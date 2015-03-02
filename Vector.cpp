@@ -7,7 +7,7 @@ double Vector::magnitude() {
 };
 
 Vector Vector::normalize() {
-  return *this = *this / this->magnitude();
+  return *this / this->magnitude();
 };
 
 Vector Vector::cross(Vector v) {
