@@ -9,3 +9,10 @@ class Coord {
     float y;
     float z;
 };
+std::ostream& operator<< (std::ostream &out, Coord &coord)
+{
+    out << "(" << coord.x << ", " <<
+        coord.y << ", " <<
+        coord.z << ")\n";
+    return out;
+}
