@@ -12,16 +12,6 @@
 using namespace std;
 
 
-class Triangle;
-
-class Triangle {
-  std::vector<double> vi, uvi, ni;
-  std::vector<double> vertices;
-  std::vector<double> uv;
-  std::vector<double> normal;
-};
-
-
 void read_line(istream& stream, vector<Coord> vertices, vector<double> faces, vector<double> normals, vector<double> textures) {
   string line;
   getline(stream, line); //line is relevant data
