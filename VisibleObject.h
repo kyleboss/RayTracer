@@ -1,15 +1,13 @@
 class VisibleObject {
   public:
-    VisibleObject (double locX, double locY, double locZ, double r, double g, double b, double specular, double ambient, double diffusion) :
+    VisibleObject (double locX, double locY, double locZ, double ksr, double ksg, double ksb, double kar, double kag, double kab, double kdr, double kdg, double kdb) :
     location(locX, locY, locZ),
-    color (r, g, b),
-    specular(specular),
-    ambient(ambient),
-    diffusion(diffusion)
+    specular(ksr, ksg, ksb),
+    ambient(kar, kag, kab),
+    diffusion(kdr, kdg, kdb)
     {}
     Coord location;
-    Color color;
-    double specular;
-    double ambient;
-    double diffusion;
+    Color specular;
+    Color ambient;
+    Color diffusion;
 };
