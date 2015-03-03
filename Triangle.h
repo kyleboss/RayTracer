@@ -5,7 +5,20 @@ class Triangle {
      point2(x2, y2, z2),
      point3(x3, y3, z3)
      {}
+     Triangle(Coord p1, Coord p2, Coord p3) :
+     point1 = p1,
+	 point2 = p2,
+	 point3 = p3
+	 {}
     Coord point1;
     Coord point2;
     Coord point3;
 };
+
+std::ostream& operator<< (std::ostream &out, Triangle &triangle)
+{
+    out << "Triangle: (" << triangle.point1 << ", " <<
+        triangle.point2 << ", " <<
+        triangle.point3 << ")\n";
+    return out;
+}
