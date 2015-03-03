@@ -8,13 +8,13 @@
 #include <time.h>
 #include "Color.h"
 #include "Canvas.h"
-#include "Coord.h"
+#include "objParse.cpp"
 #include "Camera.h"
 #include "Light.h"
 #include "MaterialProps.h"
 #include "Triangle.h"
 #include "Ray.h"
-#include "objParse.cpp"
+
 
 
 using namespace std;
@@ -23,12 +23,13 @@ using namespace std;
 void commandLine(int argc, char *argv[]) {
 	for (int i = 1; i < argc; ++i) {
 	    if(i < argc && strcmp(argv[i], "-obj") == 0) {
-	    	vector<double> vertices, faces, normals, textures;
+        vector<Coord> vertices;
+	    	vector<double> faces, normals, textures;
 	    	objParse(argv[i+1], vertices, faces, normals, textures);
 	      	i += 1;
 	    }
 	    else { //error handling per last pg in spec
-	    	stderr << "You fucked up";
+	    	cerr << "You fucked up";
 	    }
 	}
 }
@@ -43,5 +44,9 @@ int main (int argc, char *argv[]) {
   Triangle tri = Triangle(1, 2, 3, 4, 5, 6, 7, 8, 9);
   cout << light.color.r;
   cout << "rendering..." << endl;
+  vector<Coord> vertices;
+          vector<double> faces, normals, textures;
+
+  objParse(argv[1], vertices, faces, normals, textures);
   return 0;
 }

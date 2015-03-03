@@ -74,10 +74,10 @@ void objParse(char * filename, vector<Coord> vertices, vector<double> faces, vec
 //****************************************************
 // main so i debug easy
 //****************************************************
-int main(int argc, char *argv[]) {
-  vector<Coord> vertices;
-          vector<double> faces, normals, textures;
+// int main(int argc, char *argv[]) {
+//   vector<Coord> vertices;
+//           vector<double> faces, normals, textures;
 
-  objParse(argv[1], vertices, faces, normals, textures);
-  return 0;
-}
+//   objParse(argv[1], vertices, faces, normals, textures);
+//   return 0;
+// }
