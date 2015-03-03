@@ -1,11 +1,11 @@
 class Color {
   public:
-    Color (double r, double g, double b) :
+    Color (float r, float g, float b) :
     r(r),
     g(g),
     b(b)
     {}
-    double r;
-    double g;
-    double b;
+    float r;
+    float g;
+    float b;
 };

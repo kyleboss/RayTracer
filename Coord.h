@@ -1,11 +1,11 @@
 class Coord {
   public:
-    Coord (double x, double y, double z) : 
+    Coord (float x, float y, float z) : 
     x(x), 
     y(y), 
     z(z) 
     {}
-    double x;
-    double y;
-    double z;
+    float x;
+    float y;
+    float z;
 };

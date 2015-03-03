@@ -1,6 +1,6 @@
 class VisibleObject {
   public:
-    VisibleObject (double locX, double locY, double locZ, double ksr, double ksg, double ksb, double kar, double kag, double kab, double kdr, double kdg, double kdb) :
+    VisibleObject (float locX, float locY, float locZ, float ksr, float ksg, float ksb, float kar, float kag, float kab, float kdr, float kdg, float kdb) :
     location(locX, locY, locZ),
     specular(ksr, ksg, ksb),
     ambient(kar, kag, kab),

@@ -1,9 +1,9 @@
 class Canvas {
   public:
-     Canvas(double width, double height) : 
+     Canvas(float width, float height) : 
      width(width),
      height(height)
      {}
-    double width;
-    double height;
+    float width;
+    float height;
 };
