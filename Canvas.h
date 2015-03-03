@@ -1,6 +1,7 @@
 #include "Sample.h"
 
 class Canvas {
+  public:
     Sample currSample;
     float width;
     float height;
