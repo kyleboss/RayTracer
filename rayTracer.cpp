@@ -8,16 +8,17 @@
 #include <time.h>
 #include "Color.h"
 #include "Canvas.h"
-#include "Coord.h"
 #include "Camera.h"
 #include "Light.h"
 #include "MaterialProps.h"
 #include "Triangle.h"
 #include "Ray.h"
 #include "objParse.cpp"
+#include "CImg.h"
 
 
 using namespace std;
+using namespace cimg_library;
 
 //To put command line parsings here
 void commandLine(int argc, char *argv[]) {
