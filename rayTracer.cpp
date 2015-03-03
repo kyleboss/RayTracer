@@ -37,6 +37,8 @@ void commandLine(int argc, char *argv[]) {
 
 int main (int argc, char *argv[]) {
   commandLine(argc, argv);
+  Coord coord =  Coord(1, 2, 3);
+  cout << coord;
   Canvas canvas = Canvas(400.0, 40.0);
   Camera cam = Camera(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
   Light light = Light (1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
