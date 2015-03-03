@@ -14,9 +14,17 @@
 #include "MaterialProps.h"
 #include "Triangle.h"
 #include "Ray.h"
+<<<<<<< Updated upstream
 
 
 using namespace std;
+=======
+//#include "CImg.h"
+
+
+using namespace std;
+//using namespace cimg_library;
+>>>>>>> Stashed changes
 
 //To put command line parsings here
 void commandLine(int argc, char *argv[]) {

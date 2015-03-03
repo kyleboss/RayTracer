@@ -12,7 +12,11 @@ TARGET = rayTracer
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
+<<<<<<< Updated upstream
 	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp
+=======
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp -I$HOME/include -L/usr/X11R6/lib -lX11
+>>>>>>> Stashed changes
 
 clean:
 	$(RM) $(TARGET)
