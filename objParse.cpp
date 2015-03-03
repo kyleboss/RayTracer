@@ -56,9 +56,9 @@ void read_line(istream& stream, vector<Triangle> objects) {
       string v2 = tokens[i+2];
       string v3 = tokens[i+3];
 
-      int v1i = stoi(v1.substr(0, v1.find(slash))); //v1 is f v1, aka the index of the vertex
-      int v2i = stoi(v2.substr(0, v2.find(slash)));
-      int v3i = stoi(v3.substr(0, v3.find(slash)));
+      int v1i = stoi(v1.substr(0, v1.find(slash))) - 1; //v1 is f v1, aka the index of the vertex
+      int v2i = stoi(v2.substr(0, v2.find(slash))) - 1;
+      int v3i = stoi(v3.substr(0, v3.find(slash))) - 1; //-1 bc 1 indexed
       //deal with other /'s later
       //find vertices, add them to objects
       objects.push_back(Triangle(temp_vertices[v1i], temp_vertices[v2i], temp_vertices[v3i]));
