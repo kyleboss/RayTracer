@@ -1,11 +1,18 @@
 class Coord {
   public:
-    Coord (double x, double y, double z) : 
+    Coord (float x, float y, float z) : 
     x(x), 
     y(y), 
     z(z) 
     {}
-    double x;
-    double y;
-    double z;
+    float x;
+    float y;
+    float z;
 };
+std::ostream& operator<< (std::ostream &out, Coord &coord)
+{
+    out << "(" << coord.x << ", " <<
+        coord.y << ", " <<
+        coord.z << ")\n";
+    return out;
+}

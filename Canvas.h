@@ -2,6 +2,7 @@
 
 class Canvas {
   public:
+<<<<<<< HEAD
     Sample currSample;
     double width;
     double height;
@@ -12,3 +13,12 @@ class Canvas {
     {}
     bool getSample(Sample* sample);
 };
+=======
+     Canvas(float width, float height) : 
+     width(width),
+     height(height)
+     {}
+    float width;
+    float height;
+};
+>>>>>>> FETCH_HEAD

@@ -1,6 +1,6 @@
 class Light {
   public:
-    Light (double locX, double locY, double locZ, double r, double g, double b) :
+    Light (float locX, float locY, float locZ, float r, float g, float b) :
     location(locX, locY, locZ),
     color (r, g, b)
     {}

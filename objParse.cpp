@@ -12,16 +12,6 @@
 using namespace std;
 
 
-class Triangle;
-
-class Triangle {
-  std::vector<double> vi, uvi, ni;
-  std::vector<double> vertices;
-  std::vector<double> uv;
-  std::vector<double> normal;
-};
-
-
 void read_line(istream& stream, vector<Coord> vertices, vector<double> faces, vector<double> normals, vector<double> textures) {
   string line;
   getline(stream, line); //line is relevant data
@@ -84,10 +74,10 @@ void objParse(char * filename, vector<Coord> vertices, vector<double> faces, vec
 //****************************************************
 // main so i debug easy
 //****************************************************
-int main(int argc, char *argv[]) {
-  vector<Coord> vertices;
-          vector<double> faces, normals, textures;
+// int main(int argc, char *argv[]) {
+//   vector<Coord> vertices;
+//           vector<double> faces, normals, textures;
 
-  objParse(argv[1], vertices, faces, normals, textures);
-  return 0;
-}
+//   objParse(argv[1], vertices, faces, normals, textures);
+//   return 0;
+// }
