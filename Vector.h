@@ -1,15 +1,15 @@
 class Vector {
   public:
-    double x, y, z;
-    Vector(double x, double y, double z) : x(x), y(y), z(z) {}
+    float x, y, z;
+    Vector(float x, float y, float z) : x(x), y(y), z(z) {}
     Vector normalize();
     Vector cross(Vector v);
-    double dot(Vector v);
-    double magnitude();
+    float dot(Vector v);
+    float magnitude();
     Vector operator + (Vector v);
     Vector operator - (Vector v);
     Vector operator * (Vector v);
     Vector operator / (Vector v);
-    Vector operator * (double c);
-    Vector operator / (double c);
+    Vector operator * (float c);
+    Vector operator / (float c);
 };

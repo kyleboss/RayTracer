@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Vector.h"
 
-double Vector::magnitude() {
+float Vector::magnitude() {
   return sqrtf(x*x + y*y + z*z);
 };
 
@@ -14,7 +14,7 @@ Vector Vector::cross(Vector v) {
   return Vector(y*v.z - v.y*z, v.x*z - x*v.z, x*v.y - v.x*y);
 };
 
-double Vector::dot(Vector v) {
+float Vector::dot(Vector v) {
   return x*v.x + y*v.y + z*v.z;
 };
 
@@ -36,11 +36,11 @@ Vector Vector::operator / (Vector v) {
 };
 
 
-Vector Vector::operator * (double c) {
+Vector Vector::operator * (float c) {
   return Vector(c*x, c*y, c*z);
 };
 
-Vector Vector::operator / (double c) {
+Vector Vector::operator / (float c) {
   return Vector(x/c, y/c, z/c);
 };
 
