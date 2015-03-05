@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #include <math.h>
 #include <iostream>
 #include <vector>
@@ -15,8 +16,13 @@
 #include "Ray.h"
 #include "CImg.h"
 #include "saveImg.cpp"
+=======
+#include "rayTracer.h"
+>>>>>>> Stashed changes
 
+Color rayTracer::traceRay(Ray ray) {
 
+<<<<<<< Updated upstream
 using namespace std;
 
 //global variables
@@ -77,3 +83,6 @@ int main (int argc, char *argv[]) {
 
   return 0;
 }
+=======
+};
+>>>>>>> Stashed changes
