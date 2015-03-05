@@ -12,7 +12,6 @@
 #include "Camera.h"
 #include "Light.h"
 #include "MaterialProps.h"
-#include "Triangle.h"
 #include "Ray.h"
 #include "CImg.h"
 #include "saveImg.cpp"
@@ -20,17 +19,20 @@
 
 using namespace std;
 
+//global variables
+vector<Triangle> objects; //things to push onto for obj parse
+
+
+
 //To put command line parsings here
 void commandLine(int argc, char *argv[]) {
 	for (int i = 1; i < argc; ++i) {
 	    if(i < argc && strcmp(argv[i], "-obj") == 0) {
-        vector<Coord> vertices;
-	    	vector<double> faces, normals, textures;
-	    	objParse(argv[i+1], vertices, faces, normals, textures);
+	    	objParse(argv[i+1], objects);
 	      	i += 1;
 	    }
 	    else { //error handling per last pg in spec
-	    	cerr << "You fucked up";
+	    	cerr << "Bad command line input" << endl;
 	    }
 	}
 }
@@ -77,6 +79,6 @@ int main (int argc, char *argv[]) {
   vector<Coord> vertices;
           vector<double> faces, normals, textures;
 
-  objParse(argv[1], vertices, faces, normals, textures);
+
   return 0;
 }
