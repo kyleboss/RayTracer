@@ -1,5 +1,3 @@
-#include "Vector.h"
-
 class Ray {
   public:
     Coord start;
