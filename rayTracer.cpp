@@ -11,7 +11,7 @@
 #include "objParse.cpp"
 #include "Camera.h"
 #include "Light.h"
-#include "MaterialProps.h"
+#include "Material.h"
 #include "Ray.h"
 #include "CImg.h"
 #include "saveImg.cpp"
@@ -47,25 +47,20 @@ int main (int argc, char *argv[]) {
   Coord viewDir = Coord(2, 2, 2);
   Camera cam = Camera(loc, 1, viewDir);
   cout << "\n\nCAMERA PROPERTIES\n";
-  cout << cam.location;
-  cout << cam.viewDirection;
+  cout << cam;
 
   // THIS IS HOW TO SET UP A LIGHT
   Color color = Color(3,3,3);
   Light light = Light(loc, color);
   cout << "\n\nLIGHT PROPERTIES\n";
-  cout << light.location;
-  cout << light.color;
+  cout << light;
 
   // THIS IS HOW TO SET UP MATERIAL PROPERTIES
   Color color2 = Color(4,4,4);
   Color color3 = Color(5,5,5);
-  MaterialProps mp = MaterialProps(loc, color, color2, color3);
+  Material mp = Material(loc, color, color2, color3);
   cout << "\n\nMATERIAL PROPERTIES\n";
-  cout << mp.location;
-  cout << mp.specular;
-  cout << mp.ambient;
-  cout << mp.diffuse;
+  cout << mp;
 
   cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
