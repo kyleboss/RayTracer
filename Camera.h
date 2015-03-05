@@ -1,9 +1,9 @@
 class Camera {
   public:
-    Camera (float locX, float locY, float locZ, float viewAngle, float viewDirX, float viewDirY, float viewDirZ) : 
+    Camera (Coord location, float viewAngle, Coord viewDirection) : 
     viewAngle(viewAngle), 
-    location(locX, locY, locZ), 
-    viewDirection(viewDirX, viewDirY, viewDirZ)
+    viewDirection(viewDirection),
+    location(location)
     {}
     Coord location;
     float viewAngle;

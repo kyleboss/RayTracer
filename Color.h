@@ -9,3 +9,10 @@ class Color {
     float g;
     float b;
 };
+std::ostream& operator<< (std::ostream &out, Color &color)
+{
+    out << "(" << color.r << ", " <<
+        color.g << ", " <<
+        color.b << ")\n";
+    return out;
+}

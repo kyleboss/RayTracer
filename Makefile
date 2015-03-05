@@ -12,7 +12,7 @@ TARGET = rayTracer
 all: $(TARGET)
 
 $(TARGET): $(TARGET).cpp
-	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp
+	$(CC) $(CFLAGS) -o $(TARGET) $(TARGET).cpp -I/opt/X11/include -lX11 -L/opt/X11/lib/ -Dcimg_use_png -lpthread -lpng -lz
 
 clean:
 	$(RM) $(TARGET)

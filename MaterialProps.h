@@ -1,13 +1,13 @@
 class MaterialProps {
   public:
-    MaterialProps (float locX, float locY, float locZ, float ksr, float ksg, float ksb, float kar, float kag, float kab, float kdr, float kdg, float kdb) :
-    location(locX, locY, locZ),
-    specular(ksr, ksg, ksb),
-    ambient(kar, kag, kab),
-    diffusion(kdr, kdg, kdb)
+    MaterialProps (Coord location, Color specular, Color ambient, Color diffuse) :
+    location(location),
+    specular(specular),
+    ambient(ambient),
+    diffuse(diffuse)
     {}
     Coord location;
     Color specular;
     Color ambient;
-    Color diffusion;
+    Color diffuse;
 };
