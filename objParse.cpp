@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -6,11 +5,11 @@
 #include <cmath>
 #include <time.h>
 #include <math.h>
-#include "Coord.h"
-#include "Triangle.h"
-
 
 using namespace std;
+
+#include "Coord.h"
+#include "Triangle.h"
 
 //Takes in an obj file, fills the passed in obj vector of triangles in return.
 
@@ -33,7 +32,7 @@ void read_line(istream& stream, vector<Triangle> objects) {
       tokens.push_back(buf);
     }
     for (int i = 0; i < tokens.size(); i += 4) {
-      //get rid of Vs, load 3 points as a coordinate 
+      //get rid of Vs, load 3 points as a coordinate
       temp_vertices.push_back(Coord(stod(tokens[i+1]), stod(tokens[i+2]), stod(tokens[i+3])));
     }
   }

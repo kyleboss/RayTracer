@@ -1,9 +1,12 @@
+#ifndef COORD_H
+#define COORD_H
+
 class Coord {
   public:
-    Coord (float x, float y, float z) : 
-    x(x), 
-    y(y), 
-    z(z) 
+    Coord (float x, float y, float z) :
+    x(x),
+    y(y),
+    z(z)
     {}
     float x;
     float y;
@@ -17,3 +20,5 @@ std::ostream& operator<< (std::ostream &out, Coord &coord)
         coord.z << ")\n";
     return out;
 }
+
+#endif

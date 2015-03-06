@@ -1,5 +1,5 @@
 #include "Camera.h"
 
-Ray shootRay(Sample sample) {
-
+Ray Camera::shootRay(Sample sample) {
+  
 };

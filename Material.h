@@ -1,3 +1,6 @@
+#include "Coord.h"
+#include "Color.h"
+
 class Material {
   public:
     Material (Coord location, Color specular, Color ambient, Color diffuse) :
@@ -14,9 +17,9 @@ class Material {
 
 std::ostream& operator<< (std::ostream &out, Material &material)
 {
-    out << "Location: " << material.location << 
-        "Specular: " << material.specular << 
-        "Ambient: " << material.ambient << 
+    out << "Location: " << material.location <<
+        "Specular: " << material.specular <<
+        "Ambient: " << material.ambient <<
         "Diffuse: " << material.diffuse << "\n";
     return out;
 }

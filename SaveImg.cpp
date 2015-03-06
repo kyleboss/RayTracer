@@ -1,3 +1,6 @@
+#include "Color.h"
+#include "Sample.h"
+
 cimg_library::CImg<float> createImg (float width, float height) {
   cimg_library::CImg<float> img(width,height, 1, 3, 0);
   return img;

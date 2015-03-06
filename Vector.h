@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 class Vector {
   public:
     float x, y, z;
@@ -13,3 +16,5 @@ class Vector {
     Vector operator * (float c);
     Vector operator / (float c);
 };
+
+#endif

@@ -1,3 +1,9 @@
+#ifndef LIGHT_H
+#define LIGHT_H
+
+#include "Color.h"
+#include "Coord.h"
+
 class Light {
   public:
     Light (Coord location, Color color) :
@@ -10,7 +16,9 @@ class Light {
 
 std::ostream& operator<< (std::ostream &out, Light &light)
 {
-    out << "Location: " << light.location << 
+    out << "Location: " << light.location <<
     "Color: " << light.color << "\n";
     return out;
 }
+
+#endif

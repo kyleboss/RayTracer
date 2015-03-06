@@ -1,3 +1,6 @@
+#ifndef COLOR_H
+#define COLOR_H
+
 class Color {
   public:
     Color (float r, float g, float b) :
@@ -16,3 +19,5 @@ std::ostream& operator<< (std::ostream &out, Color &color)
         color.b << ")\n";
     return out;
 }
+
+#endif
