@@ -33,8 +33,8 @@ void render() {
 
 	//SET UP CAMERA
 	Coord loc = Coord(1, 1, 1);
-  Coord viewDir = Coord(2, 2, 2);
-  Camera camera = Camera(loc, 1, viewDir);
+  	Coord viewDir = Coord(2, 2, 2);
+	Camera camera = Camera(loc, 1, viewDir);
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
