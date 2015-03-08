@@ -8,6 +8,7 @@ class Coord {
     y(y),
     z(z)
     {}
+    Coord () { }
     float x;
     float y;
     float z;

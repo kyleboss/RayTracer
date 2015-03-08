@@ -11,9 +11,10 @@
 #include "Camera.h"
 #include "Tracer.h"
 #include "Canvas.h"
-
+#include "Coord.h"
 #include "objParse.cpp"
 #include "SaveImg.cpp"
+#include "Sphere.h"
 
 using namespace std;
 

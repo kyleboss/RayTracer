@@ -15,7 +15,7 @@ class Sphere {
 
 std::ostream& operator<< (std::ostream &out, Sphere &sphere)
 {
-    out << "Sphere: (" << sphere.center.<< ") , r = " << sphere.r << "\n";
+    out << "Sphere: (" << sphere.center << ") , r = " << sphere.r << "\n";
     return out;
 }
 
