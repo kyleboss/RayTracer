@@ -19,6 +19,12 @@ using namespace std;
 
 //global variables
 vector<Triangle> objects; //things to push onto for obj parse
+vector<Sphere> spheres;
+Coord camEye;
+Coord camLL;
+Coord camLR;
+Coord camUL;
+Coord camUR;
 
 // Main render loop
 void render() {
@@ -50,10 +56,31 @@ void render() {
 //To put command line parsings here
 void commandLine(int argc, char *argv[]) {
 	for (int i = 1; i < argc; ++i) {
-	    if(i < argc && strcmp(argv[i], "-obj") == 0) {
+	    if (i < argc && strcmp(argv[i], "-cam") == 0) {
+	      //cam ex ey ez llx lly llz lrx lry lrz ulx uly ulz urx ury urz
+	      camEye = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      camLL = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
+	      camLR = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
+	      camUL = Coord(strtof(argv[i+10], NULL), strtof(argv[i+11], NULL), strtof(argv[i+12], NULL));
+	      camUR = Coord(strtof(argv[i+13], NULL), strtof(argv[i+14], NULL), strtof(argv[i+15], NULL));
+	      i += 15;
+	    }
+	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
 	    	objParse(argv[i+1], objects);
 	      i += 1;
 	    }
+	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
+	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
+	      spheres.push_back(Sphere(c, strtof(argv[i+4], NULL)));
+	      i += 4;
+	    }
+	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
+	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
+	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
+	      objects.push_back(Triangle(a, b, c));
+	      i += 9;
+	    }	    
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
 	    }

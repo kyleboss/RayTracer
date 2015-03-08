@@ -93,10 +93,13 @@ void objParse(char * filename, vector<Triangle> objects){
 //****************************************************
 // main so i debug easy
 //****************************************************
-// int main(int argc, char *argv[]) {
-//   vector<Coord> vertices;
-//           vector<double> faces, normals, textures;
+//* int main(int argc, char *argv[]) {
+//   vector<Triangle> objects;
+//   objParse(argv[1], objects);
+//  for (int i = 0; i < objects.size(); i++) {
+//    cout << "Here are the trinagles";
+ //   cout << i;
+  //}
 
-//   objParse(argv[1], vertices, faces, normals, textures);
 //   return 0;
-// }
+ // }
