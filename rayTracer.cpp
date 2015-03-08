@@ -15,17 +15,22 @@
 #include "objParse.cpp"
 #include "SaveImg.cpp"
 #include "Sphere.h"
+#include "Light.h"
+#include "Material.h"
 
 using namespace std;
 
 //global variables
 vector<Triangle> objects; //things to push onto for obj parse
 vector<Sphere> spheres;
+vector<Light> lights;
+vector<Material> materials; //TODO: how to integrate w shapes?
 Coord camEye;
 Coord camLL;
 Coord camLR;
 Coord camUL;
 Coord camUR;
+//TODO: create transformation matrices (library?)
 
 // Main render loop
 void render() {
@@ -75,13 +80,33 @@ void commandLine(int argc, char *argv[]) {
 	      spheres.push_back(Sphere(c, strtof(argv[i+4], NULL)));
 	      i += 4;
 	    }
-	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
-	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
-	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
-	      objects.push_back(Triangle(a, b, c));
-	      i += 9;
-	    }	    
+	    if (i < argc && strcmp(argv[i], "-ltp") == 0) {
+	    	//ltp px py pz r g b falloff
+	      Coord pl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      Color pl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
+	      lights.push_back(Light(pl, pl_c, 2, strtof(argv[i+7], NULL)));
+	      i += 7;
+	    }	   
+	    if (i < argc && strcmp(argv[i], "-ltd") == 0) {
+	      Coord dl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      Color dl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
+	      lights.push_back(Light(dl, dl_c, 1));
+	      i += 6;
+	    }
+	    if (i < argc && strcmp(argv[i], "-lta") == 0) {
+	      Coord al = Coord(0,0,0); //lol
+	      Color al_c = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      lights.push_back(Light(al, al_c, 0));
+	      i += 3;
+	    }	
+	    if (i < argc && strcmp(argv[i], "-mat") == 0) {
+	      Color ka = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
+	      Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
+	      Color kr = Color(strtof(argv[i+11], NULL), strtof(argv[i+12], NULL), strtof(argv[i+13], NULL));
+	      materials.push_back(Material(ka, kd, ks, strtof(argv[i+10], NULL), kr));
+	      i += 13;
+	    }    
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
 	    }

@@ -6,18 +6,24 @@
 
 class Light {
   public:
-    Light (Coord location, Color color) :
+    Light (Coord location, Color color, int type, float falloff=0) :
     location(location),
-    color (color)
+    color (color),
+    type(type),
+    falloff(falloff)
     {}
     Coord location;
     Color color;
+    int type; //type: 0 = ambient 1 = directional 2 = point
+    float falloff; //default = 0, 1 or 2 for dir light
 };
 
 std::ostream& operator<< (std::ostream &out, Light &light)
 {
-    out << "Location: " << light.location <<
-    "Color: " << light.color << "\n";
+    out << "Light type " << light.type << " at "
+    "location: " << light.location <<
+    ", color: " << light.color << " with falloff " <<
+    light.falloff << " \n ";
     return out;
 }
 
