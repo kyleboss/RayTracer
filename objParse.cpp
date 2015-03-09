@@ -33,7 +33,7 @@ void read_line(istream& stream, vector<Triangle> objects) {
     }
     for (int i = 0; i < tokens.size(); i += 4) {
       //get rid of Vs, load 3 points as a coordinate
-      temp_vertices.push_back(Coord(stod(tokens[i+1]), stod(tokens[i+2]), stod(tokens[i+3])));
+      temp_vertices.push_back(Coord(strtof(tokens[i+1]), strtof(tokens[i+2]), strtof(tokens[i+3])));
     }
   }
   else if (strncmp(l, "f ", 2) == 0) {
