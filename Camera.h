@@ -15,6 +15,12 @@ class Camera {
     Ray shootRay(Sample sample);
 };
 
+Ray Camera::shootRay(Sample sample) {
+  Coord coord = Coord(1, 1, 1);
+  Ray ray = Ray(coord, 1.0, 1.0, 1.0, 1, 1.0, 1.0);
+  return ray;
+}
+
 std::ostream& operator<< (std::ostream &out, Camera &camera)
 {
     out << "viewAngle: " << camera.viewAngle <<

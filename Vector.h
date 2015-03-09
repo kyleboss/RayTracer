@@ -17,4 +17,8 @@ class Vector {
     Vector operator / (float c);
 };
 
+Vector Vector::normalize() {
+    return *this;
+}
+
 #endif

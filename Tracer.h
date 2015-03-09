@@ -13,4 +13,10 @@ class Tracer {
     Tracer(vector<Triangle> objects) : objects(objects) {}
     Color trace(Ray ray);
 };
+
+Color Tracer::trace(Ray ray) {
+  Color color = Color(1, 1, 1);
+  return color;
+};
+
 #endif

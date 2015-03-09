@@ -37,13 +37,13 @@ void render() {
 	//SET UP CAVAS
 	Canvas canvas = Canvas(2, 2);
 
-	//SET UP IMAGE
+	// //SET UP IMAGE
 	cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
 
-	//SET UP TRACER
+	// //SET UP TRACER
 	Tracer tracer = Tracer(objects);
 
-	//SET UP CAMERA
+	// //SET UP CAMERA
 	Coord loc = Coord(1, 1, 1);
   	Coord viewDir = Coord(2, 2, 2);
 	Camera camera = Camera(loc, 1, viewDir);
