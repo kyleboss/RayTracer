@@ -33,22 +33,24 @@ using namespace std;
 	Coord camLR;
 	Coord camUL;
 	Coord camUR;
+	int canvasX = 3; //CHANGE THESE!
+	int canvasY = 3; //CHANGE THESE!
 
 
 // Main render loop
 void render() {
 	//SET UP CAVAS
-	Canvas canvas = Canvas(2, 2);
+	Canvas canvas = Canvas(canvasX, canvasY);
 
 	// //SET UP IMAGE
-	cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
+	cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
 
 	// //SET UP TRACER
 	Tracer tracer = Tracer(objects);
 
 	// //SET UP CAMERA
 	Coord eyeLoc = Coord(1, 1, 2);
-  Coord LL = Coord(1, 1, 1);
+    Coord LL = Coord(1, 1, 1);
 	Coord UL = Coord(1, 2, 1);
 	Coord UR = Coord(2, 2, 1);
 	Coord LR = Coord(2, 1, 1);
@@ -56,9 +58,10 @@ void render() {
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
-		Ray ray = camera.shootRay(canvas.currSample);
-		Color color = tracer.trace(ray);
-		editPixel(&img, canvas.currSample, color);
+		cout << canvas.currSample << endl;
+		//Ray ray = camera.shootRay(canvas.currSample);
+		//Color color = tracer.trace(ray);
+		//editPixel(&img, canvas.currSample, color);
 	}
 
 	saveImg(img); // Saving image to file result.png
@@ -142,7 +145,7 @@ int main (int argc, char *argv[]) {
 	}
 
   cout << "rendering..." << endl;
-	//render();
+	render();
 
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
