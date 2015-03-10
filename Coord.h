@@ -9,15 +9,10 @@ class Coord {
     z(z)
     {}
     Coord () { }
-    static Coord midPoint(Coord c1, Coord c2);
     float x;
     float y;
     float z;
 };
-
-Coord Coord::midPoint(Coord c1, Coord c2) {
-    return Coord ((c1.x+c2.x)/2, (c1.y+c2.y)/2, (c1.z+c2.z)/2);
-}
 
 std::ostream& operator<< (std::ostream &out, Coord &coord)
 {
