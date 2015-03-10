@@ -4,27 +4,42 @@
 
 class Camera {
   public:
+    Coord LL;
+    Coord UL;
+    Coord UR;
+    Coord LR;
+    Coord eyeLoc;
+    Vector W;
+    Vector U;
+    Vector V;
+    float midX = Coord::midPoint(LL, LR).x;
+    float midY = Coord::midPoint(LL, UL).y;
+    float midZ = Coord::midPoint(UL, LR).z;
     Camera (Coord eyeLoc, Coord LL, Coord UL, Coord LR, Coord UR) :
     LL(LL),
     UL(UL),
     LR(LR),
     UR(UR),
     eyeLoc(eyeLoc)
-    {}
-    Coord LL;
-    Coord UL;
-    Coord UR;
-    Coord LR;
-    Coord eyeLoc;
-    float midX = Coord::midPoint(LL, LR).x;
-    float midY = Coord::midPoint(LL, UL).y;
+    {
+      getWUV();
+    }
     Ray shootRay(Sample sample);
+    void getWUV();
 };
 
+void Camera::getWUV() {
+  W = Vector(eyeLoc.x - midX, eyeLoc.y - midY, eyeLoc.z - midZ).normalize();
+  Vector up = Vector(0, 1, 0);
+  U = up.cross(W).normalize();
+  V = W.cross(U);
+}
+
 Ray Camera::shootRay(Sample sample) {
-  Coord coord = Coord(1, 1, 1);
-  Ray ray = Ray(coord, 1.0, 1.0, 1.0, 1, 1.0, 1.0);
-  return ray;
+  float rayX = UL.x + sample.x;
+  float rayY = LL.y + sample.y;
+  Vector pointOnPlane = (V * rayY) - W - (U * rayX);
+  return Ray(eyeLoc, pointOnPlane - eyeLoc, 5, 1, 100);
 }
 
 std::ostream& operator<< (std::ostream &out, Camera &camera)

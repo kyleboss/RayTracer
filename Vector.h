@@ -5,12 +5,14 @@ class Vector {
   public:
     float x, y, z;
     Vector(float x, float y, float z) : x(x), y(y), z(z) {}
+    Vector() : x(0), y(0), z(0) {}
     Vector normalize();
     Vector cross(Vector v);
     float dot(Vector v);
     float magnitude();
     Vector operator + (Vector v);
     Vector operator - (Vector v);
+    Vector operator - (Coord v);
     Vector operator * (Vector v);
     Vector operator / (Vector v);
     Vector operator * (float c);
@@ -39,6 +41,10 @@ Vector Vector::operator + (Vector v) {
 
 Vector Vector::operator - (Vector v) {
   return Vector(x - v.x, y - v.y, z - v.z);
+};
+
+Vector Vector::operator - (Coord c) {
+  return Vector(x - c.x, y - c.y, z - c.z);
 };
 
 Vector Vector::operator * (Vector v) {
