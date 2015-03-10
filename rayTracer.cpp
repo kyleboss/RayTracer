@@ -20,17 +20,20 @@
 
 using namespace std;
 
-//global variables
-vector<Triangle> objects; //things to push onto for obj parse
-vector<Sphere> spheres;
-vector<Light> lights;
-vector<Material> materials; //TODO: how to integrate w shapes?
-Coord camEye;
-Coord camLL;
-Coord camLR;
-Coord camUL;
-Coord camUR;
-//TODO: create transformation matrices (library?)
+//************************
+//GLOBAL VARIABLES 
+//************************
+
+	vector<Triangle> objects; //things to push onto for obj parse
+	vector<Sphere> spheres;
+	vector<Light> lights;
+	vector<Material> materials; //TODO: how to integrate w shapes?
+	Coord camEye;
+	Coord camLL;
+	Coord camLR;
+	Coord camUL;
+	Coord camUR;
+
 
 // Main render loop
 void render() {
@@ -72,7 +75,7 @@ void commandLine(int argc, char *argv[]) {
 	      i += 15;
 	    }
 	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
-	    	objParse(argv[i+1], objects);
+	    	objParse(argv[i+1], &objects);
 	      i += 1;
 	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
@@ -114,9 +117,17 @@ void commandLine(int argc, char *argv[]) {
 }
 
 int main (int argc, char *argv[]) {
+
+	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
+
+
+	cout << "These are the current triangles: " << endl;
+	for (int i = 0; i < objects.size(); i++) {
+		cout << objects[i] << endl;
+	}
   cout << "rendering..." << endl;
-	render();
+	//render();
 
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
