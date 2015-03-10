@@ -20,17 +20,20 @@
 
 using namespace std;
 
-//global variables
-vector<Triangle> objects; //things to push onto for obj parse
-vector<Sphere> spheres;
-vector<Light> lights;
-vector<Material> materials; //TODO: how to integrate w shapes?
-Coord camEye;
-Coord camLL;
-Coord camLR;
-Coord camUL;
-Coord camUR;
-//TODO: create transformation matrices (library?)
+//************************
+//GLOBAL VARIABLES 
+//************************
+
+	vector<Triangle> objects; //things to push onto for obj parse
+	vector<Sphere> spheres;
+	vector<Light> lights;
+	vector<Material> materials; //TODO: how to integrate w shapes?
+	Coord camEye;
+	Coord camLL;
+	Coord camLR;
+	Coord camUL;
+	Coord camUR;
+
 
 // Main render loop
 void render() {
@@ -71,14 +74,21 @@ void commandLine(int argc, char *argv[]) {
 	      camUR = Coord(strtof(argv[i+13], NULL), strtof(argv[i+14], NULL), strtof(argv[i+15], NULL));
 	      i += 15;
 	    }
-	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
-	    	objParse(argv[i+1], objects);
-	      i += 1;
-	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      spheres.push_back(Sphere(c, strtof(argv[i+4], NULL)));
 	      i += 4;
+	    }
+	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
+	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
+	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
+	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
+	      objects.push_back(Triangle(a, b, c));
+	      i += 9;
+	    }
+	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
+	    	objParse(argv[i+1], &objects);
+	      i += 1;
 	    }
 	    if (i < argc && strcmp(argv[i], "-ltp") == 0) {
 	    	//ltp px py pz r g b falloff
@@ -107,6 +117,7 @@ void commandLine(int argc, char *argv[]) {
 	      materials.push_back(Material(ka, kd, ks, strtof(argv[i+10], NULL), kr));
 	      i += 13;
 	    }    
+	    //TO DO: TRANSFORMATIONS
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
 	    }
@@ -114,9 +125,22 @@ void commandLine(int argc, char *argv[]) {
 }
 
 int main (int argc, char *argv[]) {
+
+	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
+
+
+	cout << "These are the current triangles: " << endl;
+	for (int i = 0; i < objects.size(); i++) {
+		cout << objects[i] << endl;
+	}
+	cout << "These are the current spheres: " << endl;
+	for (int i = 0; i < spheres.size(); i++) {
+		cout << spheres[i] << endl;
+	}
+
   cout << "rendering..." << endl;
-	render();
+	//render();
 
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
