@@ -17,4 +17,11 @@ class Ray {
     }
 };
 
+std::ostream& operator<< (std::ostream &out, Ray &ray)
+{
+    out << "tmin & tmax: " << ray.tMin << ", " << ray.tMax <<
+        "direction: " << ray.direction << "\n";
+    return out;
+}
+
 #endif

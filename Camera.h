@@ -27,8 +27,10 @@ Ray Camera::shootRay(Sample sample) {
 
 std::ostream& operator<< (std::ostream &out, Camera &camera)
 {
-    out << "viewAngle: " << camera.viewAngle <<
-        "viewDirection: " << camera.viewDirection <<
-        "location: " << camera.location << "\n";
+    out << "eyeLoc: " << camera.eyeLoc <<
+        "LL: " << camera.LL <<
+        "UL: " << camera.UL <<
+        "UR: " << camera.UR <<
+        "LR: " << camera.LR << "\n";
     return out;
 }

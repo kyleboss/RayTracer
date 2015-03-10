@@ -21,11 +21,7 @@
 using namespace std;
 
 //************************
-<<<<<<< HEAD
-//GLOBAL VARIABLES
-=======
 //GLOBAL VARIABLES 
->>>>>>> origin/master
 //************************
 
 	vector<Triangle> objects; //things to push onto for obj parse
@@ -87,15 +83,9 @@ void commandLine(int argc, char *argv[]) {
 	      i += 4;
 	    }
 	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
-<<<<<<< HEAD
-	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
-	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
-=======
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
->>>>>>> origin/master
 	      objects.push_back(Triangle(a, b, c));
 	      i += 9;
 	    }
@@ -129,11 +119,7 @@ void commandLine(int argc, char *argv[]) {
 	      Color kr = Color(strtof(argv[i+11], NULL), strtof(argv[i+12], NULL), strtof(argv[i+13], NULL));
 	      materials.push_back(Material(ka, kd, ks, strtof(argv[i+10], NULL), kr));
 	      i += 13;
-<<<<<<< HEAD
-	    }
-=======
 	    }    
->>>>>>> origin/master
 	    //TO DO: TRANSFORMATIONS
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
@@ -142,12 +128,7 @@ void commandLine(int argc, char *argv[]) {
 }
 
 int main (int argc, char *argv[]) {
-
-<<<<<<< HEAD
-	//TODO: create transformation matrices (library?)
-=======
 	//TODO: create transformation matrices (library?)	
->>>>>>> origin/master
   commandLine(argc, argv);
 
 
