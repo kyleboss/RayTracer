@@ -16,6 +16,8 @@ class Camera {
     Coord UR;
     Coord LR;
     Coord eyeLoc;
+    float midX = Coord::midPoint(LL, LR).x;
+    float midY = Coord::midPoint(LL, UL).y;
     Ray shootRay(Sample sample);
 };
 
