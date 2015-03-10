@@ -4,14 +4,18 @@
 
 class Camera {
   public:
-    Camera (Coord location, float viewAngle, Coord viewDirection) :
-    viewAngle(viewAngle),
-    viewDirection(viewDirection),
-    location(location)
+    Camera (Coord eyeLoc, Coord LL, Coord UL, Coord LR, Coord UR) :
+    LL(LL),
+    UL(UL),
+    LR(LR),
+    UR(UR),
+    eyeLoc(eyeLoc)
     {}
-    Coord location;
-    float viewAngle;
-    Coord viewDirection;
+    Coord LL;
+    Coord UL;
+    Coord UR;
+    Coord LR;
+    Coord eyeLoc;
     Ray shootRay(Sample sample);
 };
 
