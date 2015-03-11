@@ -71,8 +71,9 @@ bool Tracer::raySphere(Ray r, Sphere s, float tMin, float tMax) {
 		t = -((d.dot(e_minus_c) + discrimnant) / d_dot);
 		float t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot); 
 	}
+	Vector p = r.eval(t);
+	Vector normal = (p - c)/r;
 	return true;
-	//remember to set normal
 }
 
 bool Tracer::rayTri(Ray r, Triangle tri, float tMin, float tMax) {
