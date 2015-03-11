@@ -21,7 +21,7 @@ std::ostream& operator<< (std::ostream &out, Material &material)
 {
     out << "Ambient: " << material.ambient <<
         " Diffuse: " << material.diffuse << 
-        " Specular: " << material.specular << " with exp " << material.exp <<
+        " Specular: " << material.specular << " with exp " << material.exp << 
         " reflective: " << material.reflective << "\n";
     return out;
 }

@@ -6,6 +6,7 @@
 
 class Sphere: public Shape {
   public:
+    Sphere() {}
     Sphere(Coord center, float r, Material material) :
         center(center),
         r(r)
@@ -22,7 +23,8 @@ class Sphere: public Shape {
 
 std::ostream& operator<< (std::ostream &out, Sphere &sphere)
 {
-    out << "Sphere: (" << sphere.center << ") , r = " << sphere.r << "\n";
+    out << "Sphere: (" << sphere.center << ") , r = " << sphere.r << "\n" <<
+        "Material: " << sphere.material << "\n";
     return out;
 }
 

@@ -143,10 +143,13 @@ int main (int argc, char *argv[]) {
 	for (int i = 0; i < spheres.size(); i++) {
 		cout << spheres[i] << endl;
 	}
-
+  Color color = Color(255, 0, 255);
+  Material material = Material(color, color, color, 1, color);
+  Coord coord = Coord(1,1,1);
+  Sphere sphere = Sphere(coord, 1, material);
+  cout << sphere;
   cout << "rendering..." << endl;
 	render();
-
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
   // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)
