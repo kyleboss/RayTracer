@@ -23,7 +23,7 @@ using namespace std;
 //************************
 // GLOBAL VARIABLES 
 //************************
-	vector<Shapes> all_shapes;
+	vector<Shape> all_shapes;
 	vector<Triangle> objects; //things to push onto for obj parse
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
@@ -54,8 +54,10 @@ void render() {
 	while(canvas.getSample(&canvas.currSample)) {
 		cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
+		if (tracer.hit(ray)) {
 		//Color color = tracer.trace(ray);
-		//editPixel(&img, canvas.currSample, color); //writes to the image
+		//editPixel(&img, canvas.currSample, color); //writes to the image			
+		}
 	}
 
 	saveImg(img); // Saving image to file result.png
@@ -76,20 +78,22 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      all_shapes.push_back(Sphere(c, strtof(argv[i+4], NULL)));
+	      all_shapes.push_back(Sphere(c, strtof(argv[i+4], NULL), last_material));
 	      i += 4;
 	    }
 	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
-	      all_shapes.push_back(Triangle(a, b, c));
+	      all_shapes.push_back(Triangle(a, b, c, last_material));
 	      i += 9;
 	    }
 	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
 	    	objParse(argv[i+1], &objects);
-	    	for (int i = 0; i < objects.size(); i++)
-	    		all_shapes.push_back(objects[i]);
+	    	for (int i = 0; i < objects.size(); i++) {
+	    		objects[i].setMaterial(last_material);
+	    		all_shapes.push_back(objects[i]);	    		
+	    	}
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
 	    }
