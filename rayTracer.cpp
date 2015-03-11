@@ -15,8 +15,8 @@
 #include "objParse.cpp"
 #include "SaveImg.cpp"
 #include "Sphere.h"
+#include "Triangle.h"
 #include "Light.h"
-#include "Material.h"
 
 using namespace std;
 

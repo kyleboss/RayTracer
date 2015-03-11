@@ -2,13 +2,20 @@
 #define SPHERE_H
 
 #include "Coord.h"
+#include "Shape.h"
 
-class Sphere {
+class Sphere: public Shape {
   public:
+    Sphere(Coord center, float r, Material material) :
+        center(center),
+        r(r)
+        {
+          this->setMaterial(material);
+        }
     Sphere(Coord center, float r) :
         center(center),
         r(r)
-        {}
+        { }
     Coord center;
     float r;
 };

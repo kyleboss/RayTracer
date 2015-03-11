@@ -2,6 +2,7 @@
 
 class Material {
   public:
+    Material(){}
     Material (Color ambient, Color diffuse, Color specular, float exp, Color reflective) :
     ambient(ambient),
     diffuse(diffuse),
