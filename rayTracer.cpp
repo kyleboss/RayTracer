@@ -21,13 +21,12 @@
 using namespace std;
 
 //************************
-//GLOBAL VARIABLES 
+// GLOBAL VARIABLES 
 //************************
-
+	vector<Shapes> all_shapes;
 	vector<Triangle> objects; //things to push onto for obj parse
-	vector<Sphere> spheres;
 	vector<Light> lights;
-	vector<Material> materials; //TODO: how to integrate w shapes?
+	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
 	Coord camEye;
 	Coord camLL;
 	Coord camLR;
@@ -46,22 +45,17 @@ void render() {
 	cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
 
 	// //SET UP TRACER
-	Tracer tracer = Tracer(objects);
+	Tracer tracer = Tracer(all_shapes);
 
-	// //SET UP CAMERA
-	Coord eyeLoc = Coord(1, 1, 2);
-    Coord LL = Coord(1, 1, 1);
-	Coord UL = Coord(1, 2, 1);
-	Coord UR = Coord(2, 2, 1);
-	Coord LR = Coord(2, 1, 1);
-	Camera camera = Camera(eyeLoc, LL, UL, LR, UR);
+	// //SET UP CAMERA through command line
+	Camera camera = Camera(eyeEye, camLL, camUL, camLR, camUR);
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
 		cout << canvas.currSample << endl;
-		//Ray ray = camera.shootRay(canvas.currSample);
+		Ray ray = camera.shootRay(canvas.currSample);
 		//Color color = tracer.trace(ray);
-		//editPixel(&img, canvas.currSample, color);
+		//editPixel(&img, canvas.currSample, color); //writes to the image
 	}
 
 	saveImg(img); // Saving image to file result.png
@@ -82,18 +76,21 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      spheres.push_back(Sphere(c, strtof(argv[i+4], NULL)));
+	      all_shapes.push_back(Sphere(c, strtof(argv[i+4], NULL)));
 	      i += 4;
 	    }
 	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
-	      objects.push_back(Triangle(a, b, c));
+	      all_shapes.push_back(Triangle(a, b, c));
 	      i += 9;
 	    }
 	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
 	    	objParse(argv[i+1], &objects);
+	    	for (int i = 0; i < objects.size(); i++)
+	    		all_shapes.push_back(objects[i]);
+	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
 	    }
 	    if (i < argc && strcmp(argv[i], "-ltp") == 0) {
@@ -120,12 +117,13 @@ void commandLine(int argc, char *argv[]) {
 	      Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
 	      Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
 	      Color kr = Color(strtof(argv[i+11], NULL), strtof(argv[i+12], NULL), strtof(argv[i+13], NULL));
-	      materials.push_back(Material(ka, kd, ks, strtof(argv[i+10], NULL), kr));
+	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr));
 	      i += 13;
 	    }    
 	    //TO DO: TRANSFORMATIONS
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
+	    	i += 1;
 	    }
 	}
 }
@@ -135,14 +133,11 @@ int main (int argc, char *argv[]) {
   commandLine(argc, argv);
 
 
-	cout << "These are the current triangles: " << endl;
-	for (int i = 0; i < objects.size(); i++) {
-		cout << objects[i] << endl;
+	cout << "These are the current shapes: " << endl;
+	for (int i = 0; i < all_shapes.size(); i++) {
+		cout << all_shapes[i] << endl;
 	}
-	cout << "These are the current spheres: " << endl;
-	for (int i = 0; i < spheres.size(); i++) {
-		cout << spheres[i] << endl;
-	}
+
 
   cout << "rendering..." << endl;
 	render();

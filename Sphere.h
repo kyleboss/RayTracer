@@ -5,7 +5,7 @@
 
 class Sphere {
   public:
-    Sphere(Coord center, float r) :
+    Sphere(Coord center, float r,) :
         center(center),
         r(r)
         {}
