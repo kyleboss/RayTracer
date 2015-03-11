@@ -6,10 +6,7 @@
 
 class Sphere: public Shape {
   public:
-<<<<<<< HEAD
-    Sphere(Coord center, float r,) :
-=======
-    Sphere() {}
+    Sphere () {}
     Sphere(Coord center, float r, Material material) :
         center(center),
         r(r)
@@ -17,7 +14,6 @@ class Sphere: public Shape {
           this->setMaterial(material);
         }
     Sphere(Coord center, float r) :
->>>>>>> origin/master
         center(center),
         r(r)
         { }

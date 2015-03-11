@@ -48,7 +48,7 @@ void render() {
 	Tracer tracer = Tracer(all_shapes);
 
 	// //SET UP CAMERA through command line
-	Camera camera = Camera(eyeEye, camLL, camUL, camLR, camUR);
+	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR);
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
@@ -121,7 +121,7 @@ void commandLine(int argc, char *argv[]) {
 	      Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
 	      Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
 	      Color kr = Color(strtof(argv[i+11], NULL), strtof(argv[i+12], NULL), strtof(argv[i+13], NULL));
-	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr));
+	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
 	      i += 13;
 	    }    
 	    //TO DO: TRANSFORMATIONS
@@ -136,21 +136,11 @@ int main (int argc, char *argv[]) {
 	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
 
-
 	cout << "These are the current shapes: " << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
-		cout << all_shapes[i] << endl;
+		//cout << all_shapes[i] << endl; ER HOW TO PRINT SHAPE??
 	}
-<<<<<<< HEAD
 
-
-=======
-  Color color = Color(255, 0, 255);
-  Material material = Material(color, color, color, 1, color);
-  Coord coord = Coord(1,1,1);
-  Sphere sphere = Sphere(coord, 1, material);
-  cout << sphere;
->>>>>>> origin/master
   cout << "rendering..." << endl;
 	render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img

@@ -10,3 +10,10 @@ class Shape {
     }
 };
 #endif
+
+/*std::ostream& operator<< (std::ostream &out, Shape &shape)
+{
+    out << "Shape: " << shape <<
+        "Material: " << shape.material << "\n";
+    return out;
+}*/ //HOW TO PRINT?
