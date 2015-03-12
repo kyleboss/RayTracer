@@ -27,11 +27,11 @@ using namespace std;
 	vector<Triangle> objects; //things to push onto for obj parse
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
-	Coord camEye = Coord(0,0,1);
-	Coord camLL = Coord(-1,-1,0);
-	Coord camLR = Coord(1,-1,0);
-	Coord camUL = Coord(-1,1,0);
-	Coord camUR = Coord(1,1,0); //THE DEFAULT VALUES are bc im too lazy to enter thru command line
+	Coord camEye = Coord(0,0,0);
+	Coord camLL = Coord(-1,-1,-1);
+	Coord camLR = Coord(1,-1,-1);
+	Coord camUL = Coord(-1,1,-1);
+	Coord camUR = Coord(1,1,-1); //THE DEFAULT VALUES are bc im too lazy to enter thru command line
 	int canvasX = 10; //CHANGE THESE!
 	int canvasY = 10; //CHANGE THESE!
 
@@ -54,6 +54,7 @@ void render() {
 	while(canvas.getSample(&canvas.currSample)) {
 		//cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
+		cout << "THE RAY AT " << canvas.currSample << " IS " << ray;
 		if (tracer.hit(ray)) {
 			cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);

@@ -25,7 +25,8 @@ Vector Ray::eval(float t) {
 
 std::ostream& operator<< (std::ostream &out, Ray &ray)
 {
-    out << "tmin & tmax: " << ray.tMin << ", " << ray.tMax <<
+    out << //"tmin & tmax: " << ray.tMin << ", " << ray.tMax <<
+        "start: " << ray.start <<
         "direction: " << ray.direction << "\n";
     return out;
 }
