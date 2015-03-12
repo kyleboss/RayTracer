@@ -52,11 +52,11 @@ void render() {
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
-		//cout << canvas.currSample << endl;
+		cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
-		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray;
+		cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		if (tracer.hit(ray)) {
-			// cout << "hit at " << canvas.currSample << endl;
+			cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
