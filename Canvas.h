@@ -8,7 +8,7 @@ class Canvas {
     Canvas(float width, float height) :
     width(width),
     height(height),
-    currSample(Sample(-1, 0))
+    currSample(Sample(0, 0))
     {}
     bool getSample(Sample* sample);
 };
