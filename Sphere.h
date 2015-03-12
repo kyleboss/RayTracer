@@ -19,15 +19,15 @@ class Sphere: public Shape {
         { }
     Coord center;
     float r;
-    virtual std::basic_ostream<char, std::__1::char_traits<char> > print() {
-        std::cout << this;
+    void print(std::ostream &out) {
+      out << "Sphere: (" << this->center << ") , r = " << this->r << "\n" <<
+        "Material: " << this->material << "\n";
     }
 };
 
 std::ostream& operator<< (std::ostream &out, Sphere &sphere)
 {
-    out << "Sphere: (" << sphere.center << ") , r = " << sphere.r << "\n" <<
-        "Material: " << sphere.material << "\n";
+    sphere.print(out);
     return out;
 }
 

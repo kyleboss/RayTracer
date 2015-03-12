@@ -23,7 +23,7 @@ std::ostream& operator<< (std::ostream &out, Coord &coord)
 {
     out << "(" << coord.x << ", " <<
         coord.y << ", " <<
-        coord.z << ")\n";
+        coord.z << ")";
     return out;
 }
 

@@ -54,9 +54,9 @@ void render() {
 	while(canvas.getSample(&canvas.currSample)) {
 		//cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
-		cout << "THE RAY AT " << canvas.currSample << " IS " << ray;
+		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray;
 		if (tracer.hit(ray)) {
-			cout << "hit at " << canvas.currSample << endl;
+			// cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -98,7 +98,7 @@ void commandLine(int argc, char *argv[]) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
-	    		all_shapes.push_back(objtri);	    		
+	    		all_shapes.push_back(objtri);	  
 	    	}
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
@@ -144,13 +144,18 @@ int main (int argc, char *argv[]) {
   	//Sphere s = Sphere(Coord(1, 1, 1), 2, last_material);
   	//all_shapes.push_back(s);
 
-  	Shape q = Sphere(Coord(1, 1, 1), 2, last_material);
-  	//cout << "SHAPE!!! " << q << endl;
+  	Sphere q = Sphere(Coord(1, 1, 1), 2, last_material);
+  	// cout << "SHAPE!!! " << q << endl;
+  Coord coord = Coord(1,1,1);
+  Color color = Color(1,1,1);
+  Material material =  Material(color, color, color, 1.0, color);
+  Triangle * objtri = new Triangle(coord, coord, coord, material);
+  all_shapes.push_back(objtri);   
 	cout << "These are the current shapes:" << endl;
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
-		
-		//cout << all_shapes[i] << endl;
+		cout << "BING" << endl;
+		cout << *(all_shapes[i]) << endl;
 	}
 
   cout << "rendering..." << endl;
