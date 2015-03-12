@@ -30,7 +30,7 @@ bool Tracer::hit(Ray ray) {
 		Triangle* triangle = dynamic_cast<Triangle*>(all_shapes[i]);
 		Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
  		if (triangle != 0) { //if it's a triangle?
-			cout << "HI IM TRIANGLE! " << endl;
+			//cout << "HI IM TRIANGLE! " << endl;
 			if (rayTri(ray, triangle, t_min, t_max)) {
 				hit = true;
 				//hitobject = all_shapes[i].shape
@@ -38,7 +38,7 @@ bool Tracer::hit(Ray ray) {
 			}  			
  		}
  		if (sphere != 0) {
- 			cout << "YO IM SPHERE! " << endl;
+ 			//cout << "YO IM SPHERE! " << endl;
 			if (raySphere(ray, sphere, t_min, t_max)) {
 				hit = true;
 				//hitobject = all_shapes[i].shape

@@ -27,13 +27,13 @@ using namespace std;
 	vector<Triangle> objects; //things to push onto for obj parse
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
-	Coord camEye;
-	Coord camLL;
-	Coord camLR;
-	Coord camUL;
-	Coord camUR;
-	int canvasX = 3; //CHANGE THESE!
-	int canvasY = 3; //CHANGE THESE!
+	Coord camEye = Coord(0,0,1);
+	Coord camLL = Coord(-1,-1,0);
+	Coord camLR = Coord(1,-1,0);
+	Coord camUL = Coord(-1,1,0);
+	Coord camUR = Coord(1,1,0); //THE DEFAULT VALUES are bc im too lazy to enter thru command line
+	int canvasX = 10; //CHANGE THESE!
+	int canvasY = 10; //CHANGE THESE!
 
 
 // Main render loop
@@ -52,11 +52,12 @@ void render() {
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
-		cout << canvas.currSample << endl;
+		//cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
 		if (tracer.hit(ray)) {
-		//Color color = tracer.trace(ray);
-		//editPixel(&img, canvas.currSample, color); //writes to the image			
+			cout << "hit at " << canvas.currSample << endl;
+		    Color color = tracer.trace(ray);
+		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
 	}
 
@@ -78,7 +79,8 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      all_shapes.push_back(dynamic_cast<Shape*>(Sphere(c, strtof(argv[i+4], NULL), last_material))));
+	      Sphere * sph = new Sphere(c, strtof(argv[i+4], NULL), last_material);
+	      all_shapes.push_back(sph);
 	      i += 4;
 	      cout << "entered sphere" << endl;
 	    }
@@ -86,15 +88,16 @@ void commandLine(int argc, char *argv[]) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
-	      all_shapes.push_back(dynamic_cast<Shape*>(Triangle(a, b, c, last_material)));
+	      Triangle * tri = new Triangle(a, b, c, last_material);
+	      all_shapes.push_back(tri);
 	      i += 9;
 	      cout << "entered triangle" << endl;
 	    }
 	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
-	    		objects[i].setMaterial(last_material);
-	    		all_shapes.push_back(dynamic_cast<Shape*>(objects[i]));	    		
+	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
+	    		all_shapes.push_back(objtri);	    		
 	    	}
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
@@ -150,7 +153,7 @@ int main (int argc, char *argv[]) {
 	}
 
   cout << "rendering..." << endl;
-	//render();
+  render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
   // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)
