@@ -8,12 +8,13 @@ class Shape {
     void setMaterial (Material material) {
       this->material = material;
     }
+    virtual std::basic_ostream<char, std::__1::char_traits<char> > print() {};
 };
-#endif
 
-/*std::ostream& operator<< (std::ostream &out, Shape &shape)
+std::ostream& operator<< (std::ostream &out, Shape &shape)
 {
-    out << "Shape: " << shape <<
+    out << "Shape: " << shape.print() <<
         "Material: " << shape.material << "\n";
     return out;
-}*/ //HOW TO PRINT?
+}
+#endif

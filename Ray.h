@@ -20,7 +20,7 @@ class Ray {
 
 Vector Ray::eval(float t) {
     Vector e = Vector(start.x, start.y, start.z);
-    return e + t*direction;
+    return e + direction * t;
 }
 
 std::ostream& operator<< (std::ostream &out, Ray &ray)

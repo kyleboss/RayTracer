@@ -19,6 +19,9 @@ class Sphere: public Shape {
         { }
     Coord center;
     float r;
+    virtual std::basic_ostream<char, std::__1::char_traits<char> > print() {
+        std::cout << this;
+    }
 };
 
 std::ostream& operator<< (std::ostream &out, Sphere &sphere)

@@ -22,6 +22,9 @@ class Triangle: public Shape {
     Coord point1;
     Coord point2;
     Coord point3;
+    std::basic_ostream<char, std::__1::char_traits<char> > print() {
+        std::cout << this;
+    }
 };
 
 std::ostream& operator<< (std::ostream &out, Triangle &triangle)

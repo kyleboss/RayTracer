@@ -72,7 +72,7 @@ bool Tracer::raySphere(Ray r, Sphere s, float tMin, float tMax) {
 		float t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot); 
 	}
 	Vector p = r.eval(t);
-	Vector normal = (p - c)/r;
+	Vector normal = (p - c)/s.r;
 	return true;
 }
 
@@ -104,7 +104,7 @@ bool Tracer::rayTri(Ray r, Triangle tri, float tMin, float tMax) {
 	if (beta < 0 || beta > 1)
 		return false;  
   return true;
-  //remember to set normal
+  //remember to set normal??? how to calc normal
 }
 
 #endif

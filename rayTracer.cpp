@@ -80,6 +80,7 @@ void commandLine(int argc, char *argv[]) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      all_shapes.push_back(Sphere(c, strtof(argv[i+4], NULL), last_material));
 	      i += 4;
+	      cout << "entered sphere" << endl;
 	    }
 	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
@@ -87,6 +88,7 @@ void commandLine(int argc, char *argv[]) {
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
 	      all_shapes.push_back(Triangle(a, b, c, last_material));
 	      i += 9;
+	      cout << "entered triangle" << endl;
 	    }
 	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
 	    	objParse(argv[i+1], &objects);
@@ -127,7 +129,6 @@ void commandLine(int argc, char *argv[]) {
 	    //TO DO: TRANSFORMATIONS
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
-	    	i += 1;
 	    }
 	}
 }
@@ -135,14 +136,20 @@ void commandLine(int argc, char *argv[]) {
 int main (int argc, char *argv[]) {
 	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
+  	Sphere s = Sphere(Coord(1, 1, 1), 2, last_material);
+  	all_shapes.push_back(s);
 
-	cout << "These are the current shapes: " << endl;
+  	Shape q = Sphere(Coord(1, 1, 1), 2, last_material);
+  	cout << "SHAPE!!! " << q << endl;
+	cout << "These are the current shapes:" << endl;
+	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
-		//cout << all_shapes[i] << endl; ER HOW TO PRINT SHAPE??
+		
+		//cout << all_shapes[i] << endl;
 	}
 
   cout << "rendering..." << endl;
-	render();
+	//render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
   // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)
