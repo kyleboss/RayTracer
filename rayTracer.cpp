@@ -23,7 +23,7 @@ using namespace std;
 //************************
 // GLOBAL VARIABLES 
 //************************
-	vector<Shape> all_shapes;
+	vector<Shape*> all_shapes;
 	vector<Triangle> objects; //things to push onto for obj parse
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
@@ -78,7 +78,7 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      all_shapes.push_back(Sphere(c, strtof(argv[i+4], NULL), last_material));
+	      all_shapes.push_back(dynamic_cast<Shape*>(Sphere(c, strtof(argv[i+4], NULL), last_material))));
 	      i += 4;
 	      cout << "entered sphere" << endl;
 	    }
@@ -86,7 +86,7 @@ void commandLine(int argc, char *argv[]) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
-	      all_shapes.push_back(Triangle(a, b, c, last_material));
+	      all_shapes.push_back(dynamic_cast<Shape*>(Triangle(a, b, c, last_material)));
 	      i += 9;
 	      cout << "entered triangle" << endl;
 	    }
@@ -94,7 +94,7 @@ void commandLine(int argc, char *argv[]) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		objects[i].setMaterial(last_material);
-	    		all_shapes.push_back(objects[i]);	    		
+	    		all_shapes.push_back(dynamic_cast<Shape*>(objects[i]));	    		
 	    	}
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
@@ -126,6 +126,7 @@ void commandLine(int argc, char *argv[]) {
 	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
 	      i += 13;
 	    }    
+
 	    //TO DO: TRANSFORMATIONS
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
@@ -136,11 +137,11 @@ void commandLine(int argc, char *argv[]) {
 int main (int argc, char *argv[]) {
 	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
-  	Sphere s = Sphere(Coord(1, 1, 1), 2, last_material);
-  	all_shapes.push_back(s);
+  	//Sphere s = Sphere(Coord(1, 1, 1), 2, last_material);
+  	//all_shapes.push_back(s);
 
   	Shape q = Sphere(Coord(1, 1, 1), 2, last_material);
-  	cout << "SHAPE!!! " << q << endl;
+  	//cout << "SHAPE!!! " << q << endl;
 	cout << "These are the current shapes:" << endl;
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {

@@ -13,36 +13,40 @@ using namespace std;
 
 class Tracer {
  public:
-   vector<Shape> all_shapes;
-   Tracer(vector<Shape> all_shapes) : all_shapes(all_shapes){}
+   vector<Shape*> all_shapes;
+   Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
    Color trace(Ray ray);
    bool hit(Ray ray);
-   bool raySphere(Ray r, Sphere s, float tMin, float tMax);
-   bool rayTri(Ray r, Triangle t, float tMin, float tMax);
+   bool raySphere(Ray r, Sphere* s, float tMin, float tMax);
+   bool rayTri(Ray r, Triangle* tri, float tMin, float tMax);
 };
 //Tmin, max = 1, 100 arbitrarily 
 
 bool Tracer::hit(Ray ray) {
-bool hit = false;
-/*float t_min = 0;
-float t_max = 100;
-for (int i = 0; i < all_shapes.size(); i++) {
- 		if (typeof(all_shapes[i].shape) == Triangle) {
-		if (rayTri(ray, all_shapes[i], t_min, t_max) {
-			hit = true;
-			//hitobject = all_shapes[i].shape
-			t_max = //t that was hit
-		}  			
+	bool hit = false;
+	float t_min = 1.0e-10;
+	float t_max = 100;
+	for (int i = 0; i < all_shapes.size(); i++) {
+		Triangle* triangle = dynamic_cast<Triangle*>(all_shapes[i]);
+		Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
+ 		if (triangle != 0) { //if it's a triangle?
+			cout << "HI IM TRIANGLE! " << endl;
+			if (rayTri(ray, triangle, t_min, t_max)) {
+				hit = true;
+				//hitobject = all_shapes[i].shape
+				//t_max = //t that was hit
+			}  			
  		}
- 		if (typeof(all_shapes[i].shape) == Sphere) {
-		if (raySphere(ray, all_shapes[i], t_min, t_max) {
-			hit = true;
-			//hitobject = all_shapes[i].shape
-			t_max = //t that was hit
-		}
+ 		if (sphere != 0) {
+ 			cout << "YO IM SPHERE! " << endl;
+			if (raySphere(ray, sphere, t_min, t_max)) {
+				hit = true;
+				//hitobject = all_shapes[i].shape
+				//t_max = //t that was hit
+			}
  		}
-}*/
-return hit;
+	}
+	return hit;
 }
 
 Color Tracer::trace(Ray ray) {
@@ -53,35 +57,54 @@ Color Tracer::trace(Ray ray) {
  return color;
 };
 
-bool Tracer::raySphere(Ray r, Sphere s, float tMin, float tMax) {
+bool Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 //sph coord center float r
 //ray coord start v direction
 	float t = -INFINITY;
+	float t2 = -INFINITY; 
 	Vector d = r.direction;
-	Vector c = Vector((s.center).x, (s.center).y, (s.center).z);
+	Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
 	Vector e = Vector(r.start.x, r.start.y, r.start.z);
 	Vector e_minus_c = e - c;
 	float d_dot = d.dot(d);
-	float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s.r * s.r)));
+	float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s->r * s->r)));
 	if (discrimnant < 0)
 		return false;
 	if (discrimnant == 0)
 		t = -(d.dot(e_minus_c) / d_dot);
-	else {
+	if (discrimnant > 0) {
 		t = -((d.dot(e_minus_c) + discrimnant) / d_dot);
-		float t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot); 
+		t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot); 
 	}
-	Vector p = r.eval(t);
-	Vector normal = (p - c)/s.r;
-	return true;
+	if (t < tMin && t2 < tMin) { //equiv to t1, t2 < 0
+		return false;
+	}
+	if (t > tMax && t2 > tMax) {
+		return false;
+	}
+	else {
+		if (t > tMin && t < tMax) {
+			//return obj with t1
+			Vector p = r.eval(t);
+			Vector normal = (p - c)/s->r;
+			return true;		
+		}
+		else if (t2 > tMin && t2 < tMax) {
+			//return obj with t2
+			Vector p = r.eval(t2);
+			Vector normal = (p - c)/s->r;
+			return true;		
+		}
+	}
+	return false;
 }
 
-bool Tracer::rayTri(Ray r, Triangle tri, float tMin, float tMax) {
+bool Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
 //CALCULATIONS AS PER PG 79 OF TEXTBOOK
-  Vector x = Vector(tri.point1.x, tri.point2.x, tri.point3.x); 
+  Vector x = Vector(tri->point1.x, tri->point2.x, tri->point3.x); 
   // x = (xa, xb, xc) of triangles
-  Vector y = Vector(tri.point1.y, tri.point2.y, tri.point3.y);
-  Vector z = Vector(tri.point1.z, tri.point2.z, tri.point3.z);
+  Vector y = Vector(tri->point1.y, tri->point2.y, tri->point3.y);
+  Vector z = Vector(tri->point1.z, tri->point2.z, tri->point3.z);
   Vector d = r.direction;
   Vector e = Vector(r.start.x, r.start.y, r.start.z);
 
@@ -102,9 +125,12 @@ bool Tracer::rayTri(Ray r, Triangle tri, float tMin, float tMax) {
   	return false;
   float beta = ((x.x - e.x)*ei_m_hf + (y.y - e.y)*gf_m_di + (z.x - e.z)*dh_m_eg) / m;
 	if (beta < 0 || beta > 1)
-		return false;  
+		return false; 
+	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z); 
+	Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
+	Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);		
+	Vector normal = (p2 - p1).cross(p3 - p1);
   return true;
-  //remember to set normal??? how to calc normal
 }
 
 #endif
