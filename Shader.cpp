@@ -20,7 +20,7 @@
 
 #include <time.h>
 #include <math.h>
-#include "Light.h"
+
 
 
 #define PI 3.14159265  // Should be used from mathlib
@@ -270,7 +270,7 @@ using namespace std;
 //****************************************************
 
 
-Color shadeCircle(HitRecord hitRecord) {
+Color shadeCircle(HitRecord hitRecord, Vector w) {
   Sphere sphere = hitRecord.sphere;
   float x = hitRecord.intersection.x;
   float y = hitRecord.intersection.y;
@@ -298,7 +298,7 @@ Color shadeCircle(HitRecord hitRecord) {
       // Location of the center of pixel relative to center of sphere
       x = (x+0.5-sphere.center.x);
       y = (y+0.5-sphere.center.y);
-      Vector v = Vector(1,1,1); // ??
+      // Vector v = Vector(0,0,1); // ??
 
       float dist = sqrt(sqr(x) + sqr(y));
 
@@ -327,7 +327,7 @@ Color shadeCircle(HitRecord hitRecord) {
           r=r*(2*ln);
           r=r-normLight;
           r=r.normalize();
-          float specPos = pow(max(0.0f, r.dot(v)), sphere.material.exp); // CHECK v
+          float specPos = pow(max(0.0f, r.dot(w)), sphere.material.exp); // CHECK v
           Color ambient = sphere.material.ambient*(*itor)->color;
           Color diffuse = sphere.material.diffuse*(*itor)->color;
           diffuse.scale(diffPos);
