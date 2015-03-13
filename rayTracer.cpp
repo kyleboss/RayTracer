@@ -17,7 +17,7 @@
 #include "Sphere.h"
 #include "Triangle.h"
 #include "Light.h"
-// #include "Shader.cpp"
+#include "Shader.cpp"
 
 using namespace std;
 

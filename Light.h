@@ -6,14 +6,15 @@
 
 class Light {
   public:
-    // static std::vector<Light *> lights;
+    static std::vector<Light *> lights;
+
     Light (Coord location, Color color, int type, float falloff=0) :
     location(location),
     color (color),
     type(type),
     falloff(falloff)
     {
-        // lights.push_back(this);
+        lights.push_back(this);
     }
     Coord location;
     Color color;
@@ -29,5 +30,7 @@ std::ostream& operator<< (std::ostream &out, Light &light)
     light.falloff << " \n ";
     return out;
 }
+
+std::vector<Light *> Light::lights;
 
 #endif

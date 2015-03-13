@@ -311,7 +311,7 @@ Color shadeCircle(HitRecord hitRecord, Vector w) {
         Vector norm(x,y,z); //normal: position vector
         norm = norm.normalize();
 
-        for(std::vector<Light *>::iterator itor=Light::lights.begin(); itor!=Light::lights.end(); ++itor)
+        for(std::vector<Light *>::iterator itor=(Light::lights).begin(); itor!=Light::lights.end(); ++itor)
         {
           Coord normLightCoord = (*itor)->location;
           Vector normLight = Vector(normLightCoord.x, normLightCoord.y, normLightCoord.z);
