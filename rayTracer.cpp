@@ -144,14 +144,14 @@ int main (int argc, char *argv[]) {
   	//Sphere s = Sphere(Coord(1, 1, 1), 2, last_material);
   	//all_shapes.push_back(s);
 
-  	Sphere q = Sphere(Coord(1, 1, 1), 2, last_material);
+  	Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
   Coord coord = Coord(1,1,1);
   Color color = Color(1,1,1);
   Material material =  Material(color, color, color, 1.0, color);
   Triangle * objtri = new Triangle(coord, coord, coord, material);
   all_shapes.push_back(objtri);   
-	cout << "These are the current shapes:" << endl;
+  all_shapes.push_back(q);
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
 		cout << "BING" << endl;
@@ -159,7 +159,7 @@ int main (int argc, char *argv[]) {
 	}
 
   cout << "rendering..." << endl;
-  render();
+  //render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
   // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)
