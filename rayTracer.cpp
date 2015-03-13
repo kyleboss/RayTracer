@@ -32,8 +32,8 @@ using namespace std;
 	Coord camLR = Coord(1,-1,-1);
 	Coord camUL = Coord(-1,1,-1);
 	Coord camUR = Coord(1,1,-1); //THE DEFAULT VALUES are bc im too lazy to enter thru command line
-	int canvasX = 10; //CHANGE THESE!
-	int canvasY = 10; //CHANGE THESE!
+	int canvasX = 100; //CHANGE THESE!
+	int canvasY = 100; //CHANGE THESE!
 
 
 // Main render loop
@@ -55,7 +55,11 @@ void render() {
 		cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
 		cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
-		if (tracer.hit(ray)) {
+		HitRecord hitRecord = tracer.hit(ray);
+		if (hitRecord.isHit) {
+			cout << hitRecord.isHit;
+			cout << "PRINT TRIANGLE";
+			cout << hitRecord.triangle;
 			cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
@@ -146,11 +150,15 @@ int main (int argc, char *argv[]) {
 
   	Sphere q = Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
-  Coord coord = Coord(1,1,1);
-  Color color = Color(1,1,1);
+  Coord coord = Coord(0,0,-2);
+  Coord coord2 = Coord(1,1,-5);
+  Coord coord3 = Coord(0,1,-5);
+  Color color = Color(1,0,1);
   Material material =  Material(color, color, color, 1.0, color);
-  Triangle * objtri = new Triangle(coord, coord, coord, material);
-  all_shapes.push_back(objtri);   
+  Triangle * objtri = new Triangle(coord, coord2, coord3, material);
+  Sphere * objsph = new Sphere(coord, 1, material);
+  all_shapes.push_back(objtri);  
+  all_shapes.push_back(objsph);   
 	cout << "These are the current shapes:" << endl;
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {

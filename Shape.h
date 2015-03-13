@@ -13,6 +13,7 @@ class Shape {
 
 std::ostream& operator<< (std::ostream &out, Shape &shape)
 {
+    out << typeid(shape).name();
     shape.print(out);
     return out;
 }
