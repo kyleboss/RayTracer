@@ -32,8 +32,8 @@ using namespace std;
 	Coord camLR = Coord(1,-1,-1);
 	Coord camUL = Coord(-1,1,-1);
 	Coord camUR = Coord(1,1,-1); //THE DEFAULT VALUES are bc im too lazy to enter thru command line
-	int canvasX = 100; //CHANGE THESE!
-	int canvasY = 100; //CHANGE THESE!
+	int canvasX = 10; //CHANGE THESE!
+	int canvasY = 10; //CHANGE THESE!
 
 
 // Main render loop
@@ -48,11 +48,11 @@ void render() {
 	Tracer tracer = Tracer(all_shapes);
 
 	// //SET UP CAMERA through command line
-	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR);
+	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR, canvasX, canvasY);
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
-		cout << canvas.currSample << endl;
+		//cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
 		cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
@@ -155,17 +155,12 @@ int main (int argc, char *argv[]) {
   Coord coord3 = Coord(0,1,-5);
   Color color = Color(1,0,1);
   Material material =  Material(color, color, color, 1.0, color);
-<<<<<<< HEAD
-  Triangle * objtri = new Triangle(coord, coord, coord, material);
-  all_shapes.push_back(objtri);   
-  all_shapes.push_back(q);
-=======
+
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   Sphere * objsph = new Sphere(coord, 1, material);
   all_shapes.push_back(objtri);  
   all_shapes.push_back(objsph);   
-	cout << "These are the current shapes:" << endl;
->>>>>>> origin/master
+
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
 		cout << "BING" << endl;
@@ -173,7 +168,7 @@ int main (int argc, char *argv[]) {
 	}
 
   cout << "rendering..." << endl;
-  //render();
+  render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
   // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)
