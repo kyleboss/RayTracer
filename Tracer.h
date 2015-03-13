@@ -35,7 +35,7 @@ HitRecord Tracer::hit(Ray ray) {
 			//cout << "HI IM TRIANGLE! " << endl;
       hitRecord = rayTri(ray, triangle, t_min, t_max);
 			if (hitRecord.isHit) {
-				hit = true;
+				hit = true; //technically this isnt necessary, CLEAN UP LATER
 				//hitobject = all_shapes[i].shape
 				//t_max = //t that was hit
 			}  			
@@ -116,24 +116,38 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
   Vector d = r.direction;
   Vector e = Vector(r.start.x, r.start.y, r.start.z);
 
-  float ei_m_hf = (y.y - y.z)*(d.z) - (d.y)*(z.x - z.z);
+  //cout << "X, Y, Z " << x << y << z <<endl;
+  //cout<< "D and E" << d << e << endl;
+
+  float ei_m_hf = (y.x - y.z)*(d.z) - (d.y)*(z.x - z.z);
   float gf_m_di = (d.x)*(z.x - z.z) - (x.x - x.z)*(d.z);
-  float dh_m_eg = (x.x - x.z)*(z.x - z.z) - (y.y - y.z)*(z.z - z.y);
-  float ak_m_jb = (x.x - x.y)*(y.y - e.y) - (x.x - e.x)*(y.y - y.y);
+  float dh_m_eg = (x.x - x.z)*d.y - (y.y - y.z)*d.x;
+  float ak_m_jb = (x.x - x.y)*(y.x - e.y) - (x.x - e.x)*(y.x - y.y);
   float jc_m_al = (x.x - e.x)*(z.x - z.y) - (x.x - x.y)*(z.x - e.z);
-  float bl_m_kc = (y.y - y.y)*(z.x - e.z) - (y.y - e.y)*(z.x - z.y);
+  float bl_m_kc = (y.x - y.y)*(z.x - e.z) - (y.x - e.y)*(z.x - z.y);
 
-  float m = (x.x - x.y)*ei_m_hf + (y.y - y.y)*gf_m_di + (z.x - z.y)*dh_m_eg;
-  float t = -((z.x - z.z)*ak_m_jb + (y.y - y.z)*jc_m_al + (x.x - x.z)*bl_m_kc)/m;
+  float m = (x.x - x.y)*ei_m_hf + (y.x - y.y)*gf_m_di + (z.x - z.y)*dh_m_eg;
+  float t = -((z.x - z.z)*ak_m_jb + (y.x - y.z)*jc_m_al + (x.x - x.z)*bl_m_kc)/m;
 
-  if ((t < tMin) || (t > tMax))
+  if ((t < tMin) || (t > tMax)) {
+  	//cout << "this happened 1 " << endl;
   	return HitRecord(false);
-  float gamma = (d.z*ak_m_jb + d.y*jc_m_al + d.x*bl_m_kc)/m;
-  if (gamma < 0 || gamma > 1)
+
+  }
+  float gamma = (d.z*ak_m_jb + d. y*jc_m_al + d.x*bl_m_kc)/m;
+  if (gamma < 0 || gamma > 1) {
+  	//cout << "this happened 2 " << endl;
+
   	return HitRecord(false);
-  float beta = ((x.x - e.x)*ei_m_hf + (y.y - e.y)*gf_m_di + (z.x - e.z)*dh_m_eg) / m;
-	if (beta < 0 || beta > 1)
+
+  }
+  float beta = ((x.x - e.x)*ei_m_hf + (y.x - e.y)*gf_m_di + (z.x - e.z)*dh_m_eg) / m;
+	if (beta < 0 || beta > 1 - gamma) {
+  	//cout << "this happened 3 " << endl;
+
 		return HitRecord(false); 
+
+	}
 	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z); 
 	Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
 	Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);	
@@ -141,6 +155,8 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
   Coord intersection = Coord(p.x, p.y, p.z);
 	Vector normal = (p2 - p1).cross(p3 - p1);
   Triangle triangle = *tri;
+    	//cout << "the end good job " << endl;
+
   return HitRecord(t, intersection, normal, triangle);
 }
 
