@@ -17,6 +17,7 @@
 #include "Sphere.h"
 #include "Triangle.h"
 #include "Light.h"
+// #include "Shader.cpp"
 
 using namespace std;
 
@@ -32,8 +33,8 @@ using namespace std;
 	Coord camLR = Coord(1,-1,-1);
 	Coord camUL = Coord(-1,1,-1);
 	Coord camUR = Coord(1,1,-1); //THE DEFAULT VALUES are bc im too lazy to enter thru command line
-	int canvasX = 10; //CHANGE THESE!
-	int canvasY = 10; //CHANGE THESE!
+	int canvasX = 100; //CHANGE THESE!
+	int canvasY = 100; //CHANGE THESE!
 
 
 // Main render loop
@@ -54,13 +55,13 @@ void render() {
 	while(canvas.getSample(&canvas.currSample)) {
 		//cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
-		cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
+		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-			cout << hitRecord.isHit;
-			cout << "PRINT TRIANGLE";
-			cout << hitRecord.triangle;
-			cout << "hit at " << canvas.currSample << endl;
+			// cout << hitRecord.isHit;
+			// cout << "PRINT SPHERE";
+			// cout << hitRecord.sphere;
+			// cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -163,7 +164,6 @@ int main (int argc, char *argv[]) {
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
-		cout << "BING" << endl;
 		cout << *(all_shapes[i]) << endl;
 	}
 

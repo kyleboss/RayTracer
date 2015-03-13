@@ -13,6 +13,8 @@ class Coord {
     float x;
     float y;
     float z;
+    Coord operator * (Coord c);
+    Coord operator + (Coord c);
 };
 
 Coord Coord::midPoint(Coord c1, Coord c2) {
@@ -26,5 +28,13 @@ std::ostream& operator<< (std::ostream &out, Coord &coord)
         coord.z << ")";
     return out;
 }
+
+Coord Coord::operator * (Coord c) {
+  return Coord(x * c.x, y * c.y, z * c.z);
+};
+
+Coord Coord::operator + (Coord c) {
+  return Coord(x + c.x, y + c.y, z + c.z);
+};
 
 #endif

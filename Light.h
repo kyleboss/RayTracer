@@ -6,12 +6,15 @@
 
 class Light {
   public:
+    // static std::vector<Light *> lights;
     Light (Coord location, Color color, int type, float falloff=0) :
     location(location),
     color (color),
     type(type),
     falloff(falloff)
-    {}
+    {
+        // lights.push_back(this);
+    }
     Coord location;
     Color color;
     int type; //type: 0 = ambient 1 = directional 2 = point

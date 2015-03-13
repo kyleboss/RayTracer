@@ -17,13 +17,13 @@ class Tracer {
    vector<Shape*> all_shapes;
    Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
    Color trace(Ray ray);
-   bool hit(Ray ray);
+   HitRecord hit(Ray ray);
    HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax);
    HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax);
 };
 //Tmin, max = 1, 100 arbitrarily 
 
-bool Tracer::hit(Ray ray) {
+HitRecord Tracer::hit(Ray ray) {
 	bool hit = false;
   HitRecord hitRecord = HitRecord(false);
 	float t_min = 1.0e-10;
@@ -50,14 +50,14 @@ bool Tracer::hit(Ray ray) {
 			}
  		}
 	}
-	return hit;
+	return hitRecord;
 }
 
 Color Tracer::trace(Ray ray) {
 
  //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
  //luckily material properties are stored in all_shapes
- Color color = Color(1, 0, 0);
+ Color color = Color(1, 0, 1);
  return color;
 };
 
@@ -93,7 +93,6 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c)/s->r;
       Sphere sphere = *s;
-      cout << "YAY";
 			return HitRecord(t, intersection, normal, sphere);		
 		}
 		else if (t2 > tMin && t2 < tMax) {
@@ -102,7 +101,6 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c)/s->r;
       Sphere sphere = *s;
-      cout << "YAY";
 			return HitRecord(t2, intersection, normal, sphere);		
 		}
 	}
@@ -143,7 +141,6 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
   Coord intersection = Coord(p.x, p.y, p.z);
 	Vector normal = (p2 - p1).cross(p3 - p1);
   Triangle triangle = *tri;
-  cout << "YAY";
   return HitRecord(t, intersection, normal, triangle);
 }
 
