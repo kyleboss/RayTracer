@@ -7,6 +7,7 @@
 #include "Sphere.h"
 #include "Shape.h"
 #include "HitRecord.h"
+#include "Shader.cpp"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ class Tracer {
  public:
    vector<Shape*> all_shapes;
    Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
-   Color trace(Ray ray);
+   Color trace(HitRecord hitRecord, Vector w);
    HitRecord hit(Ray ray);
    HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax);
    HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax);
@@ -53,11 +54,13 @@ HitRecord Tracer::hit(Ray ray) {
 	return hitRecord;
 }
 
-Color Tracer::trace(Ray ray) {
+Color Tracer::trace(HitRecord hitRecord, Vector W) {
 
  //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
  //luckily material properties are stored in all_shapes
- Color color = Color(1, 0, 1);
+ Color color = shadeCircle(hitRecord, W);
+ cout << "FINAL COLOR";
+ cout << color;
  return color;
 };
 
