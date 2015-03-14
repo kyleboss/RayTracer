@@ -160,6 +160,17 @@ int main (int argc, char *argv[]) {
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   all_shapes.push_back(objtri);   
   //all_shapes.push_back(objsph);   
+  Color ka = Color(.05, .05, .05);
+  Color kd = Color(1,1,1);
+  Color ks = Color(0,0,1);
+  Color kr = Color(0,0,0);
+  float spec = 255; 
+  Material material =  Material(ka, kd, ks, spec, kr);
+
+  // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
+  Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
+  // all_shapes.push_back(objtri);  
+  all_shapes.push_back(objsph);   
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {

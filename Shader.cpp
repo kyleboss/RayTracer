@@ -294,63 +294,54 @@ Color shadeCircle(HitRecord hitRecord, Vector w) {
   //   for (j=0;j<viewport.h;j++) {
 
       // Location of the center of pixel relative to center of sphere
-      x = (x+0.5-sphere.center.x);
-      y = (y+0.5-sphere.center.y);
       Color total = Color(0,0,0);
       // Vector v = Vector(0,0,1); // ??
 
-      float dist = sqrt(sqr(x) + sqr(y));
+      // float dist = sqrt(sqr(x) + sqr(y));
 
-      if (dist<=sphere.r) {
+      // if (dist<=sphere.r) {
 
         // This is the front-facing Z coordinate
-        float z = sqrt(sphere.r*sphere.r-dist*dist);
+        // float z = sqrt(sphere.r*sphere.r-dist*dist);
         
-        Vector norm(x,y,z); //normal: position vector
-        norm = norm.normalize();
-        Light(Coord(1,1,1), Color(0, 1, 0), 1, 1);
+        // Vector norm(x,y,z); //normal: position vector
+        // norm = norm.normalize();
+        Light(Coord(2,2,2), Color(1, 1, 1), POINT, 1);
         for(std::vector<Light *>::iterator itor=(Light::lights).begin(); itor!=Light::lights.end(); ++itor)
         {
           Vector lightLocationVec = Vector((*itor)->location.x,(*itor)->location.y,(*itor)->location.z);
           Vector intersectionVec = Vector(hitRecord.intersection.x,hitRecord.intersection.y,hitRecord.intersection.z);
-          Vector lightDirectionVec = lightLocationVec - intersectionVec;
-          lightDirectionVec = lightDirectionVec.normalize();
-          float mult = hitRecord.normal.dot(lightDirectionVec);
-          if (mult > 0) {
-            Color diffuse = Color();
-            diffuse.r = max(0.0f, hitRecord.sphere.material.diffuse.r * mult * (*itor)->color.r);
-            diffuse.g = max(0.0f, hitRecord.sphere.material.diffuse.g * mult * (*itor)->color.g);
-            diffuse.b = max(0.0f, hitRecord.sphere.material.diffuse.b * mult * (*itor)->color.b);
-
-            Coord normLightCoord = (*itor)->location;
-            Vector normLight = Vector(normLightCoord.x, normLightCoord.y, normLightCoord.z);
+          Vector lightDirectionVec;
             if ((*itor)->type == DIRECTIONAL) {
-              normLight = normLight*(-1);
+              lightDirectionVec = lightLocationVec*(-1);
             } else if ((*itor)->type == POINT) {
-              normLight = norm-normLight;
+              lightDirectionVec = lightLocationVec-intersectionVec;
             }
-            normLight = normLight.normalize();
-            float ln = normLight.dot(norm);
+            lightDirectionVec = lightDirectionVec.normalize();
+            float ln = lightDirectionVec.dot(hitRecord.normal);
             float diffPos = max(0.0f, ln); //max(l.n, 0)
-            Vector r = norm;
+            Vector r = hitRecord.normal;
             r=r*(2*ln);
-            r=r-normLight;
+            r=r-lightDirectionVec;
             r=r.normalize();
-            float specPos = pow(max(0.0f, r.dot(w)), sphere.material.exp); // CHECK v
+            float specPos = pow(max(0.0f, r.dot(Vector(0,0,0))), sphere.material.exp); // CHECK v
             Color ambient = sphere.material.ambient*(*itor)->color;
-            // Color diffuse = sphere.material.diffuse*(*itor)->color;
-            // diffuse = diffuse.scale(diffPos);
-            // diffuse.scale(diffPos);
+            Color diffuse = sphere.material.diffuse*(*itor)->color;
+            diffuse = diffuse.scale(diffPos);
+            diffuse.scale(diffPos);
             Color specular = sphere.material.specular*(*itor)->color;
             specular.scale(specPos);
             total = ambient+diffuse+specular;
-            cout << "AMBIENT:" << ambient;
-            cout << "DIFFUSE:" << diffuse;
-            cout << "SPECULAR:" << specular;
-            cout << "TOTAL" << total;
+            cout << "exp" << sphere.material.exp;
+            cout << "specPos" << specPos;
+            cout << "specular" << specular;
+            // cout << "AMBIENT:" << ambient;
+            // cout << "DIFFUSE:" << diffuse;
+            // cout << "SPECULAR:" << specular;
+            // cout << "TOTAL" << total;
             return total;
-          }
-        }
+          // }
+        // }
 
         // for (int k=0; k < numDl; k++) { //loop direction light
         //   Vec normLight = dl[k].pos;
