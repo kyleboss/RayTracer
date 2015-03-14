@@ -47,7 +47,12 @@ Ray Camera::shootRay(Sample sample) {
   float rayv = LR.y + (UR.y - LR.y) * (sample.y + 0.5) / canvasY;
 
   Vector direction = W * -d + U * rayu + V * rayv;
+
   //Vector pointOnPlane = (V * rayY) - W - (U * rayX);
+    float u = ((float) (sample.x))/((float) canvasX);
+  float v = ((float) (sample.y))/((float) canvasY);
+  // Coord directionCoord = ((LL*v+UL*(1-v))*u+(LR*v + UR*(1-v))*(1-u))-eyeLoc;
+  // Vector direction = Vector(directionCoord.x, directionCoord.y, directionCoord.z);
   return Ray(eyeLoc, direction, 5, 1, 100);
 }
 

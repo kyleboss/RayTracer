@@ -14,6 +14,7 @@ class Coord {
     float y;
     float z;
     Coord operator * (Coord c);
+    Coord operator * (float s);
     Coord operator + (Coord c);
     Coord operator - (Coord c);
 };
@@ -32,6 +33,10 @@ std::ostream& operator<< (std::ostream &out, Coord &coord)
 
 Coord Coord::operator * (Coord c) {
   return Coord(x * c.x, y * c.y, z * c.z);
+};
+
+Coord Coord::operator * (float s) {
+  return Coord(x * s, y * s, z * s);
 };
 
 Coord Coord::operator + (Coord c) {

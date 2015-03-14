@@ -7,6 +7,8 @@
 #include <cmath>
 #include <time.h>
 
+int canvasX = 10; //CHANGE THESE!
+int canvasY = 10; //CHANGE THESE!
 #include "CImg.h"
 #include "Camera.h"
 #include "Tracer.h"
@@ -16,6 +18,8 @@
 #include "SaveImg.cpp"
 #include "Sphere.h"
 #include "Triangle.h"
+#include "Matrix.h"
+#include "Transformation.h"
 
 using namespace std;
 
@@ -31,10 +35,9 @@ using namespace std;
 	Coord camUR = Coord(1,1,-1);
 	Coord camLR = Coord(1,-1,-1);
 	Coord camLL = Coord(-1,-1,-1);
+	// Matrix transMatrix = Matrix();
 
  //THE DEFAULT VALUES are bc im too lazy to enter thru command line
-	int canvasX = 300; //CHANGE THESE!
-	int canvasY = 300; //CHANGE THESE!
 
 // Main render loop
 void render() {
@@ -52,15 +55,16 @@ void render() {
 
 	//RENDER LOOP
 	while(canvas.getSample(&canvas.currSample)) {
-		//cout << canvas.currSample << endl;
+		// cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
 		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
+			cout << hitRecord;
 			// cout << hitRecord.isHit; 
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
-			cout << "hit at " << canvas.currSample << endl;
+			// cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(hitRecord, camera.W, ray.direction);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -150,9 +154,9 @@ int main (int argc, char *argv[]) {
 
   	//Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
-  Coord coord = Coord(0,0.5,-2);
-  Coord coord2 = Coord(-0.5,0,-1);
-  Coord coord3 = Coord(0.5,0,-2);
+  Coord coord = Coord(0,1,-2);
+  Coord coord2 = Coord(-1,0,-2);
+  Coord coord3 = Coord(1,0,-2);
   Color color = Color(1,0,1); 
 
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
@@ -164,11 +168,11 @@ int main (int argc, char *argv[]) {
   float spec = 255; 
   Material material =  Material(ka, kd, ks, spec, kr);
 
-  // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
-  Sphere * objsph = new Sphere(Coord(.5,-.5,-2), .3, material);
+  // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
+  Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   all_shapes.push_back(objtri);  
-  all_shapes.push_back(objsph);   
+  // all_shapes.push_back(objsph);   
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
@@ -176,6 +180,43 @@ int main (int argc, char *argv[]) {
 	}
 
   cout << "rendering..." << endl;
+    Matrix m1 = Matrix();
+  Matrix m2 = Matrix();
+  m1.setVal(0,0,3);
+  m1.setVal(0,1,2);
+  m1.setVal(0,2,9);
+  m1.setVal(0,3,6);
+  m1.setVal(1,0,5);
+  m1.setVal(2,0,7);
+  m1.setVal(3,0,8);
+  m2.setVal(0,0,4);
+  m2.setVal(0,1,3);
+  m2.setVal(0,2,8);
+  m2.setVal(0,3,1);
+  m2.setVal(1,0,5);
+  m2.setVal(2,0,6);
+  m2.setVal(3,0,9);
+  Matrix transMatrix = Matrix(TRANSLATION, 2, 3, 4);
+  Matrix scaleMatrix = Matrix(SCALE, 2, 3, 4);
+  Matrix rotaXMatrix = Matrix(ROTATION, X, 45);
+  Matrix rotaYMatrix = Matrix(ROTATION, Y, 45);
+  Matrix rotaZMatrix = Matrix(ROTATION, Z, 45);
+  Matrix I = Matrix();
+  for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+          I.matrix[i][j] = 1;
+      }
+  }
+  Matrix mult = I.multiply(m1);
+  cout << "TRANSLATION: \n" << transMatrix << "\n";
+  cout << "SCALE: \n" << scaleMatrix << "\n";
+  cout << "XROTATION: \n" << rotaXMatrix << "\n";
+  cout << "YROTATION: \n" << rotaYMatrix << "\n";
+  cout << "ZROTATION: \n" << rotaZMatrix << "\n";
+  cout << "m1:\n" << m1 << "\n";
+  cout << "m2:\n" << I << "\n";
+  cout << "m1*m2: \n" << mult << "\n";
+
   render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)

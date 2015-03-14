@@ -345,8 +345,8 @@ Color shadeCircle(HitRecord hitRecord, Vector w, Vector rayDirection) {
             specular.scale(specPos);
             total = ambient+diffuse+specular;
             // cout << "exp" << shape.material.exp;
-            cout << "specPos" << specPos;
-            cout << "specular" << specular;
+            // cout << "specPos" << specPos;
+            // cout << "specular" << specular;
             // cout << "AMBIENT:" << ambient;
             // cout << "DIFFUSE:" << diffuse;
             // cout << "SPECULAR:" << specular;

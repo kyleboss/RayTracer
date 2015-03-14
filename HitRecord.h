@@ -25,6 +25,7 @@ class HitRecord {
 std::ostream& operator<< (std::ostream &out, HitRecord &rec)
 {
     out << "Hit record at t = " << rec.t <<
+        "Intersection @ " << rec.intersection <<
         ", normal: " << rec.normal << "\n";
     return out;
 }
