@@ -158,7 +158,6 @@ int main (int argc, char *argv[]) {
 
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
-  all_shapes.push_back(objtri);   
   //all_shapes.push_back(objsph);   
   Color ka = Color(.05, .05, .05);
   Color kd = Color(1,1,1);
@@ -168,8 +167,8 @@ int main (int argc, char *argv[]) {
   material =  Material(ka, kd, ks, spec, kr);
 
   // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
-  Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
-  // all_shapes.push_back(objtri);  
+  Sphere * objsph = new Sphere(Coord(.5,-.5,-2), .3, material);
+  all_shapes.push_back(objtri);  
   all_shapes.push_back(objsph);   
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
