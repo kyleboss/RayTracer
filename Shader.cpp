@@ -272,6 +272,7 @@ using namespace std;
 
 Color shadeCircle(HitRecord hitRecord, Vector w) {
   Sphere sphere = hitRecord.sphere;
+  Triangle triangle = hitRecord.triangle;
   float x = hitRecord.intersection.x;
   float y = hitRecord.intersection.y;
   // Draw inner circle
@@ -324,15 +325,24 @@ Color shadeCircle(HitRecord hitRecord, Vector w) {
             r=r*(2*ln);
             r=r-lightDirectionVec;
             r=r.normalize();
-            float specPos = pow(max(0.0f, r.dot(Vector(0,0,0))), sphere.material.exp); // CHECK v
-            Color ambient = sphere.material.ambient*(*itor)->color;
-            Color diffuse = sphere.material.diffuse*(*itor)->color;
+            Color ambient, diffuse, specular;
+            float specPos;
+            if (hitRecord.isSphere) {
+              specPos = pow(max(0.0f, r.dot(Vector(0,0,0))), sphere.material.exp); // CHECK v
+              ambient = sphere.material.ambient*(*itor)->color;
+              diffuse = sphere.material.diffuse*(*itor)->color;
+              specular = sphere.material.specular*(*itor)->color;
+            } else {
+              specPos = pow(max(0.0f, r.dot(Vector(0,0,0))), triangle.material.exp); // CHECK v
+              ambient = triangle.material.ambient*(*itor)->color;
+              diffuse = triangle.material.diffuse*(*itor)->color;
+              specular = triangle.material.specular*(*itor)->color;              
+            }
             diffuse = diffuse.scale(diffPos);
             diffuse.scale(diffPos);
-            Color specular = sphere.material.specular*(*itor)->color;
             specular.scale(specPos);
             total = ambient+diffuse+specular;
-            cout << "exp" << sphere.material.exp;
+            // cout << "exp" << shape.material.exp;
             cout << "specPos" << specPos;
             cout << "specular" << specular;
             // cout << "AMBIENT:" << ambient;
