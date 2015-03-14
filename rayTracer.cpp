@@ -16,8 +16,6 @@
 #include "SaveImg.cpp"
 #include "Sphere.h"
 #include "Triangle.h"
-#include "Light.h"
-#include "Shader.cpp"
 
 using namespace std;
 
@@ -37,7 +35,6 @@ using namespace std;
  //THE DEFAULT VALUES are bc im too lazy to enter thru command line
 	int canvasX = 300; //CHANGE THESE!
 	int canvasY = 300; //CHANGE THESE!
- 
 
 // Main render loop
 void render() {
@@ -63,8 +60,13 @@ void render() {
 			// cout << hitRecord.isHit; 
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
+<<<<<<< HEAD
 			//cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);
+=======
+			cout << "hit at " << canvas.currSample << endl;
+		    Color color = tracer.trace(hitRecord, camera.W);
+>>>>>>> ed96c22601052d155eeb6d5aaf3643201d588e11
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
 	}

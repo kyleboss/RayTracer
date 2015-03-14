@@ -15,6 +15,7 @@ class Coord {
     float z;
     Coord operator * (Coord c);
     Coord operator + (Coord c);
+    Coord operator - (Coord c);
 };
 
 Coord Coord::midPoint(Coord c1, Coord c2) {
@@ -35,6 +36,10 @@ Coord Coord::operator * (Coord c) {
 
 Coord Coord::operator + (Coord c) {
   return Coord(x + c.x, y + c.y, z + c.z);
+};
+
+Coord Coord::operator - (Coord c) {
+  return Coord(x - c.x, y - c.y, z - c.z);
 };
 
 #endif
