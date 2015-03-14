@@ -61,7 +61,7 @@ void render() {
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
 			cout << "hit at " << canvas.currSample << endl;
-		    Color color = tracer.trace(hitRecord, camera.W);
+		    Color color = tracer.trace(hitRecord, camera.W, ray.direction);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
 	}

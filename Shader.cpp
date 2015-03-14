@@ -270,7 +270,7 @@ using namespace std;
 //****************************************************
 
 
-Color shadeCircle(HitRecord hitRecord, Vector w) {
+Color shadeCircle(HitRecord hitRecord, Vector w, Vector rayDirection) {
   Sphere sphere = hitRecord.sphere;
   Triangle triangle = hitRecord.triangle;
   float x = hitRecord.intersection.x;
@@ -307,7 +307,7 @@ Color shadeCircle(HitRecord hitRecord, Vector w) {
         
         // Vector norm(x,y,z); //normal: position vector
         // norm = norm.normalize();
-        Light(Coord(2,2,2), Color(1, 1, 1), POINT, 1);
+        Light(Coord(-2,-2,-2), Color(1, 1, 1), DIRECTIONAL, 1);
         for(std::vector<Light *>::iterator itor=(Light::lights).begin(); itor!=Light::lights.end(); ++itor)
         {
           Vector lightLocationVec = Vector((*itor)->location.x,(*itor)->location.y,(*itor)->location.z);
@@ -327,13 +327,15 @@ Color shadeCircle(HitRecord hitRecord, Vector w) {
             r=r.normalize();
             Color ambient, diffuse, specular;
             float specPos;
+            Vector w = rayDirection*(-1);
+            w = w.normalize();
             if (hitRecord.isSphere) {
-              specPos = pow(max(0.0f, r.dot(Vector(0,0,0))), sphere.material.exp); // CHECK v
+              specPos = pow(max(0.0f, r.dot(w)), sphere.material.exp); // CHECK v
               ambient = sphere.material.ambient*(*itor)->color;
               diffuse = sphere.material.diffuse*(*itor)->color;
               specular = sphere.material.specular*(*itor)->color;
             } else {
-              specPos = pow(max(0.0f, r.dot(Vector(0,0,0))), triangle.material.exp); // CHECK v
+              specPos = pow(max(0.0f, r.dot(w)), triangle.material.exp); // CHECK v
               ambient = triangle.material.ambient*(*itor)->color;
               diffuse = triangle.material.diffuse*(*itor)->color;
               specular = triangle.material.specular*(*itor)->color;              
