@@ -34,7 +34,6 @@ using namespace std;
 	int canvasX = 10; //CHANGE THESE!
 	int canvasY = 10; //CHANGE THESE!
 
-
 // Main render loop
 void render() {
 	//SET UP CAVAS
@@ -56,7 +55,7 @@ void render() {
 		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-			// cout << hitRecord.isHit;
+			// cout << hitRecord.isHit; 
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
 			cout << "hit at " << canvas.currSample << endl;
@@ -147,18 +146,18 @@ int main (int argc, char *argv[]) {
   	//Sphere s = Sphere(Coord(1, 1, 1), 2, last_material);
   	//all_shapes.push_back(s);
 
-  	Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
+  	//Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
   Coord coord = Coord(0,0,-2);
-  Coord coord2 = Coord(1,1,-5);
-  Coord coord3 = Coord(0,1,-5);
-  Color color = Color(1,0,1);
+  Coord coord2 = Coord(-1,0,-2);
+  Coord coord3 = Coord(0,-1,-2);
+  Color color = Color(1,0,1); 
   Material material =  Material(color, color, color, 1.0, color);
 
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
-  Sphere * objsph = new Sphere(coord, 1, material);
+  //Sphere * objsph = new Sphere(coord, 1, material);
   all_shapes.push_back(objtri);  
-  all_shapes.push_back(objsph);   
+  //all_shapes.push_back(objsph);   
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
