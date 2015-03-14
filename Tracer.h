@@ -25,27 +25,29 @@ class Tracer {
 //Tmin, max = 1, 100 arbitrarily 
 
 HitRecord Tracer::hit(Ray ray) {
-	bool hit = false;
   HitRecord hitRecord = HitRecord(false);
 	float t_min = 1.0e-10;
 	float t_max = 100;
+	HitRecord temp = HitRecord(false);
 	for (int i = 0; i < all_shapes.size(); i++) {
 		Triangle* triangle = dynamic_cast<Triangle*>(all_shapes[i]);
 		Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
  		if (triangle != 0) { //if it's a triangle?
 			//cout << "HI IM TRIANGLE! " << endl;
-      hitRecord = rayTri(ray, triangle, t_min, t_max);
-			if (hitRecord.isHit) {
-				hit = true; //technically this isnt necessary, CLEAN UP LATER
+      temp = rayTri(ray, triangle, t_min, t_max);
+			if (temp.isHit) {
+				hitRecord = temp;
+				t_max = temp.t;
 				//hitobject = all_shapes[i].shape
 				//t_max = //t that was hit
 			}  			
  		}
  		if (sphere != 0) {
  			//cout << "YO IM SPHERE! " << endl;
-      hitRecord = raySphere(ray, sphere, t_min, t_max);
-			if (hitRecord.isHit) {
-				hit = true;
+      temp = raySphere(ray, sphere, t_min, t_max);
+			if (temp.isHit) {
+				hitRecord = temp;
+				t_max = temp.t;
 				//hitobject = all_shapes[i].shape
 				//t_max = //t that was hit
 			}

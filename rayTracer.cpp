@@ -158,7 +158,7 @@ int main (int argc, char *argv[]) {
 
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
-  all_shapes.push_back(objtri);  
+  all_shapes.push_back(objtri);   
   //all_shapes.push_back(objsph);   
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
