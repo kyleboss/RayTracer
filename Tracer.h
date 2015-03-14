@@ -62,6 +62,7 @@ Color Tracer::trace(HitRecord hitRecord, Vector W) {
  cout << "FINAL COLOR";
  cout << color;
  return color;
+ // return Color(1, 0, 1);
 };
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
