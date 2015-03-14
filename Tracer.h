@@ -65,6 +65,7 @@ Color Tracer::trace(HitRecord hitRecord, Vector W, Vector rayDirection) {
  // cout << color;
  return color;
  // return Color(1, 0, 1);
+}
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 //sph coord center float r
