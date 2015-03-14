@@ -151,12 +151,10 @@ int main (int argc, char *argv[]) {
   	//Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
   Coord coord = Coord(0,0.5,-2);
-  Coord coord2 = Coord(-0.5,0,-2);
+  Coord coord2 = Coord(-0.5,0,-1);
   Coord coord3 = Coord(0.5,0,-2);
   Color color = Color(1,0,1); 
-  Material material =  Material(color, color, color, 1.0, color);
 
-  Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   //all_shapes.push_back(objsph);   
   Color ka = Color(.05, .05, .05);
@@ -164,9 +162,10 @@ int main (int argc, char *argv[]) {
   Color ks = Color(0,0,1);
   Color kr = Color(0,0,0);
   float spec = 255; 
-  material =  Material(ka, kd, ks, spec, kr);
+  Material material =  Material(ka, kd, ks, spec, kr);
 
   // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
+  Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   Sphere * objsph = new Sphere(Coord(.5,-.5,-2), .3, material);
   all_shapes.push_back(objtri);  
   all_shapes.push_back(objsph);   
