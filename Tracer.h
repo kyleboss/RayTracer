@@ -61,11 +61,10 @@ Color Tracer::trace(HitRecord hitRecord, Vector W, Vector rayDirection) {
  //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
  //luckily material properties are stored in all_shapes
  Color color = shadeCircle(hitRecord, W, rayDirection);
- cout << "FINAL COLOR";
- cout << color;
+ // cout << "FINAL COLOR";
+ // cout << color;
  return color;
  // return Color(1, 0, 1);
-};
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 //sph coord center float r
