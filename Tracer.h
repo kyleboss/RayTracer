@@ -17,7 +17,7 @@ class Tracer {
  public:
    vector<Shape*> all_shapes;
    Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
-   Color trace(HitRecord hitRecord, Vector w);
+   Color trace(HitRecord hitRecord, Vector w, Vector rayDirection);
    HitRecord hit(Ray ray);
    HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax);
    HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax);
@@ -56,11 +56,11 @@ HitRecord Tracer::hit(Ray ray) {
 	return hitRecord;
 }
 
-Color Tracer::trace(HitRecord hitRecord, Vector W) {
+Color Tracer::trace(HitRecord hitRecord, Vector W, Vector rayDirection) {
 
  //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
  //luckily material properties are stored in all_shapes
- Color color = shadeCircle(hitRecord, W);
+ Color color = shadeCircle(hitRecord, W, rayDirection);
  cout << "FINAL COLOR";
  cout << color;
  return color;
