@@ -134,7 +134,7 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
   	return HitRecord(false);
 
   }
-  float gamma = (d.z*ak_m_jb + d. y*jc_m_al + d.x*bl_m_kc)/m;
+  float gamma = (d.z*ak_m_jb + d.y*jc_m_al + d.x*bl_m_kc)/m;
   if (gamma < 0 || gamma > 1) {
   	//cout << "this happened 2 " << endl;
 

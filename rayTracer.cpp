@@ -29,14 +29,14 @@ using namespace std;
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
 	Coord camEye = Coord(0,0,0);
-	Coord camUL = Coord(-1,1,0);
-	Coord camUR = Coord(1,1,-2);
-	Coord camLR = Coord(1,-1,-2);
-	Coord camLL = Coord(-1,-1,0);
+	Coord camUL = Coord(-1,1,-1);
+	Coord camUR = Coord(1,1,-1);
+	Coord camLR = Coord(1,-1,-1);
+	Coord camLL = Coord(-1,-1,-1);
 
  //THE DEFAULT VALUES are bc im too lazy to enter thru command line
-	int canvasX = 100; //CHANGE THESE!
-	int canvasY = 100; //CHANGE THESE!
+	int canvasX = 300; //CHANGE THESE!
+	int canvasY = 300; //CHANGE THESE!
  
 
 // Main render loop
@@ -63,7 +63,7 @@ void render() {
 			// cout << hitRecord.isHit; 
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
-			cout << "hit at " << canvas.currSample << endl;
+			//cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(ray);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -153,14 +153,14 @@ int main (int argc, char *argv[]) {
 
   	//Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
-  Coord coord = Coord(0,0,-2);
-  Coord coord2 = Coord(-1,0,-2);
-  Coord coord3 = Coord(0,-1,-2);
+  Coord coord = Coord(0,0.5,-2);
+  Coord coord2 = Coord(-0.5,0,-2);
+  Coord coord3 = Coord(0.5,0,-2);
   Color color = Color(1,0,1); 
   Material material =  Material(color, color, color, 1.0, color);
 
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
-  //Sphere * objsph = new Sphere(coord, 1, material);
+  //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   all_shapes.push_back(objtri);  
   //all_shapes.push_back(objsph);   
 
