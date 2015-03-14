@@ -22,7 +22,7 @@ class Tracer {
    HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax);
    HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax);
 };
-//Tmin, max = 1, 100 arbitrarily 
+//Tmin, max = 1, 100 arbitrarily
 
 HitRecord Tracer::hit(Ray ray) {
   HitRecord hitRecord = HitRecord(false);
@@ -40,7 +40,7 @@ HitRecord Tracer::hit(Ray ray) {
 				t_max = temp.t;
 				//hitobject = all_shapes[i].shape
 				//t_max = //t that was hit
-			}  			
+			}
  		}
  		if (sphere != 0) {
  			//cout << "YO IM SPHERE! " << endl;
@@ -60,27 +60,18 @@ Color Tracer::trace(HitRecord hitRecord, Vector W, Vector rayDirection) {
 
  //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
  //luckily material properties are stored in all_shapes
-<<<<<<< HEAD
- Color color = shadeCircle(hitRecord, W);
- //cout << "FINAL COLOR";
- //cout << color;
- return color;
- //return Color(1, 0, 1);
-};
-=======
  Color color = shadeCircle(hitRecord, W, rayDirection);
  // cout << "FINAL COLOR";
  // cout << color;
  return color;
  // return Color(1, 0, 1);
 }
->>>>>>> origin/master
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 //sph coord center float r
 //ray coord start v direction
 	float t = -INFINITY;
-	float t2 = -INFINITY; 
+	float t2 = -INFINITY;
 	Vector d = r.direction;
 	Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
 	Vector e = Vector(r.start.x, r.start.y, r.start.z);
@@ -93,7 +84,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 		t = -(d.dot(e_minus_c) / d_dot);
 	if (discrimnant > 0) {
 		t = -((d.dot(e_minus_c) + discrimnant) / d_dot);
-		t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot); 
+		t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot);
 	}
 	if (t < tMin && t2 < tMin) { //equiv to t1, t2 < 0
 		return HitRecord(false);
@@ -108,7 +99,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c)/s->r;
       Sphere sphere = *s;
-			return HitRecord(t, intersection, normal, sphere);		
+			return HitRecord(t, intersection, normal, sphere);
 		}
 		else if (t2 > tMin && t2 < tMax) {
 			//return obj with t2
@@ -116,7 +107,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c)/s->r;
       Sphere sphere = *s;
-			return HitRecord(t2, intersection, normal, sphere);		
+			return HitRecord(t2, intersection, normal, sphere);
 		}
 	}
 	return HitRecord(false);
@@ -124,7 +115,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 
 HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
 //CALCULATIONS AS PER PG 79 OF TEXTBOOK
-  Vector x = Vector(tri->point1.x, tri->point2.x, tri->point3.x); 
+  Vector x = Vector(tri->point1.x, tri->point2.x, tri->point3.x);
   // x = (xa, xb, xc) of triangles
   Vector y = Vector(tri->point1.y, tri->point2.y, tri->point3.y);
   Vector z = Vector(tri->point1.z, tri->point2.z, tri->point3.z);
@@ -160,13 +151,13 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
 	if (beta < 0 || beta > 1 - gamma) {
   	//cout << "this happened 3 " << endl;
 
-		return HitRecord(false); 
+		return HitRecord(false);
 
 	}
-	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z); 
+	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z);
 	Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
-	Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);	
-  Vector p = r.eval(t);	
+	Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);
+  Vector p = r.eval(t);
   Coord intersection = Coord(p.x, p.y, p.z);
 	Vector normal = (p2 - p1).cross(p3 - p1);
   Triangle triangle = *tri;
