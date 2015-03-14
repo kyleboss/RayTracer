@@ -8,7 +8,6 @@
 #include "Shape.h"
 #include "HitRecord.h"
 #include "Shader.cpp"
-
 using namespace std;
 
 //Ray.start <- coord, Ray.direction <-vec
@@ -17,7 +16,7 @@ class Tracer {
  public:
    vector<Shape*> all_shapes;
    Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
-   Color trace(HitRecord hitRecord, Vector w, Vector rayDirection);
+   Color trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection);
    HitRecord hit(Ray ray);
    HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax);
    HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax);
@@ -26,8 +25,8 @@ class Tracer {
 
 HitRecord Tracer::hit(Ray ray) {
   HitRecord hitRecord = HitRecord(false);
-	float t_min = 1.0e-10;
-	float t_max = 100;
+	float t_min = ray.tMin;
+	float t_max = ray.tMax;
 	HitRecord temp = HitRecord(false);
 	for (int i = 0; i < all_shapes.size(); i++) {
 		Triangle* triangle = dynamic_cast<Triangle*>(all_shapes[i]);
@@ -56,25 +55,50 @@ HitRecord Tracer::hit(Ray ray) {
 	return hitRecord;
 }
 
-Color Tracer::trace(HitRecord hitRecord, Vector W, Vector rayDirection) {
+Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection) {
 
  //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
  //luckily material properties are stored in all_shapes
-<<<<<<< HEAD
- Color color = shadeCircle(hitRecord, W);
- //cout << "FINAL COLOR";
- //cout << color;
- return color;
- //return Color(1, 0, 1);
-};
-=======
- Color color = shadeCircle(hitRecord, W, rayDirection);
+
+  float epsilon = .01;
+  Color total = Color(0,0,0);
+  for(std::vector<Light *>::iterator itor=(Light::lights).begin(); itor!=Light::lights.end(); ++itor) {
+    
+    Vector lightLocationVec = Vector((*itor)->location.x,(*itor)->location.y,(*itor)->location.z);
+    Vector intersectionVec = Vector(hitRecord.intersection.x,hitRecord.intersection.y,hitRecord.intersection.z);
+    Vector lightDirectionVec;
+    Color lightColor = (*itor)->color;
+
+    if ((*itor)->type == DIRECTIONAL) {
+      lightDirectionVec = lightLocationVec*(-1);
+    } else if ((*itor)->type == POINT) {
+      lightDirectionVec = lightLocationVec-intersectionVec;
+    }
+    lightDirectionVec = lightDirectionVec.normalize();
+
+
+	  Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
+	  HitRecord shadowHR = this->hit(shadow);
+    if (shadowHR.isHit) {
+    	if (shadowHR.isSphere) { //TODO: shadowHR or hitRecord?
+    		total = shadowHR.sphere.material.ambient*lightColor;
+    	}
+    	else {
+    		total = shadowHR.triangle.material.ambient*lightColor;
+    	}
+      return total;
+    }
+    else {
+			 total = shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor);
+    }
+
+  }
+
  // cout << "FINAL COLOR";
  // cout << color;
- return color;
+ return total;
  // return Color(1, 0, 1);
 }
->>>>>>> origin/master
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 //sph coord center float r

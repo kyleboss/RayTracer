@@ -61,7 +61,7 @@ void render() {
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
 			cout << "hit at " << canvas.currSample << endl;
-		    Color color = tracer.trace(hitRecord, camera.W, ray.direction);
+		    Color color = tracer.trace(hitRecord, lights, ray.direction);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
 	}
@@ -157,7 +157,7 @@ int main (int argc, char *argv[]) {
 
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   //all_shapes.push_back(objsph);   
-  Color ka = Color(.05, .05, .05);
+  Color ka = Color(.5, .05, .05);
   Color kd = Color(1,1,1);
   Color ks = Color(0,0,1);
   Color kr = Color(0,0,0);
@@ -170,10 +170,13 @@ int main (int argc, char *argv[]) {
   all_shapes.push_back(objtri);  
   all_shapes.push_back(objsph);   
 
+  Light l = Light(Coord(-2,-2,-2), Color(1, 1, 1), 1, 1);
+  lights.push_back(l);
+
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
 		cout << *(all_shapes[i]) << endl;
-	}
+	}  
 
   cout << "rendering..." << endl;
   render();
