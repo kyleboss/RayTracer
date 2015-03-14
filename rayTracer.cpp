@@ -165,7 +165,7 @@ int main (int argc, char *argv[]) {
   Color ks = Color(0,0,1);
   Color kr = Color(0,0,0);
   float spec = 255; 
-  Material material =  Material(ka, kd, ks, spec, kr);
+  material =  Material(ka, kd, ks, spec, kr);
 
   // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
