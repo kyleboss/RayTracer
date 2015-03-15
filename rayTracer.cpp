@@ -19,7 +19,7 @@ int canvasY = 500; //CHANGE THESE!
 #include "Sphere.h"
 #include "Triangle.h"
 #include "Matrix.h"
-#include "Transformation.h"
+#include "Transform.h"
 
 using namespace std;
 
@@ -60,11 +60,6 @@ void render() {
 		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-			//cout << hitRecord;
-			// cout << hitRecord.isHit; 
-			// cout << "PRINT SPHERE";
-			// cout << hitRecord.sphere;
-			//cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(hitRecord, lights, ray.direction);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -149,6 +144,7 @@ void commandLine(int argc, char *argv[]) {
 int main (int argc, char *argv[]) {
 	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
+<<<<<<< HEAD
  
 //*******************************************
 // THIS SETS UP THE SCENE AS ON THE WEBSITE
@@ -168,6 +164,11 @@ int main (int argc, char *argv[]) {
   lights.push_back(l1);
 
 //Sphere 1
+=======
+  Coord coord = Coord(5,5,-17);
+  Coord coord2 = Coord(1,4,-20); 
+  Coord coord3 = Coord(6,-1,-20);
+>>>>>>> origin/master
   Color ka = Color(.1, .1, .1);
   Color kd = Color(1, 0, 1); 
   Color ks = Color(1,1,1);
@@ -175,6 +176,7 @@ int main (int argc, char *argv[]) {
   Material mat1 = Material(ka, kd, ks, 50, kr);
   Sphere * s1 = new Sphere(Coord(0,0,-20), 3, mat1);
 
+<<<<<<< HEAD
 //Sphere 2
   ka = Color(.1, .1, .1);
   kd = Color(1, 1, 0); 
@@ -190,6 +192,11 @@ int main (int argc, char *argv[]) {
   kr = Color(0,0,0);
   Material mat3 = Material(ka, kd, ks, 50, kr);
   Sphere * s3 = new Sphere(Coord(-2,-2,-15), 1, mat3);
+=======
+  Triangle * objtri = new Triangle(coord, coord2, coord3, material);
+  Sphere * objsph = new Sphere(Coord(0,0,-20), 1, material);
+  all_shapes.push_back(objsph);    
+>>>>>>> origin/master
 
   //all_shapes.push_back(s1);
   // all_shapes.push_back(s2);
@@ -216,53 +223,6 @@ int main (int argc, char *argv[]) {
 	}  
 
   cout << "rendering..." << endl;
-  //   Matrix m1 = Matrix();
-  // Matrix m2 = Matrix();
-  // m1.setVal(0,0,3);
-  // m1.setVal(0,1,2);
-  // m1.setVal(0,2,9);
-  // m1.setVal(0,3,6);
-  // m1.setVal(1,0,5);
-  // m1.setVal(2,0,7);
-  // m1.setVal(3,0,8);
-  // m2.setVal(0,0,4);
-  // m2.setVal(0,1,3);
-  // m2.setVal(0,2,8);
-  // m2.setVal(0,3,1);
-  // m2.setVal(1,0,5);
-  // m2.setVal(2,0,6);
-  // m2.setVal(3,0,9);
-  // Matrix transMatrix = Matrix(TRANSLATION, 2, 3, 4);
-  // Matrix scaleMatrix = Matrix(SCALE, 2, 3, 4);
-  // Matrix rotaXMatrix = Matrix(ROTATION, X, 45);
-  // Matrix rotaYMatrix = Matrix(ROTATION, Y, 45);
-  // Matrix rotaZMatrix = Matrix(ROTATION, Z, 45);
-  // Matrix I = Matrix();
-  // for (int i = 0; i < 4; i++) {
-  //     for (int j = 0; j < 4; j++) {
-  //         I.matrix[i][j] = 1;
-  //     }
-  // }
-  // Matrix mult = I.multiply(m1);
-  // cout << "TRANSLATION: \n" << transMatrix << "\n";
-  // cout << "SCALE: \n" << scaleMatrix << "\n";
-  // cout << "XROTATION: \n" << rotaXMatrix << "\n";
-  // cout << "YROTATION: \n" << rotaYMatrix << "\n";
-  // cout << "ZROTATION: \n" << rotaZMatrix << "\n";
-  // cout << "m1:\n" << m1 << "\n";
-  // cout << "m2:\n" << I << "\n";
-  // cout << "m1*m2: \n" << mult << "\n";
-
   render();
-	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
-  // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
-  // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)
-  // Color imgCol1 = Color(255,0,255);
-  // Color imgCol2 = Color(0, 255, 255);
-  // editPixel(&img, sample, imgCol1); // Setting 0,0 to have be magenta.
-  // editPixel(&img, sample2, imgCol2); // Setting 1,1 to be cyan.
-  // saveImg(img); // Saving image to file result.png
-  // img.display(); // Displaying image
-	//
   return 0;
 }

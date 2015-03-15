@@ -52,5 +52,4 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
   //cout << "specPos" << specPos;
   //cout << "specular" << specular;
   return total;
-
 }

@@ -100,14 +100,12 @@ Matrix Matrix::multiply(Matrix m2) {
     for (int l = 0; l < 4; ++l) {
         product.setVal(l,l,0);
     }
-    float total = 0;
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
+            product.matrix[i][j] = 0;
             for (int k = 0; k < 4; ++k) {
-                total = total + (this->matrix[k][i]*m2.matrix[j][k]);
+                product.matrix[i][j] = product.matrix[i][j] + (m2.matrix[i][k]*this->matrix[k][j]);
             }
-            product.matrix[i][j] = total;
-            total=0;
         }
     }
     return product;
