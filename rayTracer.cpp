@@ -60,11 +60,11 @@ void render() {
 		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-			cout << hitRecord;
+			//cout << hitRecord;
 			// cout << hitRecord.isHit; 
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
-			cout << "hit at " << canvas.currSample << endl;
+			//cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(hitRecord, lights, ray.direction);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -157,8 +157,7 @@ int main (int argc, char *argv[]) {
   Coord coord = Coord(5,5,-17);
   Coord coord2 = Coord(1,4,-20); 
   Coord coord3 = Coord(6,-1,-20);
-  Color color = Color(1,0,1); 
-
+ 
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   //all_shapes.push_back(objsph);   
   Color ka = Color(.1, .1, .1);
@@ -169,9 +168,9 @@ int main (int argc, char *argv[]) {
   Material material =  Material(ka, kd, ks, spec, kr);
 
   Triangle * objtri = new Triangle(coord, coord2, coord3, material);
-  //Sphere * objsph = new Sphere(Coord(0.5,0.5,-2), 1, material);
-  all_shapes.push_back(objtri);  
-  // all_shapes.push_back(objsph);    
+  Sphere * objsph = new Sphere(Coord(0,0,-20), 1, material);
+  //all_shapes.push_back(objtri);  
+  all_shapes.push_back(objsph);    
 
   Light l = Light(Coord(0.57735027, -0.57735027, -0.57735027), Color(1, 1, 1), 1, 1);
   Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1, 1);
