@@ -81,15 +81,15 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 	  HitRecord shadowHR = this->hit(shadow);
     if (shadowHR.isHit) {
     	if (shadowHR.isSphere) { //TODO: shadowHR or hitRecord?
-    		total = shadowHR.sphere.material.ambient*lightColor;
+    		total = total + shadowHR.sphere.material.ambient*lightColor;
     	}
     	else {
-    		total = shadowHR.triangle.material.ambient*lightColor;
+    		total = total + shadowHR.triangle.material.ambient*lightColor;
     	}
       return total;
     }
     else {
-			 total = shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor);
+			 total = total + shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor);
     }
 
   }
@@ -97,7 +97,6 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
  // cout << "FINAL COLOR";
  // cout << color;
  return total;
- // return Color(1, 0, 1);
 }
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
@@ -160,7 +159,7 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
 
   float ei_m_hf = (y.x - y.z)*(d.z) - (d.y)*(z.x - z.z);
   float gf_m_di = (d.x)*(z.x - z.z) - (x.x - x.z)*(d.z);
-  float dh_m_eg = (x.x - x.z)*d.y - (y.y - y.z)*d.x;
+  float dh_m_eg = (x.x - x.z)*d.y - (y.x - y.z)*d.x;
   float ak_m_jb = (x.x - x.y)*(y.x - e.y) - (x.x - e.x)*(y.x - y.y);
   float jc_m_al = (x.x - e.x)*(z.x - z.y) - (x.x - x.y)*(z.x - e.z);
   float bl_m_kc = (y.x - y.y)*(z.x - e.z) - (y.x - e.y)*(z.x - z.y);
@@ -173,6 +172,7 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
   	return HitRecord(false);
 
   }
+
   float gamma = (d.z*ak_m_jb + d.y*jc_m_al + d.x*bl_m_kc)/m;
   if (gamma < 0 || gamma > 1) {
   	//cout << "this happened 2 " << endl;

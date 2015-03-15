@@ -9,9 +9,6 @@ class Camera {
     Coord UR;
     Coord LR;
     Coord eyeLoc;
-    Vector W;
-    Vector U;
-    Vector V;
     int canvasX;
     int canvasY;
     float d;
@@ -26,34 +23,16 @@ class Camera {
     canvasX(canvasX),
     canvasY(canvasY),
     eyeLoc(eyeLoc)
-    {
-      getWUV();
-    }
+    {}
     Ray shootRay(Sample sample);
-    void getWUV();
 };
 
-void Camera::getWUV() {
-  W = Vector(eyeLoc.x - midX, eyeLoc.y - midY, eyeLoc.z - midZ);
-  d = W.magnitude();
-  W.normalize();
-  Vector up = Vector(0, 1, 0);
-  U = up.cross(W).normalize();
-  V = W.cross(U);
-}
-
 Ray Camera::shootRay(Sample sample) {
-  float rayu = UL.x + (UR.x - UL.x) * (sample.x + 0.5) / canvasX;
-  float rayv = LR.y + (UR.y - LR.y) * (sample.y + 0.5) / canvasY;
-
-  Vector direction = W * -d + U * rayu + V * rayv;
-
-  //Vector pointOnPlane = (V * rayY) - W - (U * rayX);
-    float u = ((float) (sample.x))/((float) canvasX);
-  float v = ((float) (sample.y))/((float) canvasY);
-  // Coord directionCoord = ((LL*v+UL*(1-v))*u+(LR*v + UR*(1-v))*(1-u))-eyeLoc;
-  // Vector direction = Vector(directionCoord.x, directionCoord.y, directionCoord.z);
-  return Ray(eyeLoc, direction, 5, 1, 100);
+  float u = sample.x / canvasX;
+  float v = sample.y / canvasY;
+  Coord pointOnPlane = ((LL*v+UL*(1-v))*u+(LR*v + UR*(1-v))*(1-u)) - eyeLoc;
+  Vector direction = Vector(-pointOnPlane.x, pointOnPlane.y, pointOnPlane.z).normalize();
+  return Ray(eyeLoc, direction, 5, 1, 1.0e10);
 }
 
 std::ostream& operator<< (std::ostream &out, Camera &camera)
