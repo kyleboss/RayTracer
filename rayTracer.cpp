@@ -7,8 +7,8 @@
 #include <cmath>
 #include <time.h>
 
-int canvasX = 300; //CHANGE THESE!
-int canvasY = 300; //CHANGE THESE!
+int canvasX = 500; //CHANGE THESE!
+int canvasY = 500; //CHANGE THESE!
 #include "CImg.h"
 #include "Camera.h"
 #include "Tracer.h"
@@ -31,10 +31,10 @@ using namespace std;
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
 	Coord camEye = Coord(0,0,0);
-	Coord camUL = Coord(-1,1,-1);
-	Coord camUR = Coord(1,1,-1);
-	Coord camLR = Coord(1,-1,-1);
-	Coord camLL = Coord(-1,-1,-1);
+	Coord camUL = Coord(-1,1,-3);
+	Coord camUR = Coord(1,1,-3);
+	Coord camLR = Coord(1,-1,-3);
+	Coord camLL = Coord(-1,-1,-3);
 	// Matrix transMatrix = Matrix();
 
  //THE DEFAULT VALUES are bc im too lazy to enter thru command line
@@ -154,16 +154,16 @@ int main (int argc, char *argv[]) {
 
   	//Sphere * q = new Sphere(Coord(1, 1, 1), 2, last_material);
   	// cout << "SHAPE!!! " << q << endl;
-  Coord coord = Coord(0,1,-2);
-  Coord coord2 = Coord(-1,0,-2); 
-  Coord coord3 = Coord(1,0,-2);
+  Coord coord = Coord(5,5,-17);
+  Coord coord2 = Coord(1,4,-20); 
+  Coord coord3 = Coord(6,-1,-20);
   Color color = Color(1,0,1); 
 
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   //all_shapes.push_back(objsph);   
-  Color ka = Color(.05, .05, .25);
-  Color kd = Color(1,0,0); 
-  Color ks = Color(0,0,1);
+  Color ka = Color(.1, .1, .1);
+  Color kd = Color(.1, .1, .1); 
+  Color ks = Color(1,1,1);
   Color kr = Color(0,0,0);
   float spec = 255; 
   Material material =  Material(ka, kd, ks, spec, kr);
@@ -173,8 +173,10 @@ int main (int argc, char *argv[]) {
   all_shapes.push_back(objtri);  
   // all_shapes.push_back(objsph);    
 
-  Light l = Light(Coord(2,2,2), Color(1, 1, 1), 2, 1);
+  Light l = Light(Coord(0.57735027, -0.57735027, -0.57735027), Color(1, 1, 1), 1, 1);
+  Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1, 1);
   lights.push_back(l);
+  lights.push_back(l1);
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
