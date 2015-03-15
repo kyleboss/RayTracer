@@ -151,7 +151,6 @@ void commandLine(int argc, char *argv[]) {
 int main (int argc, char *argv[]) {
 	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
-<<<<<<< HEAD
  
 //*******************************************
 // THIS SETS UP THE SCENE AS ON THE WEBSITE
@@ -171,11 +170,6 @@ int main (int argc, char *argv[]) {
   lights.push_back(l1);
 
 //Sphere 1
-=======
-  Coord coord = Coord(5,5,-17);
-  Coord coord2 = Coord(1,4,-20); 
-  Coord coord3 = Coord(6,-1,-20);
->>>>>>> origin/master
   Color ka = Color(.1, .1, .1);
   Color kd = Color(1, 0, 1); 
   Color ks = Color(1,1,1);
@@ -183,7 +177,6 @@ int main (int argc, char *argv[]) {
   Material mat1 = Material(ka, kd, ks, 50, kr);
   Sphere * s1 = new Sphere(Coord(0,0,-20), 3, mat1);
 
-<<<<<<< HEAD
 //Sphere 2
   ka = Color(.1, .1, .1);
   kd = Color(1, 1, 0); 
@@ -199,11 +192,7 @@ int main (int argc, char *argv[]) {
   kr = Color(0,0,0);
   Material mat3 = Material(ka, kd, ks, 50, kr);
   Sphere * s3 = new Sphere(Coord(-2,-2,-15), 1, mat3);
-=======
-  Triangle * objtri = new Triangle(coord, coord2, coord3, material);
-  Sphere * objsph = new Sphere(Coord(0,0,-20), 1, material);
-  all_shapes.push_back(objsph);    
->>>>>>> origin/master
+
 
   //all_shapes.push_back(s1);
   // all_shapes.push_back(s2);
