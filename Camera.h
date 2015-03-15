@@ -43,16 +43,17 @@ void Camera::getWUV() {
 }
 
 Ray Camera::shootRay(Sample sample) {
-  float u = UL.x + (UR.x - UL.x) * (sample.x + 0.5) / canvasX;
-  float v = LR.y + (UR.y - LR.y) * (sample.y + 0.5) / canvasY;
-
+  //float u = UL.x + (UR.x - UL.x) * (sample.x + 0.5) / canvasX;
+  //float v = LR.y + (UR.y - LR.y) * (sample.y + 0.5) / canvasY;
+  float u = sample.x / canvasX;
+  float v = sample.y / canvasY;
   //Vector direction = W * -d + U * rayu + V * rayv;
 
   //Vector pointOnPlane = (V * rayY) - W - (U * rayX);
   //float u = ((float) (sample.x))/((float) canvasX);
   //float v = ((float) (sample.y))/((float) canvasY);
   Coord pointOnPlane = ((LL*v+UL*(1-v))*u+(LR*v + UR*(1-v))*(1-u)) - eyeLoc;
-  Vector direction = Vector(pointOnPlane.x, pointOnPlane.y, pointOnPlane.z);
+  Vector direction = Vector(pointOnPlane.x, pointOnPlane.y, pointOnPlane.z).normalize();
   return Ray(eyeLoc, direction, 5, 1, 1.0e10);
 }
 
