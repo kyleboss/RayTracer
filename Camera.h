@@ -28,11 +28,11 @@ class Camera {
 };
 
 Ray Camera::shootRay(Sample sample) {
-  float u = sample.x / canvasX;
-  float v = sample.y / canvasY;
+  float u = (sample.x + 0.5) / canvasX;
+  float v = (sample.y + 0.5) / canvasY;
   Coord pointOnPlane = ((LL*v+UL*(1-v))*u+(LR*v + UR*(1-v))*(1-u)) - eyeLoc;
   Vector direction = Vector(-pointOnPlane.x, pointOnPlane.y, pointOnPlane.z).normalize();
-  return Ray(eyeLoc, direction, 5, 1, 1.0e10);
+  return Ray(eyeLoc, direction, 5, 1.0e-10, 1.0e10);
 }
 
 std::ostream& operator<< (std::ostream &out, Camera &camera)

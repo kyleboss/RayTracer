@@ -56,46 +56,35 @@ HitRecord Tracer::hit(Ray ray) {
 }
 
 Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection) {
-
- //TO DO: IMPLEMENT SHADER HERE. currently just sets color to red if shape is there
- //luckily material properties are stored in all_shapes
-
-  float epsilon = .01;
+  float epsilon = .1;
   Color total = Color(0,0,0);
-  for(std::vector<Light *>::iterator itor=(Light::lights).begin(); itor!=Light::lights.end(); ++itor) {
-    
-    Vector lightLocationVec = Vector((*itor)->location.x,(*itor)->location.y,(*itor)->location.z);
+  for(int i = 0; i < lights.size(); i++) {
+    Vector lightLocationVec = Vector(lights[i].location.x,lights[i].location.y,lights[i].location.z);
     Vector intersectionVec = Vector(hitRecord.intersection.x,hitRecord.intersection.y,hitRecord.intersection.z);
     Vector lightDirectionVec;
-    Color lightColor = (*itor)->color;
+    Color lightColor = lights[i].color;
+    int lightType = lights[i].type;
 
-    if ((*itor)->type == DIRECTIONAL) {
+    if (lightType == DIRECTIONAL) {
       lightDirectionVec = lightLocationVec*(-1);
-    } else if ((*itor)->type == POINT) {
+    } else if (lightType == POINT) {
       lightDirectionVec = lightLocationVec-intersectionVec;
     }
     lightDirectionVec = lightDirectionVec.normalize();
-
-
-	  // Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
-	  // HitRecord shadowHR = this->hit(shadow);
-   //  if (shadowHR.isHit) {
-   //  	if (shadowHR.isSphere) { //TODO: shadowHR or hitRecord?
-   //  		total = total + shadowHR.sphere.material.ambient*lightColor;
-   //  	}
-   //  	else {
-   //  		total = total + shadowHR.triangle.material.ambient*lightColor;
-   //  	}
-   //    return total;
-   //  }
-   //  else {
-			 total = total + shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor);
-   //  }
-
+  	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
+	  HitRecord shadowHR = this->hit(shadow);
+    if (shadowHR.isHit) {
+    	if (hitRecord.isSphere) { //TODO: shadowHR or hitRecord?
+    		total = total + hitRecord.sphere.material.ambient*lightColor;
+    	}
+    	else {
+    		total = total + hitRecord.triangle.material.ambient*lightColor;
+    	}
+    }
+    else {
+			 total = total + shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor, lightType);
+	  }
   }
-
- // cout << "FINAL COLOR";
- // cout << color;
  return total;
 }
 

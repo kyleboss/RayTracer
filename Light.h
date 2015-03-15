@@ -12,10 +12,7 @@ class Light {
     color (color),
     type(type),
     falloff(falloff),
-    location(location)
-    {
-        lights.push_back(this);
-    }
+    location(location){}
     Color color;
     Coord location;
     int type; //type: 0 = ambient 1 = directional 2 = point
@@ -30,7 +27,5 @@ std::ostream& operator<< (std::ostream &out, Light &light)
     light.falloff << " \n ";
     return out;
 }
-
-std::vector<Light *> Light::lights;
 
 #endif

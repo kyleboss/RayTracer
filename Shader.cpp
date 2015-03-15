@@ -15,7 +15,7 @@ const int POINT = 2;
 using namespace std;
 
 
-Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirection, Color lightColor) {
+Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirection, Color lightColor, int lightType) {
   
   Sphere sphere = hitRecord.sphere;
   Triangle triangle = hitRecord.triangle;
@@ -24,6 +24,16 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
   Vector n = hitRecord.normal.normalize();
   Color total = Color(0,0,0);
   Color ambient, diffuse, specular;
+
+  if (lightType == AMBIENT) {
+  //cout << "HEY AMBIENT LIGHT" << endl;
+    if (hitRecord.isSphere) {
+      total = total + hitRecord.sphere.material.ambient*lightColor;
+    } else {
+      total = total + hitRecord.triangle.material.ambient*lightColor;
+    }
+    //return total; NOT sure if should exit out
+  }
 
   //DIFFUSE!
   float ln = lightDirectionVec.dot(n);

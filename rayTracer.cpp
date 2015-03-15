@@ -61,6 +61,14 @@ void render() {
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
 		    Color color = tracer.trace(hitRecord, lights, ray.direction);
+		    //cout << color << " at (" << canvas.currSample.x << " , " << canvas.currSample.y << ")" << endl; 
+		    //clipping
+		    if (color.r > 1)
+		    	color.r = 1;
+		    if (color.g > 1)
+		    	color.g = 1;
+		    if (color.b > 1) 
+		    	color.b = 1;
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
 	}
@@ -120,8 +128,15 @@ void commandLine(int argc, char *argv[]) {
 	      Coord pl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color pl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
 	      pl = Transform::performTransform(pl);
-	      lights.push_back(Light(pl, pl_c, 2, strtof(argv[i+7], NULL)));
-	      i += 7;
+	      if ((strcmp(argv[i+7], "0") == 0) || (strcmp(argv[i+7], "1") == 0) || (strcmp(argv[i+7], "2") == 0)) {
+	      	//if they specified falloff
+	      	lights.push_back(Light(pl, pl_c, 2, strtof(argv[i+7], NULL)));
+	      	i += 7;
+	      }
+	      else {
+	      	lights.push_back(Light(pl, pl_c, 2, 0));
+	      	i+= 6;
+	      }
 	    }
 	    if (i < argc && strcmp(argv[i], "-ltd") == 0) {
 	      Coord dl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
@@ -168,7 +183,6 @@ void commandLine(int argc, char *argv[]) {
 }
 
 int main (int argc, char *argv[]) {
-	//TODO: create transformation matrices (library?)	
   commandLine(argc, argv);
  
 //*******************************************
@@ -182,9 +196,9 @@ int main (int argc, char *argv[]) {
 	        // x, y = 500 x 500
 //*******************************************
  
-//Lights
-  Light l = Light(Coord(0.57735027, -0.57735027, -0.57735027), Color(1, 1, 1), 1, 1);
-  Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1, 1);
+//Lights ALSO!!! DO LIGHT FALLOFF
+  Light l = Light(Coord(0.57735027,  -0.57735027, -0.57735027), Color(1, 1, 1), 1);
+  Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1);
   lights.push_back(l);
   lights.push_back(l1);
 
@@ -210,16 +224,16 @@ int main (int argc, char *argv[]) {
   ks = Color(1,1,1);
   kr = Color(0,0,0);
   Material mat3 = Material(ka, kd, ks, 50, kr);
-  Transform(TRANSLATE, 1, 2, 1);
+  //Transform(TRANSLATION, 1, 2, 1);
   Coord c = Coord(-2,-2,-15);
-  c = Transform::performTransform(c);
-  cout << c;
+  //c = Transform::performTransform(c);
+  //cout << c;
   Sphere * s3 = new Sphere(c, 1, mat3);
 
 
-  //all_shapes.push_back(s1);
-  // all_shapes.push_back(s2);
-   all_shapes.push_back(s3);
+  all_shapes.push_back(s1);
+  all_shapes.push_back(s2);
+  all_shapes.push_back(s3);
 
 //Triangle
   Coord coord = Coord(5,5,-17);
@@ -232,7 +246,7 @@ int main (int argc, char *argv[]) {
   Material mattri =  Material(ka, kd, ks, 50, kr);
   Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
    
-  //all_shapes.push_back(tri); 
+  all_shapes.push_back(tri); 
 
 //********************* 
 
