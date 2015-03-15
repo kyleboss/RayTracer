@@ -68,14 +68,14 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     if (lightType == DIRECTIONAL) {
       lightDirectionVec = lightLocationVec*(-1);
     } else if (lightType == POINT) {
-      lightDirectionVec = lightLocationVec-intersectionVec;
+      lightDirectionVec = lightLocationVec - intersectionVec;
     }
+    float r = lightDirectionVec.magnitude();
     lightDirectionVec = lightDirectionVec.normalize();
-    cout << "LDV IS " << lightDirectionVec << endl;
   	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
 	  HitRecord shadowHR = this->hit(shadow);
     if (shadowHR.isHit) {
-    	if (hitRecord.isSphere) { //TODO: shadowHR or hitRecord?
+    	if (hitRecord.isSphere) {
     		total = total + hitRecord.sphere.material.ambient*lightColor;
     	}
     	else {
@@ -89,7 +89,6 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 	  if (lightType == POINT) {
 	  	int falloff = lights[i].falloff;
 	    if (falloff != 0) {
-	    	float r = lightDirectionVec.magnitude();
 	    	if (falloff == 1) {
 	    		total = total.scale(1/r);
 	    	}

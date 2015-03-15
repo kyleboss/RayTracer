@@ -195,7 +195,7 @@ int main (int argc, char *argv[]) {
 	        // UL=[-1.  1. -3.]
 	        // x, y = 500 x 500
 //*******************************************
- /*
+
 //Lights
   Light l = Light(Coord(0.57735027,  -0.57735027, -0.57735027), Color(1, 1, 1), 1);
   Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1);
@@ -247,16 +247,14 @@ int main (int argc, char *argv[]) {
   Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
    
   all_shapes.push_back(tri); 
-*/
+
 //********************* 
 
-  //Attenuation check
-  Light a0 = Light(Coord(-0.57735027,  0.57735027, 0.57735027), Color(1, 1, 1), 2);
-  //Light d = Light(Coord(-1, -1, -1), Color(1, 1, 1), 1);
-  //Light a0 = Light(Coord(.5, -.5, 2), Color(1, 1, 1), 2, 0);
-  Light a = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 2);
-  Light a1 = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 2);
-  lights.push_back(a);
+/*  //Attenuation check
+  Light none = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 0);
+  Light lin = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 1);
+  Light quad = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 2); //lol not much of a visible change?
+  lights.push_back(quad); //change from non, lin, quad to your desires  
 
   Color ka = Color(.05, .05, .05);
   Color kd = Color(1, 1, 1); 
@@ -264,7 +262,7 @@ int main (int argc, char *argv[]) {
   Color kr = Color(0,0,0);
   Material mat1 = Material(ka, kd, ks, 64, kr);
   Sphere * s1 = new Sphere(Coord(0,0,-20), 3.5, mat1); 
-  all_shapes.push_back(s1);
+  all_shapes.push_back(s1);*/
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
