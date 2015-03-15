@@ -77,20 +77,20 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     lightDirectionVec = lightDirectionVec.normalize();
 
 
-	  Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
-	  HitRecord shadowHR = this->hit(shadow);
-    if (shadowHR.isHit) {
-    	if (shadowHR.isSphere) { //TODO: shadowHR or hitRecord?
-    		total = total + shadowHR.sphere.material.ambient*lightColor;
-    	}
-    	else {
-    		total = total + shadowHR.triangle.material.ambient*lightColor;
-    	}
-      return total;
-    }
-    else {
+	  // Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
+	  // HitRecord shadowHR = this->hit(shadow);
+   //  if (shadowHR.isHit) {
+   //  	if (shadowHR.isSphere) { //TODO: shadowHR or hitRecord?
+   //  		total = total + shadowHR.sphere.material.ambient*lightColor;
+   //  	}
+   //  	else {
+   //  		total = total + shadowHR.triangle.material.ambient*lightColor;
+   //  	}
+   //    return total;
+   //  }
+   //  else {
 			 total = total + shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor);
-    }
+   //  }
 
   }
 
