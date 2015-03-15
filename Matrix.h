@@ -27,7 +27,7 @@ class Matrix {
             }
         }
     }
-    Matrix(int transformation, float x, float y, float z) {
+    Matrix(int transformation, float x, float y, float z, float angle=0) {
         matrix = Matrix().matrix;
         if (transformation == TRANSLATION) {
             matrix[3][0] = x;
@@ -38,6 +38,16 @@ class Matrix {
             matrix[1][1] = y;
             matrix[2][2] = z;
         }
+        // } else if (transformation == ROTATION) {
+        //     matrix[0][0] = 0;
+        //     matrix[0][0] = z;
+        //     matrix[1][0] = -z;
+        //     matrix[1][1] = 0;
+        //     matrix[2][0] = y;
+        //     matrix[2][2] = 0;
+        //     matrix[3][1] = -x;
+        //     matrix[3][3] = 0;
+        // }
     }
     Matrix(int transformation, int axis, float angle) {
         matrix = Matrix().matrix;

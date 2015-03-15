@@ -134,7 +134,14 @@ void commandLine(int argc, char *argv[]) {
 	      i += 13;
 	    }    
 
-	    //TO DO: TRANSFORMATIONS
+	    // if (i < argc && strcmp(argv[i], "-xfr") == 0) {
+	    //   Color ka = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	    //   Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
+	    //   Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
+	    //   Color kr = Color(strtof(argv[i+11], NULL), strtof(argv[i+12], NULL), strtof(argv[i+13], NULL));
+	    //   last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
+	    //   i += 13;
+	    // }    
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
 	    }

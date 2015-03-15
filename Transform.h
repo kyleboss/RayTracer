@@ -17,18 +17,14 @@ class Transform {
     Transform(int transformation, float x, float y, float z) : transformation(transformation), x(x), y(y), z(z) {
         transforms.push_back(this);
         this->matrix = Matrix(this->transformation, this->x, this->y, this->z);
-        std::cout << "Transformation matrix:\n";
         std::cout << matrix << "\n";
         calcTransMatrix();
-        std::cout << "transMatrix after calcs: \n" << transMatrix << "\n";
     }
     Transform(int transformation, int axis, float angle) : transformation(transformation), axis(axis), angle(angle) {
         transforms.push_back(this);
         this->matrix = Matrix(this->transformation, this->axis, this->angle);
-        std::cout << "Transformation matrix:\n";
         std::cout << matrix << "\n";
         calcTransMatrix();
-        std::cout << "transMatrix after calcs: \n" << transMatrix << "\n";
     }
 };
 
@@ -42,7 +38,6 @@ void Transform::calcTransMatrix() {
         if ((itor) == std::prev(Transform::transforms.end())) {
             transformation = (*itor)->matrix;
         } else {
-            cout << "MATRIX MULTIPLICATION\n" << transformation << " & \n" << (*itor)->matrix << "\n";
             transformation = transformation.multiply((*itor)->matrix);
         }
         if (itor == Transform::transforms.begin()) {
@@ -58,7 +53,6 @@ void Transform::emptyTransforms() {
 }
 
 Coord Transform::performTransform(Coord loc) {
-    cout << "Multiplying \n" << transMatrix << "\nwith " << loc << "\n"; 
     if ((Transform::transforms).size() == 0) {
         return loc;
     }
