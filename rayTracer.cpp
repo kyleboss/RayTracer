@@ -19,7 +19,7 @@ int canvasY = 10; //CHANGE THESE!
 #include "Sphere.h"
 #include "Triangle.h"
 #include "Matrix.h"
-#include "Transformation.h"
+#include "Transform.h"
 
 using namespace std;
 
@@ -60,11 +60,11 @@ void render() {
 		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-			cout << hitRecord;
+			// cout << hitRecord;
 			// cout << hitRecord.isHit; 
 			// cout << "PRINT SPHERE";
 			// cout << hitRecord.sphere;
-			cout << "hit at " << canvas.currSample << endl;
+			// cout << "hit at " << canvas.currSample << endl;
 		    Color color = tracer.trace(hitRecord, lights, ray.direction);
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
@@ -183,7 +183,17 @@ int main (int argc, char *argv[]) {
 	}  
 
   cout << "rendering..." << endl;
-    Matrix m1 = Matrix();
+  Coord c1 = Coord(0, 0, 0);
+  Transform t1 = Transform(TRANSLATION, 2, 3, 4);
+  // cout << "TRANSLATING: (2,3,4)";
+  // c1 = Transform::performTransform(c1);
+  Transform t2 = Transform(SCALE, 2, 2, .5);
+  cout << "SCALING: (4,6,2)\n";
+  Transform t3 = Transform(TRANSLATION, 1, 1, 0);
+  cout << "TRANSLATING: (5, 7, 2)\n";
+  c1 = Coord(0,0,0);
+  c1 = Transform::performTransform(c1);
+  Matrix m1 = Matrix();
   Matrix m2 = Matrix();
   m1.setVal(0,0,3);
   m1.setVal(0,1,2);
@@ -211,16 +221,16 @@ int main (int argc, char *argv[]) {
       }
   }
   Matrix mult = I.multiply(m1);
-  cout << "TRANSLATION: \n" << transMatrix << "\n";
-  cout << "SCALE: \n" << scaleMatrix << "\n";
-  cout << "XROTATION: \n" << rotaXMatrix << "\n";
-  cout << "YROTATION: \n" << rotaYMatrix << "\n";
-  cout << "ZROTATION: \n" << rotaZMatrix << "\n";
-  cout << "m1:\n" << m1 << "\n";
-  cout << "m2:\n" << I << "\n";
-  cout << "m1*m2: \n" << mult << "\n";
+  //  "TRANSLATION: \n" << transMatrix << "\n";
+  // cout << "SCALE: \n" << scaleMatrix << "\n";
+  // cout << "XROTATION: \n" << rotaXMatrix << "\n";
+  // cout << "YROTATION: \n" << rotaYMatrix << "\n";
+  // cout << "ZROTATION: \n" << rotaZMatrix << "\n";
+  // cout << "m1:\n" << m1 << "\n";
+  // cout << "m2:\n" << I << "\n";
+  // cout << "m1*m2: \n" << mult << "\n";
 
-  render();
+  // render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
   // Sample sample = Sample (0,0); // Instantiating a pixel @ 0,0 (origin @ top-left)
   // Sample sample2 = Sample (1, 1); // Instantiating a pixel @ 1,1 (thus bottom-right)

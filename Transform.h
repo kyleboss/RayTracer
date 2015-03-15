@@ -11,18 +11,24 @@ class Transform {
     int transformation;
     int axis;
     Matrix matrix;
-    Coord performTransform(Coord loc);
+    static Coord performTransform(Coord loc);
     void calcTransMatrix();
     void emptyTransforms();
     Transform(int transformation, float x, float y, float z) : transformation(transformation), x(x), y(y), z(z) {
         transforms.push_back(this);
-        matrix = Matrix(this->transformation, this->x, this->y, this->z);
+        this->matrix = Matrix(this->transformation, this->x, this->y, this->z);
+        std::cout << "Transformation matrix:\n";
+        std::cout << matrix << "\n";
         calcTransMatrix();
+        std::cout << "transMatrix after calcs: \n" << transMatrix << "\n";
     }
     Transform(int transformation, int axis, float angle) : transformation(transformation), axis(axis), angle(angle) {
         transforms.push_back(this);
-        matrix = Matrix(this->transformation, this->axis, this->angle);
+        this->matrix = Matrix(this->transformation, this->axis, this->angle);
+        std::cout << "Transformation matrix:\n";
+        std::cout << matrix << "\n";
         calcTransMatrix();
+        std::cout << "transMatrix after calcs: \n" << transMatrix << "\n";
     }
 };
 
@@ -32,11 +38,15 @@ void Transform::calcTransMatrix() {
         transMatrix = transformation;
         return;
     }
-    for(std::vector<Transform *>::iterator itor=(Transform::transforms).end(); itor!=Transform::transforms.begin(); --itor) {
-        if ((*itor) == *Transform::transforms.end()) {
+    for(std::vector<Transform *>::iterator itor=std::prev((Transform::transforms).end()); true; --itor) {
+        if ((itor) == std::prev(Transform::transforms.end())) {
             transformation = (*itor)->matrix;
         } else {
+            cout << "MATRIX MULTIPLICATION\n" << transformation << " & \n" << (*itor)->matrix << "\n";
             transformation = transformation.multiply((*itor)->matrix);
+        }
+        if (itor == Transform::transforms.begin()) {
+            break;
         }
     }
     transMatrix = transformation;
@@ -44,14 +54,20 @@ void Transform::calcTransMatrix() {
 
 void Transform::emptyTransforms() {
     Transform::transforms.clear();
+    transMatrix = Matrix();
 }
 
 Coord Transform::performTransform(Coord loc) {
+    cout << "Multiplying \n" << transMatrix << "\nwith " << loc << "\n"; 
+    if ((Transform::transforms).size() == 0) {
+        return loc;
+    }
     Coord toReturn = Coord();
     Matrix m = transMatrix;
     toReturn.x = m.matrix[0][0]*loc.x+m.matrix[1][0]*loc.y+m.matrix[2][0]*loc.z+m.matrix[3][0];
     toReturn.y = m.matrix[0][1]*loc.x+m.matrix[1][1]*loc.y+m.matrix[2][1]*loc.z+m.matrix[3][1];
-    toReturn.x = m.matrix[0][2]*loc.x+m.matrix[1][2]*loc.y+m.matrix[2][2]*loc.z+m.matrix[3][2];
+    toReturn.z = m.matrix[0][2]*loc.x+m.matrix[1][2]*loc.y+m.matrix[2][2]*loc.z+m.matrix[3][2];
+    cout << toReturn << "\n";
     return toReturn;
 }
 
