@@ -7,8 +7,8 @@
 #include <cmath>
 #include <time.h>
 
-int canvasX = 10; //CHANGE THESE!
-int canvasY = 10; //CHANGE THESE!
+int canvasX = 100; //CHANGE THESE!
+int canvasY = 100; //CHANGE THESE!
 #include "CImg.h"
 #include "Camera.h"
 #include "Tracer.h"
@@ -161,18 +161,18 @@ int main (int argc, char *argv[]) {
 
   //Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
   //all_shapes.push_back(objsph);   
-  Color ka = Color(.5, .05, .05);
-  Color kd = Color(1,1,1);
+  Color ka = Color(.05, .05, .05);
+  Color kd = Color(1,0,0);
   Color ks = Color(0,0,1);
   Color kr = Color(0,0,0);
   float spec = 255; 
   Material material =  Material(ka, kd, ks, spec, kr);
 
-  Triangle * objtri = new Triangle(coord, coord2, coord3, material);
+  //Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   // Triangle * objtri = new Triangle(coord, coord2, coord3, material);
   Sphere * objsph = new Sphere(Coord(0,0,-2), 1, material);
-  all_shapes.push_back(objtri);  
-  // all_shapes.push_back(objsph);   
+  //all_shapes.push_back(objtri);  
+   all_shapes.push_back(objsph);   
 
   Light l = Light(Coord(-2,-2,-2), Color(1, 1, 1), 1, 1);
   lights.push_back(l);
@@ -183,42 +183,42 @@ int main (int argc, char *argv[]) {
 	}  
 
   cout << "rendering..." << endl;
-    Matrix m1 = Matrix();
-  Matrix m2 = Matrix();
-  m1.setVal(0,0,3);
-  m1.setVal(0,1,2);
-  m1.setVal(0,2,9);
-  m1.setVal(0,3,6);
-  m1.setVal(1,0,5);
-  m1.setVal(2,0,7);
-  m1.setVal(3,0,8);
-  m2.setVal(0,0,4);
-  m2.setVal(0,1,3);
-  m2.setVal(0,2,8);
-  m2.setVal(0,3,1);
-  m2.setVal(1,0,5);
-  m2.setVal(2,0,6);
-  m2.setVal(3,0,9);
-  Matrix transMatrix = Matrix(TRANSLATION, 2, 3, 4);
-  Matrix scaleMatrix = Matrix(SCALE, 2, 3, 4);
-  Matrix rotaXMatrix = Matrix(ROTATION, X, 45);
-  Matrix rotaYMatrix = Matrix(ROTATION, Y, 45);
-  Matrix rotaZMatrix = Matrix(ROTATION, Z, 45);
-  Matrix I = Matrix();
-  for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-          I.matrix[i][j] = 1;
-      }
-  }
-  Matrix mult = I.multiply(m1);
-  cout << "TRANSLATION: \n" << transMatrix << "\n";
-  cout << "SCALE: \n" << scaleMatrix << "\n";
-  cout << "XROTATION: \n" << rotaXMatrix << "\n";
-  cout << "YROTATION: \n" << rotaYMatrix << "\n";
-  cout << "ZROTATION: \n" << rotaZMatrix << "\n";
-  cout << "m1:\n" << m1 << "\n";
-  cout << "m2:\n" << I << "\n";
-  cout << "m1*m2: \n" << mult << "\n";
+  //   Matrix m1 = Matrix();
+  // Matrix m2 = Matrix();
+  // m1.setVal(0,0,3);
+  // m1.setVal(0,1,2);
+  // m1.setVal(0,2,9);
+  // m1.setVal(0,3,6);
+  // m1.setVal(1,0,5);
+  // m1.setVal(2,0,7);
+  // m1.setVal(3,0,8);
+  // m2.setVal(0,0,4);
+  // m2.setVal(0,1,3);
+  // m2.setVal(0,2,8);
+  // m2.setVal(0,3,1);
+  // m2.setVal(1,0,5);
+  // m2.setVal(2,0,6);
+  // m2.setVal(3,0,9);
+  // Matrix transMatrix = Matrix(TRANSLATION, 2, 3, 4);
+  // Matrix scaleMatrix = Matrix(SCALE, 2, 3, 4);
+  // Matrix rotaXMatrix = Matrix(ROTATION, X, 45);
+  // Matrix rotaYMatrix = Matrix(ROTATION, Y, 45);
+  // Matrix rotaZMatrix = Matrix(ROTATION, Z, 45);
+  // Matrix I = Matrix();
+  // for (int i = 0; i < 4; i++) {
+  //     for (int j = 0; j < 4; j++) {
+  //         I.matrix[i][j] = 1;
+  //     }
+  // }
+  // Matrix mult = I.multiply(m1);
+  // cout << "TRANSLATION: \n" << transMatrix << "\n";
+  // cout << "SCALE: \n" << scaleMatrix << "\n";
+  // cout << "XROTATION: \n" << rotaXMatrix << "\n";
+  // cout << "YROTATION: \n" << rotaYMatrix << "\n";
+  // cout << "ZROTATION: \n" << rotaZMatrix << "\n";
+  // cout << "m1:\n" << m1 << "\n";
+  // cout << "m2:\n" << I << "\n";
+  // cout << "m1*m2: \n" << mult << "\n";
 
   render();
 	// cimg_library::CImg<float> img = createImg(2, 2); // Creates a 2x2 Img
