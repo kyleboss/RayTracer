@@ -7,22 +7,15 @@ class Transform {
     float x;
     float y;
     float z;
-    float angle;
     int transformation;
     int axis;
     Matrix matrix;
     static Coord performTransform(Coord loc);
     void calcTransMatrix();
-    void emptyTransforms();
+    static void emptyTransforms();
     Transform(int transformation, float x, float y, float z) : transformation(transformation), x(x), y(y), z(z) {
         transforms.push_back(this);
         this->matrix = Matrix(this->transformation, this->x, this->y, this->z);
-        std::cout << matrix << "\n";
-        calcTransMatrix();
-    }
-    Transform(int transformation, int axis, float angle) : transformation(transformation), axis(axis), angle(angle) {
-        transforms.push_back(this);
-        this->matrix = Matrix(this->transformation, this->axis, this->angle);
         std::cout << matrix << "\n";
         calcTransMatrix();
     }
@@ -69,7 +62,6 @@ std::ostream& operator<< (std::ostream &out, Transform &trans)
 {
     out << "Transformation: " << trans.transformation <<
         "\n(x,y,z) (if not rotation): (" << trans.x << ", " << trans.y << ", " << trans.z << ")\n" <<
-        "angle (if rotation): " << trans.angle << "\n" <<
         "Matrix: \n" << trans.matrix;
     return out;
 }

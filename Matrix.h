@@ -13,6 +13,8 @@ class Matrix {
     Matrix inverse();
     Matrix transpose();
     Matrix multiply(Matrix m2);
+    Matrix multiply(float s);
+    Matrix operator + (Matrix m);
     Matrix() {
         for (int i = 0; i < 4; i++) {
             matrix[i] = new float[4];
@@ -27,7 +29,7 @@ class Matrix {
             }
         }
     }
-    Matrix(int transformation, float x, float y, float z, float angle=0) {
+    Matrix(int transformation, float x, float y, float z) {
         matrix = Matrix().matrix;
         if (transformation == TRANSLATION) {
             matrix[3][0] = x;
@@ -37,35 +39,23 @@ class Matrix {
             matrix[0][0] = x;
             matrix[1][1] = y;
             matrix[2][2] = z;
-        }
-        // } else if (transformation == ROTATION) {
-        //     matrix[0][0] = 0;
-        //     matrix[0][0] = z;
-        //     matrix[1][0] = -z;
-        //     matrix[1][1] = 0;
-        //     matrix[2][0] = y;
-        //     matrix[2][2] = 0;
-        //     matrix[3][1] = -x;
-        //     matrix[3][3] = 0;
-        // }
-    }
-    Matrix(int transformation, int axis, float angle) {
-        matrix = Matrix().matrix;
-        if (axis == X) {
-            matrix[1][1] = cos(angle);
-            matrix[2][1] = -sin(angle);
-            matrix[1][2] = sin(angle);
-            matrix[2][2] = cos(angle);
-        } else if (axis == Y) {
-            matrix[0][0] = cos(angle);
-            matrix[2][0] = sin(angle);
-            matrix[0][2] = -sin(angle);
-            matrix[2][2] = cos(angle);
-        } else if (axis == Z) {
-            matrix[0][0] = cos(angle);
-            matrix[1][0] = -sin(angle);
-            matrix[0][1] = sin(angle);
-            matrix[1][1] = cos(angle);
+        } else if (transformation == ROTATION) {
+            Matrix A = Matrix();
+            Matrix I = Matrix();
+            Vector r = Vector(x,y,z);
+            float angle = r.magnitude();
+            r = r.normalize();
+            A.matrix[0][0] = 0;
+            A.matrix[0][0] = r.z;
+            A.matrix[0][2] = -1*r.y;
+            A.matrix[1][0] = -1*r.z;
+            A.matrix[1][1] = 0;
+            A.matrix[1][2] = r.x;
+            A.matrix[2][0] = r.y;
+            A.matrix[2][2] = 0;
+            A.matrix[3][1] = -1*r.x;
+            A.matrix[3][3] = 0;
+            matrix = (I+A.multiply(sin(angle))+A.multiply(A).multiply(1-cos(angle))).matrix;
         }
     }
 };
@@ -120,6 +110,26 @@ Matrix Matrix::multiply(Matrix m2) {
     }
     return product;
 }
+
+Matrix Matrix::multiply(float s) {
+    Matrix product = Matrix();
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            product.matrix[i][j] = this->matrix[i][j]*s;
+        }
+    }
+    return product;
+}
+
+Matrix Matrix::operator + (Matrix m) {
+    Matrix sum = Matrix();
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            sum.matrix[i][j] = this->matrix[i][j]+m.matrix[i][j];
+        }
+    }
+    return sum;
+};
 
 std::ostream& operator<< (std::ostream &out, Matrix &m)
 {

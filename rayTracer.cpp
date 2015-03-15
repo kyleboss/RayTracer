@@ -79,10 +79,16 @@ void commandLine(int argc, char *argv[]) {
 	      camLR = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
 	      camUL = Coord(strtof(argv[i+10], NULL), strtof(argv[i+11], NULL), strtof(argv[i+12], NULL));
 	      camUR = Coord(strtof(argv[i+13], NULL), strtof(argv[i+14], NULL), strtof(argv[i+15], NULL));
+	      camEye = Transform::performTransform(camEye);
+	      camLL = Transform::performTransform(camLL);
+	      camLR = Transform::performTransform(camLR);
+	      camUL = Transform::performTransform(camUL);
+	      camUR = Transform::performTransform(camUR);
 	      i += 15;
 	    }
 	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      c = Transform::performTransform(c);
 	      Sphere * sph = new Sphere(c, strtof(argv[i+4], NULL), last_material);
 	      all_shapes.push_back(sph);
 	      i += 4;
@@ -92,6 +98,9 @@ void commandLine(int argc, char *argv[]) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
+	      a = Transform::performTransform(a);
+	      b = Transform::performTransform(b);
+	      c = Transform::performTransform(c);
 	      Triangle * tri = new Triangle(a, b, c, last_material);
 	      all_shapes.push_back(tri);
 	      i += 9;
@@ -110,18 +119,21 @@ void commandLine(int argc, char *argv[]) {
 	    	//ltp px py pz r g b falloff
 	      Coord pl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color pl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
+	      pl = Transform::performTransform(pl);
 	      lights.push_back(Light(pl, pl_c, 2, strtof(argv[i+7], NULL)));
 	      i += 7;
 	    }
 	    if (i < argc && strcmp(argv[i], "-ltd") == 0) {
 	      Coord dl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color dl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
+	      dl = Transform::performTransform(dl);
 	      lights.push_back(Light(dl, dl_c, 1));
 	      i += 6;
 	    }
 	    if (i < argc && strcmp(argv[i], "-lta") == 0) {
 	      Coord al = Coord(0,0,0); //lol
 	      Color al_c = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
+	      al = Transform::performTransform(al);
 	      lights.push_back(Light(al, al_c, 0));
 	      i += 3;
 	    }
@@ -133,15 +145,22 @@ void commandLine(int argc, char *argv[]) {
 	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
 	      i += 13;
 	    }    
-
-	    // if (i < argc && strcmp(argv[i], "-xfr") == 0) {
-	    //   Color ka = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	    //   Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
-	    //   Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
-	    //   Color kr = Color(strtof(argv[i+11], NULL), strtof(argv[i+12], NULL), strtof(argv[i+13], NULL));
-	    //   last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
-	    //   i += 13;
-	    // }    
+	    if (i < argc && strcmp(argv[i], "-xft") == 0) {
+	 			Transform(TRANSLATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
+	      i += 3;
+	    } 
+	    if (i < argc && strcmp(argv[i], "-xfr") == 0) {
+	 			Transform(ROTATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
+	      i += 3;
+	    }
+	    if (i < argc && strcmp(argv[i], "-xfs") == 0) {
+	 			Transform(SCALE, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
+	      i += 3;
+	    }
+	    if (i < argc && strcmp(argv[i], "-xfz") == 0) {
+	 			Transform::emptyTransforms();
+	      i += 1;
+	    }
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
 	    }
@@ -191,7 +210,11 @@ int main (int argc, char *argv[]) {
   ks = Color(1,1,1);
   kr = Color(0,0,0);
   Material mat3 = Material(ka, kd, ks, 50, kr);
-  Sphere * s3 = new Sphere(Coord(-2,-2,-15), 1, mat3);
+  Transform(TRANSLATE, 1, 2, 1);
+  Coord c = Coord(-2,-2,-15);
+  c = Transform::performTransform(c);
+  cout << c;
+  Sphere * s3 = new Sphere(c, 1, mat3);
 
 
   //all_shapes.push_back(s1);
