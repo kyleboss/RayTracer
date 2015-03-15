@@ -32,6 +32,7 @@ Color Color::operator + (Color c) {
   return Color(r + c.r, g + c.g, b + c.b);
 };
 
+
 Color Color::scale(float s) {
   return Color(r*s, g*s, b*s);
 };

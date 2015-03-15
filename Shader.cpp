@@ -19,14 +19,12 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
   
   Sphere sphere = hitRecord.sphere;
   Triangle triangle = hitRecord.triangle;
-  float x = hitRecord.intersection.x;
-  float y = hitRecord.intersection.y;
+
   Vector n = hitRecord.normal.normalize();
   Color total = Color(0,0,0);
   Color ambient, diffuse, specular;
 
   if (lightType == AMBIENT) {
-  //cout << "HEY AMBIENT LIGHT" << endl;
     if (hitRecord.isSphere) {
       total = total + hitRecord.sphere.material.ambient*lightColor;
     } else {
@@ -42,7 +40,9 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
   Vector r = n*2*ln - lightDirectionVec;
   r = r.normalize();
   float specPos;
-  Vector v = rayDirection*(-1);
+  Vector v;
+    v = rayDirection*(-1);
+
   v = v.normalize();
   if (hitRecord.isSphere) {
     specPos = pow(max(0.0f, r.dot(v)), sphere.material.exp); // CHECK v

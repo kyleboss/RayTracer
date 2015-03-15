@@ -60,7 +60,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
   Color total = Color(0,0,0);
   for(int i = 0; i < lights.size(); i++) {
     Vector lightLocationVec = Vector(lights[i].location.x,lights[i].location.y,lights[i].location.z);
-    Vector intersectionVec = Vector(hitRecord.intersection.x,hitRecord.intersection.y,hitRecord.intersection.z);
+    Vector intersectionVec = hitRecord.normal.normalize();
     Vector lightDirectionVec;
     Color lightColor = lights[i].color;
     int lightType = lights[i].type;
@@ -71,6 +71,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
       lightDirectionVec = lightLocationVec-intersectionVec;
     }
     lightDirectionVec = lightDirectionVec.normalize();
+    cout << "LDV IS " << lightDirectionVec << endl;
   	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
 	  HitRecord shadowHR = this->hit(shadow);
     if (shadowHR.isHit) {
@@ -83,6 +84,19 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     }
     else {
 			 total = total + shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor, lightType);
+	  }
+	  //attenuation! 
+	  if (lightType == POINT) {
+	  	int falloff = lights[i].falloff;
+	    if (falloff != 0) {
+	    	float r = lightDirectionVec.magnitude();
+	    	if (falloff == 1) {
+	    		total = total.scale(1/r);
+	    	}
+	    	else if (falloff == 2) {
+	    		total = total.scale(1/(r*r));
+	    	}
+	    }
 	  }
   }
  return total;
@@ -118,7 +132,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 			//return obj with t1
 			Vector p = r.eval(t);
       Coord intersection = Coord(p.x, p.y, p.z);
-			Vector normal = (p - c)/s->r;
+			Vector normal = (p - c);
       Sphere sphere = *s;
 			return HitRecord(t, intersection, normal, sphere);
 		}
@@ -126,7 +140,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
 			//return obj with t2
 			Vector p = r.eval(t2);
       Coord intersection = Coord(p.x, p.y, p.z);
-			Vector normal = (p - c)/s->r;
+			Vector normal = (p - c);
       Sphere sphere = *s;
 			return HitRecord(t2, intersection, normal, sphere);
 		}
