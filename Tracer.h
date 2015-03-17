@@ -33,8 +33,8 @@ HitRecord Tracer::hit(Ray ray) {
 		Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
  		if (triangle != 0) { //if it's a triangle?
 			//cout << "HI IM TRIANGLE! " << endl;
-      		temp = rayTri(ray, triangle, t_min, t_max);
-      //temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
+      		//temp = rayTri(ray, triangle, t_min, t_max);
+      		temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
 			if (temp.isHit) {
 				hitRecord = temp;
 				t_max = temp.t;
@@ -44,8 +44,8 @@ HitRecord Tracer::hit(Ray ray) {
  		}
  		if (sphere != 0) {
  			//cout << "YO IM SPHERE! " << endl;
-     		 temp = raySphere(ray, sphere, t_min, t_max);
-      //temp = raySphere(ray, sphere, t_min, t_max, ray.bouncesLeft);
+     		 //temp = raySphere(ray, sphere, t_min, t_max);
+      		temp = raySphere(ray, sphere, t_min, t_max, ray.bouncesLeft);
 			if (temp.isHit) {
 				hitRecord = temp;
 				t_max = temp.t;
