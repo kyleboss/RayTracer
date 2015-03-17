@@ -266,7 +266,7 @@ int main (int argc, char *argv[]) {
   Material mat1 = Material(ka, kd, ks, 64, kr);
   Sphere * s1 = new Sphere(Coord(0,0,0), 0.65, mat1); 
   all_shapes.push_back(s1);*/
-
+ 
 
 
 
