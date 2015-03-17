@@ -94,7 +94,7 @@ void commandLine(int argc, char *argv[]) {
 	      camUR = Transform::performTransform(camUR);
 	      i += 15;
 	    }
-	    if (i < argc && strcmp(argv[i], "sph") == 0) {
+	    else if (i < argc && strcmp(argv[i], "sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      c = Transform::performTransform(c);
 	      Sphere * sph = new Sphere(c, strtof(argv[i+4], NULL), last_material);
@@ -102,7 +102,7 @@ void commandLine(int argc, char *argv[]) {
 	      i += 4;
 	      cout << "entered sphere" << endl;
 	    }
-	    if (i < argc && strcmp(argv[i], "tri") == 0) {
+	    else if (i < argc && strcmp(argv[i], "tri") == 0) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
@@ -114,7 +114,7 @@ void commandLine(int argc, char *argv[]) {
 	      i += 9;
 	      cout << "entered triangle" << endl;
 	    }
-	    if (i < argc && strcmp(argv[i], "obj") == 0) {
+	    else if (i < argc && strcmp(argv[i], "obj") == 0) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
@@ -123,7 +123,7 @@ void commandLine(int argc, char *argv[]) {
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
 	    }
-	    if (i < argc && strcmp(argv[i], "ltp") == 0) {
+	    else if (i < argc && strcmp(argv[i], "ltp") == 0) {
 	    	//ltp px py pz r g b falloff
 	      Coord pl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color pl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
@@ -138,21 +138,21 @@ void commandLine(int argc, char *argv[]) {
 	      	i+= 6;
 	      }
 	    }
-	    if (i < argc && strcmp(argv[i], "ltd") == 0) {
+	    else if (i < argc && strcmp(argv[i], "ltd") == 0) {
 	      Coord dl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color dl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
 	      dl = Transform::performTransform(dl);
 	      lights.push_back(Light(dl, dl_c, 1));
 	      i += 6;
 	    }
-	    if (i < argc && strcmp(argv[i], "lta") == 0) {
+	    else if (i < argc && strcmp(argv[i], "lta") == 0) {
 	      Coord al = Coord(0,0,0); //lol
 	      Color al_c = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      al = Transform::performTransform(al);
 	      lights.push_back(Light(al, al_c, 0));
 	      i += 3;
 	    }
-	    if (i < argc && strcmp(argv[i], "mat") == 0) {
+	    else if (i < argc && strcmp(argv[i], "mat") == 0) {
 	      Color ka = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
 	      Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
@@ -160,24 +160,24 @@ void commandLine(int argc, char *argv[]) {
 	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
 	      i += 13;
 	    }    
-	    if (i < argc && strcmp(argv[i], "xft") == 0) {
+	    else if (i < argc && strcmp(argv[i], "xft") == 0) {
 	 			Transform(TRANSLATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      i += 3;
 	    } 
-	    if (i < argc && strcmp(argv[i], "xfr") == 0) {
+	    else if (i < argc && strcmp(argv[i], "xfr") == 0) {
 	 			Transform(ROTATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      i += 3;
 	    }
-	    if (i < argc && strcmp(argv[i], "xfs") == 0) {
+	    else if (i < argc && strcmp(argv[i], "xfs") == 0) {
 	 			Transform(SCALE, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      i += 3;
 	    }
-	    if (i < argc && strcmp(argv[i], "xfz") == 0) {
+	    else if (i < argc && strcmp(argv[i], "xfz") == 0) {
 	 			Transform::emptyTransforms();
 	      i += 1;
 	    }
 	    else { //error handling per last pg in spec
-	    	cerr << "Bad command line input" << endl;
+	    	cerr << "Bad command line input @ ";
 	    	cout << "'" << argv[i] << "'" << endl;
 	    }
 	}
