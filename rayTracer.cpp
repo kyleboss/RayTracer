@@ -24,7 +24,7 @@ int canvasY = 500; //CHANGE THESE!
 using namespace std;
 
 //************************
-// GLOBAL VARIABLES 
+// GLOBAL VARIABLES  
 //************************
 	vector<Shape*> all_shapes;
 	vector<Triangle> objects; //things to push onto for obj parse
@@ -196,7 +196,7 @@ int main (int argc, char *argv[]) {
 	        // x, y = 500 x 500
 //*******************************************
 /*
-//Lights
+//Lights 
   Light l = Light(Coord(0.57735027,  -0.57735027, -0.57735027), Color(1, 1, 1), 1);
   Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1);
   lights.push_back(l);
@@ -247,21 +247,35 @@ int main (int argc, char *argv[]) {
   Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
    
   all_shapes.push_back(tri); 
-
-//********************* 
 */
-/*  //Attenuation check
-  Light none = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 0);
+//*********************  
+  
+  /*Light a = Light(Coord(1, 1, 1), Color(1, 1, 1), 2); //lol not much of a visible change?
+  lights.push_back(a); //change from non, lin, quad to your desires  
+
+  Color ka = Color(1,1,1);  
+  Color kd = Color(1, 1, 1); 
+  Color ks = Color(0,0,0);
+  Color kr = Color(0,0,0);
+  Material mat1 = Material(ka, kd, ks, 64, kr);
+  Sphere * s1 = new Sphere(Coord(0,0,0), 0.65, mat1); 
+  all_shapes.push_back(s1);*/
+
+
+
+
+  //Attenuation check
+  /*Light none = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 0);
   Light lin = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 1);
   Light quad = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 2); //lol not much of a visible change?
-  lights.push_back(quad); //change from non, lin, quad to your desires  
+  lights.push_back(none); //change from non, lin, quad to your desires  
 
   Color ka = Color(.05, .05, .05);
   Color kd = Color(1, 1, 1); 
   Color ks = Color(1,1,1);
   Color kr = Color(0,0,0);
   Material mat1 = Material(ka, kd, ks, 64, kr);
-  Sphere * s1 = new Sphere(Coord(0,0,-20), 3.5, mat1); 
+  Sphere * s1 = new Sphere(Coord(0,0,-5), 3.5, mat1); 
   all_shapes.push_back(s1);*/
 
 	cout << "all of the lights" << lights.size() << endl;

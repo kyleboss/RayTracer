@@ -33,7 +33,8 @@ HitRecord Tracer::hit(Ray ray) {
 		Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
  		if (triangle != 0) { //if it's a triangle?
 			//cout << "HI IM TRIANGLE! " << endl;
-      temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
+      		//temp = rayTri(ray, triangle, t_min, t_max);
+      		temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
 			if (temp.isHit) {
 				hitRecord = temp;
 				t_max = temp.t;
@@ -43,7 +44,8 @@ HitRecord Tracer::hit(Ray ray) {
  		}
  		if (sphere != 0) {
  			//cout << "YO IM SPHERE! " << endl;
-      temp = raySphere(ray, sphere, t_min, t_max, ray.bouncesLeft);
+     		 //temp = raySphere(ray, sphere, t_min, t_max);
+      		temp = raySphere(ray, sphere, t_min, t_max, ray.bouncesLeft);
 			if (temp.isHit) {
 				hitRecord = temp;
 				t_max = temp.t;
@@ -74,6 +76,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
   for(int i = 0; i < lights.size(); i++) {
     Vector lightLocationVec = Vector(lights[i].location.x,lights[i].location.y,lights[i].location.z);
     Vector intersectionVec = Vector(hitRecord.intersection.x, hitRecord.intersection.y, hitRecord.intersection.z);
+
     Vector lightDirectionVec;
     Color lightColor = lights[i].color;
     int lightType = lights[i].type;
@@ -88,11 +91,13 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
   	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
 	  HitRecord shadowHR = this->hit(shadow);
     if (shadowHR.isHit) {
-    	if (hitRecord.isSphere) {
-    		total = total + hitRecord.sphere.material.ambient*lightColor;
-    	}
-    	else {
-    		total = total + hitRecord.triangle.material.ambient*lightColor;
+    	if (lightType == AMBIENT) {
+	    	if (hitRecord.isSphere) {
+	    		total = total + hitRecord.sphere.material.ambient*lightColor;
+	    	}
+	    	else {
+	    		total = total + hitRecord.triangle.material.ambient*lightColor;
+	    	}    		
     	}
     }
     else {

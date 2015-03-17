@@ -46,17 +46,17 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
   v = v.normalize();
   if (hitRecord.isSphere) {
     specPos = pow(max(0.0f, r.dot(v)), sphere.material.exp); // CHECK v
-    ambient = sphere.material.ambient*lightColor;
+    //ambient = sphere.material.ambient*lightColor;
     diffuse = sphere.material.diffuse*lightColor;
     specular = sphere.material.specular*lightColor;
   } else {
     specPos = pow(max(0.0f, r.dot(v)), triangle.material.exp); // CHECK v
-    ambient = triangle.material.ambient*lightColor;
+    //ambient = triangle.material.ambient*lightColor;
     diffuse = triangle.material.diffuse*lightColor;
     specular = triangle.material.specular*lightColor;              
   }
   diffuse = diffuse.scale(diffPos);
   specular = specular.scale(specPos);
-  total = total + ambient + diffuse + specular; 
+  total = total + diffuse + specular; 
   return total;
 }
