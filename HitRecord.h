@@ -13,11 +13,12 @@ class HitRecord {
     Vector normal;
     Sphere sphere;
     Triangle triangle;
+    int bounces;
     HitRecord(float t, Vector normal) : t(t), normal(normal), isHit(1), isSphere(false) {}
-    HitRecord(float t, Coord intersection, Vector normal, Sphere sphere) :
-    t(t), intersection(intersection), normal(normal), isHit(1), sphere(sphere), isSphere(true) {}
-    HitRecord(float t, Coord intersection, Vector normal, Triangle triangle) :
-    t(t), intersection(intersection), normal(normal), isHit(1), triangle(triangle), isSphere(false)
+    HitRecord(float t, Coord intersection, Vector normal, Sphere sphere, int bounces) :
+    t(t), intersection(intersection), normal(normal), isHit(1), sphere(sphere), isSphere(true), bounces(bounces) {}
+    HitRecord(float t, Coord intersection, Vector normal, Triangle triangle, int bounces) :
+    t(t), intersection(intersection), normal(normal), isHit(1), triangle(triangle), isSphere(false), bounces(bounces)
     {}
     HitRecord(bool isHit) : isHit(0), isSphere(false) {}
 };

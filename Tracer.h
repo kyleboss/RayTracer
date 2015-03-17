@@ -18,8 +18,8 @@ class Tracer {
    Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
    Color trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection);
    HitRecord hit(Ray ray);
-   HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax);
-   HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax);
+   HitRecord raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounces);
+   HitRecord rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounces);
 };
 //Tmin, max = 1, 100 arbitrarily
 
@@ -34,6 +34,7 @@ HitRecord Tracer::hit(Ray ray) {
  		if (triangle != 0) { //if it's a triangle?
 			//cout << "HI IM TRIANGLE! " << endl;
       		temp = rayTri(ray, triangle, t_min, t_max);
+      //temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
 			if (temp.isHit) {
 				hitRecord = temp;
 				t_max = temp.t;
@@ -44,6 +45,7 @@ HitRecord Tracer::hit(Ray ray) {
  		if (sphere != 0) {
  			//cout << "YO IM SPHERE! " << endl;
      		 temp = raySphere(ray, sphere, t_min, t_max);
+      //temp = raySphere(ray, sphere, t_min, t_max, ray.bouncesLeft);
 			if (temp.isHit) {
 				hitRecord = temp;
 				t_max = temp.t;
@@ -58,10 +60,23 @@ HitRecord Tracer::hit(Ray ray) {
 Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection) {
   float epsilon = .1;
   Color total = Color(0,0,0);
+  if(hitRecord.bounces > 0) {
+    Vector r = rayDirection + hitRecord.normal * 2 * (rayDirection * -1).dot(hitRecord.normal);
+    Ray reflect = Ray(hitRecord.intersection, r, hitRecord.bounces, epsilon, INFINITY);
+    HitRecord rHit = hit(reflect);
+    if(rHit.isHit) {
+      if(hitRecord.isSphere) {
+        total = total + hitRecord.sphere.material.reflective * trace(rHit, lights, reflect.direction);
+      }
+      else {
+        total = total + hitRecord.triangle.material.reflective * trace(rHit, lights, reflect.direction);
+      }
+    }
+  }
   for(int i = 0; i < lights.size(); i++) {
     Vector lightLocationVec = Vector(lights[i].location.x,lights[i].location.y,lights[i].location.z);
     Vector intersectionVec = Vector(hitRecord.intersection.x, hitRecord.intersection.y, hitRecord.intersection.z);
-    //cout << "INTER " << intersectionVec << endl;
+
     Vector lightDirectionVec;
     Color lightColor = lights[i].color;
     int lightType = lights[i].type;
@@ -88,7 +103,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     else {
 			 total = total + shadeCircle(hitRecord, lightDirectionVec, rayDirection, lightColor, lightType);
 	  }
-	  //attenuation! 
+	  //attenuation!
 	  if (lightType == POINT) {
 	  	int falloff = lights[i].falloff;
 	    if (falloff != 0) {
@@ -104,7 +119,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
  return total;
 }
 
-HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
+HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounces) {
 //sph coord center float r
 //ray coord start v direction
 	float t = -INFINITY;
@@ -136,7 +151,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c);
       Sphere sphere = *s;
-			return HitRecord(t, intersection, normal, sphere);
+			return HitRecord(t, intersection, normal, sphere, bounces-1);
 		}
 		else if (t2 > tMin && t2 < tMax) {
 			//return obj with t2
@@ -144,13 +159,13 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax) {
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c);
       Sphere sphere = *s;
-			return HitRecord(t2, intersection, normal, sphere);
+			return HitRecord(t2, intersection, normal, sphere, bounces-1);
 		}
 	}
 	return HitRecord(false);
 }
 
-HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
+HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounces) {
 //CALCULATIONS AS PER PG 79 OF TEXTBOOK
   Vector x = Vector(tri->point1.x, tri->point2.x, tri->point3.x);
   // x = (xa, xb, xc) of triangles
@@ -201,7 +216,7 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax) {
   Triangle triangle = *tri;
     	//cout << "the end good job " << endl;
 
-  return HitRecord(t, intersection, normal, triangle);
+  return HitRecord(t, intersection, normal, triangle, bounces-1);
 }
 
 #endif

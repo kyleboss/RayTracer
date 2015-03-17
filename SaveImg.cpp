@@ -13,5 +13,6 @@ void editPixel(cimg_library::CImg<float>* img, Sample& sample, Color& color) {
 }
 
 void saveImg(cimg_library::CImg<float> img) {
+  img.normalize(0, 255);
   img.save("result.png");
 }
