@@ -60,7 +60,8 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
   Color total = Color(0,0,0);
   for(int i = 0; i < lights.size(); i++) {
     Vector lightLocationVec = Vector(lights[i].location.x,lights[i].location.y,lights[i].location.z);
-    Vector intersectionVec = hitRecord.normal.normalize();
+    Vector intersectionVec = Vector(hitRecord.intersection.x, hitRecord.intersection.y, hitRecord.intersection.z);
+    cout << "INTER " << intersectionVec << endl;
     Vector lightDirectionVec;
     Color lightColor = lights[i].color;
     int lightType = lights[i].type;

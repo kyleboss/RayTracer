@@ -30,11 +30,11 @@ using namespace std;
 	vector<Triangle> objects; //things to push onto for obj parse
 	vector<Light> lights;
 	Material last_material = Material(Color(0,0,0), Color(0,0,0), Color(0,0,0), 0, Color(0,0,0)); //intialize to black so there's no garbage
-	Coord camEye = Coord(0,0,0);
-	Coord camUL = Coord(-1,1,-3);
-	Coord camUR = Coord(1,1,-3);
-	Coord camLR = Coord(1,-1,-3);
-	Coord camLL = Coord(-1,-1,-3);
+	Coord camEye = Coord(0,0,2);
+	Coord camLL = Coord(-1,-1,1);
+	Coord camLR = Coord(1,-1,1);
+	Coord camUL = Coord(-1,1,1);
+	Coord camUR = Coord(1,1,1);
 	// Matrix transMatrix = Matrix();
 
  //THE DEFAULT VALUES are bc im too lazy to enter thru command line
@@ -78,9 +78,9 @@ void render() {
 };
 
 //To put command line parsings here
-void commandLine(int argc, char *argv[]) {
+void commandLine(int argc, char *argv[]) { 
 	for (int i = 1; i < argc; ++i) {
-	    if (i < argc && strcmp(argv[i], "-cam") == 0) {
+	    if (i < argc && strcmp(argv[i], "cam") == 0) {
 	      //cam ex ey ez llx lly llz lrx lry lrz ulx uly ulz urx ury urz
 	      camEye = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      camLL = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
@@ -94,7 +94,7 @@ void commandLine(int argc, char *argv[]) {
 	      camUR = Transform::performTransform(camUR);
 	      i += 15;
 	    }
-	    if (i < argc && strcmp(argv[i], "-sph") == 0) {
+	    if (i < argc && strcmp(argv[i], "sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      c = Transform::performTransform(c);
 	      Sphere * sph = new Sphere(c, strtof(argv[i+4], NULL), last_material);
@@ -102,7 +102,7 @@ void commandLine(int argc, char *argv[]) {
 	      i += 4;
 	      cout << "entered sphere" << endl;
 	    }
-	    if (i < argc && strcmp(argv[i], "-tri") == 0) {
+	    if (i < argc && strcmp(argv[i], "tri") == 0) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));	
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));	
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));	
@@ -114,7 +114,7 @@ void commandLine(int argc, char *argv[]) {
 	      i += 9;
 	      cout << "entered triangle" << endl;
 	    }
-	    if (i < argc && strcmp(argv[i], "-obj") == 0) {
+	    if (i < argc && strcmp(argv[i], "obj") == 0) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
@@ -123,7 +123,7 @@ void commandLine(int argc, char *argv[]) {
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
 	    }
-	    if (i < argc && strcmp(argv[i], "-ltp") == 0) {
+	    if (i < argc && strcmp(argv[i], "ltp") == 0) {
 	    	//ltp px py pz r g b falloff
 	      Coord pl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color pl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
@@ -138,21 +138,21 @@ void commandLine(int argc, char *argv[]) {
 	      	i+= 6;
 	      }
 	    }
-	    if (i < argc && strcmp(argv[i], "-ltd") == 0) {
+	    if (i < argc && strcmp(argv[i], "ltd") == 0) {
 	      Coord dl = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color dl_c = Color(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
 	      dl = Transform::performTransform(dl);
 	      lights.push_back(Light(dl, dl_c, 1));
 	      i += 6;
 	    }
-	    if (i < argc && strcmp(argv[i], "-lta") == 0) {
+	    if (i < argc && strcmp(argv[i], "lta") == 0) {
 	      Coord al = Coord(0,0,0); //lol
 	      Color al_c = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      al = Transform::performTransform(al);
 	      lights.push_back(Light(al, al_c, 0));
 	      i += 3;
 	    }
-	    if (i < argc && strcmp(argv[i], "-mat") == 0) {
+	    if (i < argc && strcmp(argv[i], "mat") == 0) {
 	      Color ka = Color(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Color kd = Color(strtof(argv[i+4], NULL), strtof(argv[i+6], NULL), strtof(argv[i+6], NULL));
 	      Color ks = Color(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
@@ -160,24 +160,25 @@ void commandLine(int argc, char *argv[]) {
 	      last_material = Material(ka, kd, ks, strtof(argv[i+10], NULL), kr);
 	      i += 13;
 	    }    
-	    if (i < argc && strcmp(argv[i], "-xft") == 0) {
+	    if (i < argc && strcmp(argv[i], "xft") == 0) {
 	 			Transform(TRANSLATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      i += 3;
 	    } 
-	    if (i < argc && strcmp(argv[i], "-xfr") == 0) {
+	    if (i < argc && strcmp(argv[i], "xfr") == 0) {
 	 			Transform(ROTATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      i += 3;
 	    }
-	    if (i < argc && strcmp(argv[i], "-xfs") == 0) {
+	    if (i < argc && strcmp(argv[i], "xfs") == 0) {
 	 			Transform(SCALE, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      i += 3;
 	    }
-	    if (i < argc && strcmp(argv[i], "-xfz") == 0) {
+	    if (i < argc && strcmp(argv[i], "xfz") == 0) {
 	 			Transform::emptyTransforms();
 	      i += 1;
 	    }
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input" << endl;
+	    	cout << "'" << argv[i] << "'" << endl;
 	    }
 	}
 }
@@ -195,7 +196,7 @@ int main (int argc, char *argv[]) {
 	        // UL=[-1.  1. -3.]
 	        // x, y = 500 x 500
 //*******************************************
-
+/*
 //Lights
   Light l = Light(Coord(0.57735027,  -0.57735027, -0.57735027), Color(1, 1, 1), 1);
   Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1);
@@ -249,7 +250,7 @@ int main (int argc, char *argv[]) {
   all_shapes.push_back(tri); 
 
 //********************* 
-
+*/
 /*  //Attenuation check
   Light none = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 0);
   Light lin = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 1);
@@ -263,6 +264,11 @@ int main (int argc, char *argv[]) {
   Material mat1 = Material(ka, kd, ks, 64, kr);
   Sphere * s1 = new Sphere(Coord(0,0,-20), 3.5, mat1); 
   all_shapes.push_back(s1);*/
+
+	cout << "all of the lights" << lights.size() << endl;
+	for (int i = 0; i < lights.size(); i++) {
+		cout << (lights[i]) << endl;
+	}  
 
 	cout << "all shapes size is" << all_shapes.size() << endl;
 	for (int i = 0; i < all_shapes.size(); i++) {
