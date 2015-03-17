@@ -16,7 +16,6 @@ class Transform {
     Transform(int transformation, float x, float y, float z) : transformation(transformation), x(x), y(y), z(z) {
         transforms.push_back(this);
         this->matrix = Matrix(this->transformation, this->x, this->y, this->z);
-        std::cout << matrix << "\n";
         calcTransMatrix();
     }
 };
@@ -54,6 +53,7 @@ Coord Transform::performTransform(Coord loc) {
     toReturn.x = m.matrix[0][0]*loc.x+m.matrix[1][0]*loc.y+m.matrix[2][0]*loc.z+m.matrix[3][0];
     toReturn.y = m.matrix[0][1]*loc.x+m.matrix[1][1]*loc.y+m.matrix[2][1]*loc.z+m.matrix[3][1];
     toReturn.z = m.matrix[0][2]*loc.x+m.matrix[1][2]*loc.y+m.matrix[2][2]*loc.z+m.matrix[3][2];
+    cout << "MULTIPLING transMatrix\n" << transMatrix << " with coord " << loc << endl;
     cout << toReturn << "\n";
     return toReturn;
 }

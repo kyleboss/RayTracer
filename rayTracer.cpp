@@ -72,9 +72,15 @@ void render() {
 		    editPixel(&img, canvas.currSample, color); //writes to the image			
 		}
 	}
-
+  Color color = Color(1,1,1);
+  editPixel(&img, canvas.currSample, color);
 	saveImg(img); // Saving image to file result.png
-	img.display(); // Displaying image
+  // img.normalize(0,255);
+  // cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
+  img.display();
+  while (true) {
+    // main_disp.wait();
+  }
 };
 
 //To put command line parsings here
