@@ -177,8 +177,7 @@ void commandLine(int argc, char *argv[]) {
 	      i += 1;
 	    }
 	    else { //error handling per last pg in spec
-	    	cerr << "Bad command line input @ ";
-	    	cout << "'" << argv[i] << "'" << endl;
+	    	cerr << "Bad command line input" << endl;
 	    }
 	}
 }
