@@ -75,7 +75,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     }
     float r = lightDirectionVec.magnitude();
     lightDirectionVec = lightDirectionVec.normalize();
-  	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 0, epsilon, INFINITY);
+  	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
 	  HitRecord shadowHR = this->hit(shadow);
     if (shadowHR.isHit) {
     	if (lightType == AMBIENT) {
@@ -103,25 +103,23 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 	    }
 	  }
   }
+  //reflection
   if(hitRecord.bounces > 0) {
-  	printf("Reflect\n");
-    Vector r = rayDirection + hitRecord.normal * 2 * (rayDirection * -1).dot(hitRecord.normal);
+  	Vector l = (rayDirection * -1).normalize();
+  	Vector n = hitRecord.normal.normalize();
+    Vector r = (l * -1).normalize() + n * 2 * (l).dot(hitRecord.normal);
     r = r.normalize();
     Ray reflect = Ray(hitRecord.intersection, r, hitRecord.bounces - 1, epsilon, INFINITY);
     HitRecord rHit = hit(reflect);
     if(rHit.isHit) {
-      printf("Hit! Bounces: %d\n", rHit.bounces);
       Color reflectance;
       if(hitRecord.isSphere) {
-      	printf("Sphere\n");
         reflectance = hitRecord.sphere.material.reflective;
       } else {
-      	printf("Triangle\n");
         reflectance = hitRecord.triangle.material.reflective;
       }
-      printf("Reflectance: %d %d %d\n", reflectance.r, reflectance.g, reflectance.b);
-      if (!(reflectance.r == 0 && reflectance.g == 0 && reflectance.b == 0)) {
-        total = total + reflectance * trace(rHit, lights, r);
+      if (!(reflectance.r == 0 & reflectance.g == 0 & reflectance.b == 0)) {
+        total = total + reflectance * trace(rHit, lights, reflect.direction);
       }
     }
   }
@@ -137,7 +135,6 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
 	Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
 	Vector e = Vector(r.start.x, r.start.y, r.start.z);
 	Vector e_minus_c = e - c;
-  e_minus_c = (s->matrixTransform)*e_minus_c;
 	float d_dot = d.dot(d);
 	float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s->r * s->r)));
 	if (discrimnant < 0)
