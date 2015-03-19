@@ -104,7 +104,7 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    else if (i < argc && strcmp(argv[i], "sph") == 0) {
 	      Coord c = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
-	      // c = Transform::performTransform(c);
+	      c = Transform::performTransform(c);
 	      Sphere * sph = new Sphere(c, strtof(argv[i+4], NULL), last_material);
 	      all_shapes.push_back(sph);
 	      i += 4;

@@ -135,6 +135,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
 	Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
 	Vector e = Vector(r.start.x, r.start.y, r.start.z);
 	Vector e_minus_c = e - c;
+  // e_minus_c = (s->matrixTransform)*e_minus_c;
 	float d_dot = d.dot(d);
 	float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s->r * s->r)));
 	if (discrimnant < 0)
