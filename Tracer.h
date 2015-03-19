@@ -58,8 +58,9 @@ HitRecord Tracer::hit(Ray ray) {
 }
 
 Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection) {
-  float epsilon = .1;
+  float epsilon = .25;
   Color total = Color(0,0,0);
+
   for(int i = 0; i < lights.size(); i++) {
     Vector lightLocationVec = Vector(lights[i].location.x,lights[i].location.y,lights[i].location.z);
     Vector intersectionVec = Vector(hitRecord.intersection.x, hitRecord.intersection.y, hitRecord.intersection.z);
@@ -77,6 +78,8 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     lightDirectionVec = lightDirectionVec.normalize();
   	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
 	  HitRecord shadowHR = this->hit(shadow);
+    
+	  
     if (shadowHR.isHit) {
     	if (lightType == AMBIENT) {
 	    	if (hitRecord.isSphere) {
@@ -104,31 +107,37 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 	  }
   }
   //reflection
-  if(hitRecord.bounces > 0) {
+  //check if necessary
+  bool isreflective;
+  Color reflectance;
+  if (hitRecord.isSphere) {
+    reflectance = hitRecord.sphere.material.reflective;
+  } else {
+    reflectance = hitRecord.triangle.material.reflective;
+  }
+
+  if (!(reflectance.r == 0 & reflectance.g == 0 & reflectance.b == 0)) {
+  	isreflective = true;  	
+  }
+  if(hitRecord.bounces > 0 && isreflective == true) {
+  	cout << "doing reflections ";
   	Vector l = (rayDirection * -1).normalize();
   	Vector n = hitRecord.normal.normalize();
-    Vector r = (l * -1).normalize() + n * 2 * (l).dot(hitRecord.normal);
+    Vector r = (l * -1) + n * 2 * (l).dot(n);
     r = r.normalize();
     Ray reflect = Ray(hitRecord.intersection, r, hitRecord.bounces - 1, epsilon, INFINITY);
     HitRecord rHit = hit(reflect);
     if(rHit.isHit) {
-      Color reflectance;
-      if(hitRecord.isSphere) {
-        reflectance = hitRecord.sphere.material.reflective;
-      } else {
-        reflectance = hitRecord.triangle.material.reflective;
-      }
-      if (!(reflectance.r == 0 & reflectance.g == 0 & reflectance.b == 0)) {
         total = total + reflectance * trace(rHit, lights, reflect.direction);
       }
     }
-  }
  return total;
 }
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounces) {
 //sph coord center float r
 //ray coord start v direction
+	cout << "one call " << endl;
 	float t = -INFINITY;
 	float t2 = -INFINITY;
 	Vector d = r.direction;
@@ -156,18 +165,24 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
 		if (t > tMin && t < tMax) {
 			//return obj with t1
 			Vector p = r.eval(t);
-      Coord intersection = Coord(p.x, p.y, p.z);
-			Vector normal = (p - c);
-      Sphere sphere = *s;
+     	 Coord intersection = Coord(p.x, p.y, p.z);
+			Vector normal = (p - c) * 2;
+	      	Sphere sphere = *s;
+      		if (normal.magnitude() < s->r)
+      			cout << "BAD t1 " << t << " Tmin: " << tMin << endl;
+      			//return HitRecord(false);
 			return HitRecord(t, intersection, normal, sphere, bounces);
 		}
 		else if (t2 > tMin && t2 < tMax) {
 			//return obj with t2
-			Vector p = r.eval(t2);
-      Coord intersection = Coord(p.x, p.y, p.z);
-			Vector normal = (p - c);
-      Sphere sphere = *s;
-			return HitRecord(t2, intersection, normal, sphere, bounces);
+		Vector p = r.eval(t2);
+      	Coord intersection = Coord(p.x, p.y, p.z);
+		Vector normal = (p - c) * 2;
+      	Sphere sphere = *s;
+      		if (normal.magnitude() < s->r)
+      			cout << "BAD t2 " << t2 << " Tmin: " << tMin << endl;
+      			//return HitRecord(false);
+		return HitRecord(t2, intersection, normal, sphere, bounces);
 		}
 	}
 	return HitRecord(false);
