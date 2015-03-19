@@ -3,9 +3,6 @@ rayTracer
 rayTracer.dSYM
 .gitignore~
 result.png
-<<<<<<< HEAD
-result.png
-
+Magick*
+ImageMagick-*
 *.png
-=======
->>>>>>> ed96c22601052d155eeb6d5aaf3643201d588e11
