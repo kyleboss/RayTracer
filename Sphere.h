@@ -3,20 +3,26 @@
 
 #include "Coord.h"
 #include "Shape.h"
+#include "Transform.h"
 
 class Sphere: public Shape {
   public:
+    Matrix matrixTransform;
     Sphere () {}
     Sphere(Coord center, float r, Material material) :
         center(center),
-        r(r)
+        r(r),
+        matrixTransform(transMatrix)
         {
           this->setMaterial(material);
+          matrixTransform = transMatrix;
         }
     Sphere(Coord center, float r) :
         center(center),
         r(r)
-        { }
+        { 
+            matrixTransform = transMatrix;
+        }
     Coord center;
     float r;
     void print(std::ostream &out) {
