@@ -124,7 +124,8 @@ void commandLine(int argc, char *argv[]) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
-	    		all_shapes.push_back(objtri);	  
+	    		all_shapes.push_back(objtri);
+	    		cout << "pushed tri from obj" << endl;	  
 	    	}
 	    	//hacky fix to deal w/ shape class, if slow fix later ^ 
 	      i += 1;
