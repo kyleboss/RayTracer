@@ -75,7 +75,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     }
     float r = lightDirectionVec.magnitude();
     lightDirectionVec = lightDirectionVec.normalize();
-  	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
+  	Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 0, epsilon, INFINITY);
 	  HitRecord shadowHR = this->hit(shadow);
     if (shadowHR.isHit) {
     	if (lightType == AMBIENT) {
@@ -104,19 +104,24 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 	  }
   }
   if(hitRecord.bounces > 0) {
+  	printf("Reflect\n");
     Vector r = rayDirection + hitRecord.normal * 2 * (rayDirection * -1).dot(hitRecord.normal);
     r = r.normalize();
     Ray reflect = Ray(hitRecord.intersection, r, hitRecord.bounces - 1, epsilon, INFINITY);
     HitRecord rHit = hit(reflect);
     if(rHit.isHit) {
+      printf("Hit! Bounces: %d\n", rHit.bounces);
       Color reflectance;
       if(hitRecord.isSphere) {
+      	printf("Sphere\n");
         reflectance = hitRecord.sphere.material.reflective;
       } else {
+      	printf("Triangle\n");
         reflectance = hitRecord.triangle.material.reflective;
       }
-      if (!(reflectance.r == 0 & reflectance.g == 0 & reflectance.b == 0)) {
-        total = total + reflectance * trace(rHit, lights, reflect.direction);
+      printf("Reflectance: %d %d %d\n", reflectance.r, reflectance.g, reflectance.b);
+      if (!(reflectance.r == 0 && reflectance.g == 0 && reflectance.b == 0)) {
+        total = total + reflectance * trace(rHit, lights, r);
       }
     }
   }

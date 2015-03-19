@@ -253,9 +253,8 @@ int main (int argc, char *argv[]) {
   Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
 
   all_shapes.push_back(tri);
-*/
 //*********************
-
+  /*
   /*Light a = Light(Coord(1, 1, 1), Color(1, 1, 1), 2); //lol not much of a visible change?
   lights.push_back(a); //change from non, lin, quad to your desires
 
