@@ -127,10 +127,7 @@ void commandLine(int argc, char *argv[]) {
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
 	    		all_shapes.push_back(objtri);
-<<<<<<< HEAD
 	    		cout << "pushed tri from obj" << endl;	  
-=======
->>>>>>> origin/master
 	    	}
 	    	//hacky fix to deal w/ shape class, if slow fix later ^
 	      i += 1;
