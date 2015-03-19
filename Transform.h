@@ -1,5 +1,6 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
+#include "Matrix.h"
 Matrix transMatrix = Matrix();
 class Transform {
   public:
@@ -53,8 +54,8 @@ Coord Transform::performTransform(Coord loc) {
     toReturn.x = m.matrix[0][0]*loc.x+m.matrix[1][0]*loc.y+m.matrix[2][0]*loc.z+m.matrix[3][0];
     toReturn.y = m.matrix[0][1]*loc.x+m.matrix[1][1]*loc.y+m.matrix[2][1]*loc.z+m.matrix[3][1];
     toReturn.z = m.matrix[0][2]*loc.x+m.matrix[1][2]*loc.y+m.matrix[2][2]*loc.z+m.matrix[3][2];
-    cout << "MULTIPLING transMatrix\n" << transMatrix << " with coord " << loc << endl;
-    cout << toReturn << "\n";
+    std::cout << "MULTIPLING transMatrix\n" << transMatrix << " with coord " << loc << std::endl;
+    std::cout << toReturn << "\n";
     return toReturn;
 }
 
