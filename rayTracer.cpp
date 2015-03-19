@@ -6,7 +6,7 @@
 #include <fstream>
 #include <cmath>
 #include <time.h>
-#include <Magick++.h> 
+// #include <Magick++.h> 
 
 int canvasX = 500; //CHANGE THESE!
 int canvasY = 500; //CHANGE THESE!
@@ -44,11 +44,11 @@ void render() {
 	Canvas canvas = Canvas(canvasX, canvasY);
 
 	// //SET UP IMAGE
-	// cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
+	cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
   // Magick::Blob blob(&Magick::rgbt[0],(rgbt.size()*sizeof(rgbt[0]));
-  std::string canvasXStr = std::to_string(canvasX);
-  std::string canvasYStr = std::to_string(canvasY);
-  Magick::Image img( canvasYStr + "x" + canvasXStr, "black"); 
+  // std::string canvasXStr = std::to_string(canvasX);
+  // std::string canvasYStr = std::to_string(canvasY);
+  // Magick::Image img( canvasYStr + "x" + canvasXStr, "black"); 
 	// //SET UP TRACER
 	Tracer tracer = Tracer(all_shapes);
 
@@ -114,9 +114,9 @@ void commandLine(int argc, char *argv[]) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
-	      // a = Transform::performTransform(a);
-	      // b = Transform::performTransform(b);
-	      // c = Transform::performTransform(c);
+	      a = Transform::performTransform(a);
+	      b = Transform::performTransform(b);
+	      c = Transform::performTransform(c);
 	      Triangle * tri = new Triangle(a, b, c, last_material);
 	      all_shapes.push_back(tri);
 	      i += 9;
@@ -191,7 +191,7 @@ void commandLine(int argc, char *argv[]) {
 }
 
 int main (int argc, char *argv[]) {
-  Magick::InitializeMagick(*argv);
+  // Magick::InitializeMagick(*argv);
   commandLine(argc, argv);
 
 //*******************************************

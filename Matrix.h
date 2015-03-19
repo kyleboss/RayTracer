@@ -14,6 +14,7 @@ class Matrix {
     Matrix transpose();
     Matrix multiply(Matrix m2);
     Matrix multiply(float s);
+    Vector operator * (Vector v);
     Matrix operator + (Matrix m);
     Matrix() {
         for (int i = 0; i < 4; i++) {
@@ -111,6 +112,8 @@ Matrix Matrix::multiply(Matrix m2) {
     return product;
 }
 
+
+
 Matrix Matrix::multiply(float s) {
     Matrix product = Matrix();
     for (int i = 0; i < 4; ++i) {
@@ -129,6 +132,28 @@ Matrix Matrix::operator + (Matrix m) {
         }
     }
     return sum;
+};
+
+Vector Matrix::operator * (Vector v) {
+    Vector product = Vector();
+    int total = 0;
+    for (int i = 0; i < 4; ++i) {
+        total = 0;
+        for (int j = 0; j < 4; ++j) {
+            total+= this->matrix[i][j];
+        }
+        if (i == 0) {
+            product.x = total;
+        }
+        if (i == 1) {
+            product.y = total;
+        }
+        if (i == 2) {
+            product.z = total;
+        }
+        total=0;
+    }
+    return product;
 };
 
 std::ostream& operator<< (std::ostream &out, Matrix &m)
