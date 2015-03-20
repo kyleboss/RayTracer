@@ -50,12 +50,12 @@ void render() {
   // std::string canvasYStr = std::to_string(canvasY);
   // Magick::Image img( canvasYStr + "x" + canvasXStr, "black"); 
 	// //SET UP TRACER
-	Tracer tracer = Tracer(all_shapes);
+	Tracer tracer = Tracer(all_shapes);       
 
 	// //SET UP CAMERA through command line
 	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR, canvasX, canvasY);
 
-	//RENDER LOOP
+	//RENDER LOOP   
 	while(canvas.getSample(&canvas.currSample)) {
 		// cout << canvas.currSample << endl;
 		Ray ray = camera.shootRay(canvas.currSample);
@@ -68,22 +68,20 @@ void render() {
 		    if (color.r > 1)
 		    	color.r = 1;
 		    if (color.g > 1)
-		    	color.g = 1;
+		    	color.g = 1; 
 		    if (color.b > 1)
 		    	color.b = 1;
 		    editPixel(&img, canvas.currSample, color); //writes to the image
 		}
 	}
-  Color color = Color(1,1,1);
-  editPixel(&img, canvas.currSample, color);
+  //Color color = Color(1,1,1);
+  //editPixel(&img, canvas.currSample, color);
 	saveImg(img); // Saving image to file result.png
   // img.normalize(0,255);
   // cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
   img.display();
-  while (true) {
-    // main_disp.wait();
-  }
-};
+
+}; 
 
 //To put command line parsings here
 void commandLine(int argc, char *argv[]) {
@@ -121,15 +119,15 @@ void commandLine(int argc, char *argv[]) {
 	      Triangle * tri = new Triangle(a, b, c, last_material);
 	      all_shapes.push_back(tri);
 	      i += 9;
-	      cout << "entered triangle" << endl;
-	    }
+	      cout << "entered triangle" << endl; 
+	    } 
 	    else if (i < argc && strcmp(argv[i], "obj") == 0) {
 	    	objParse(argv[i+1], &objects);
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
 	    		all_shapes.push_back(objtri);
 	    		cout << "pushed tri from obj" << endl;	  
-	    	}
+	    	} 
 	    	//hacky fix to deal w/ shape class, if slow fix later ^
 	      i += 1;
 	    }
@@ -173,8 +171,6 @@ void commandLine(int argc, char *argv[]) {
 	    else if (i < argc && strcmp(argv[i], "xft") == 0) {
 	 			Transform(TRANSLATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      transMatrix = Transform::calcTransMatrix();
-        cout << "NEW TRANS MATRIX\n";
-        cout << transMatrix;
         i += 3;
 	    }
 	    else if (i < argc && strcmp(argv[i], "xfr") == 0) {
@@ -186,8 +182,6 @@ void commandLine(int argc, char *argv[]) {
 	 			Transform(SCALE, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
 	      transMatrix = Transform::calcTransMatrix();
         i += 3;
-        cout << "NEW SCALE MATRIX\n";
-        cout << transMatrix;
 	    }
 	    else if (i < argc && strcmp(argv[i], "xfz") == 0) {
 	 			transMatrix = Matrix();
@@ -231,7 +225,7 @@ int main (int argc, char *argv[]) {
 //Sphere 2
   ka = Color(.1, .1, .1);
   kd = Color(1, 1, 0);
-  ks = Color(1,1,1);
+  ks = Color(1,1,1); 
   kr = Color(0,0,0);
   Material mat2 = Material(ka, kd, ks, 50, kr);
   Sphere * s2 = new Sphere(Coord(-2,2,-15), 1, mat2);
@@ -280,7 +274,7 @@ int main (int argc, char *argv[]) {
 
 
 
-
+          
   //Attenuation check
   /*Light none = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 0);
   Light lin = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 1);

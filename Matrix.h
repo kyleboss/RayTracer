@@ -10,7 +10,7 @@ class Matrix {
   public:
     float** matrix = new float*[4];
     void setVal(int x, int y, int val);
-    static Matrix invert(Matrix m);
+    static void invert(Matrix* m);
     Matrix transpose();
     Matrix multiply(Matrix m2);
     Matrix multiply(float s);
@@ -65,58 +65,99 @@ void Matrix::setVal(int x, int y, int val) {
     matrix[x][y] = val;
 }
 
-// Matrix Matrix::inverse(Matrix m) {
-//     std::cout << "m before\n";
-//     std::cout << *m.matrix;
-//     Matrix m2 = Matrix();
-//     for (int i = 0; i < 4; ++i) {
-//         float diviser = m.matrix[i][i];
-//         for (int k = 0; k < 4; k++) {
-//             m.matrix[i][k] /= diviser;
-//             m2.matrix[i][k] /= diviser;
-//         }
-//         for (int j = 0; j < 4; ++j) {
-//             if (i!=j) {
-//                 float multiplier = m.matrix[j][i];
-//                 for (int l = 0; l < 4; l++) {
-//                     m.matrix[j][l] -= multiplier*m.matrix[i][l];
-//                     m2.matrix[j][l] -= multiplier*m.matrix[i][l];
-//                 }
-//             }
-//         }
-//     }
-//     std::cout << "m AFTER\n";
-//     std::cout << *(m.matrix);
-//     return m2;
-// }
+//INVERSE FUNCTIONS BROUGHT TO YOU BY:
+//https://chi3x10.wordpress.com/2008/05/28/calculate-matrix-inversion-in-c/
+// calculate the cofactor of element (row,col)
+int GetMinor(float **src, float **dest, int row, int col, int order)
+{
+    // indicate which col and row is being copied to dest
+    int colCount=0,rowCount=0;
+ 
+    for(int i = 0; i < order; i++ )
+    {
+        if( i != row )
+        {
+            colCount = 0;
+            for(int j = 0; j < order; j++ )
+            {
+                // when j is not the element
+                if( j != col )
+                {
+                    dest[rowCount][colCount] = src[i][j];
+                    colCount++;
+                }
+            }
+            rowCount++;
+        }
+    }
+ 
+    return 1;
+}
 
-Matrix Matrix::invert(Matrix m) {
-    m.matrix[0][0] = m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][1] - m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][1] + m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][2] - m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][3] + m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][3];
-    m.matrix[0][1] = m.matrix[0][3]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][2]*m.matrix[2][3]*m.matrix[3][1] - m.matrix[0][3]*m.matrix[2][1]*m.matrix[3][2] + m.matrix[0][1]*m.matrix[2][3]*m.matrix[3][2] + m.matrix[0][2]*m.matrix[2][1]*m.matrix[3][3] - m.matrix[0][1]*m.matrix[2][2]*m.matrix[3][3];
-    m.matrix[0][2] = m.matrix[0][2]*m.matrix[1][3]*m.matrix[3][1] - m.matrix[0][3]*m.matrix[1][2]*m.matrix[3][1] + m.matrix[0][3]*m.matrix[1][1]*m.matrix[3][2] - m.matrix[0][1]*m.matrix[1][3]*m.matrix[3][2] - m.matrix[0][2]*m.matrix[1][1]*m.matrix[3][3] + m.matrix[0][1]*m.matrix[1][2]*m.matrix[3][3];
-    m.matrix[0][3] = m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][1] - m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][1] - m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][2] + m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][2] + m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][3] - m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][3];
-    m.matrix[1][0] = m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][0] - m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][2] + m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][2] + m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][3] - m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][3];
-    m.matrix[1][1] = m.matrix[0][2]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[2][2]*m.matrix[3][0] + m.matrix[0][3]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[0][0]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[0][2]*m.matrix[2][0]*m.matrix[3][3] + m.matrix[0][0]*m.matrix[2][2]*m.matrix[3][3];
-    m.matrix[1][2] = m.matrix[0][3]*m.matrix[1][2]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[1][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][0]*m.matrix[3][2] + m.matrix[0][0]*m.matrix[1][3]*m.matrix[3][2] + m.matrix[0][2]*m.matrix[1][0]*m.matrix[3][3] - m.matrix[0][0]*m.matrix[1][2]*m.matrix[3][3];
-    m.matrix[1][3] = m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][0] - m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][0] + m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][2] - m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][2] - m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][3] + m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][3];
-    m.matrix[2][0] = m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][0] + m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][1] - m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][1] - m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][3] + m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][3];
-    m.matrix[2][1] = m.matrix[0][3]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[0][1]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[2][0]*m.matrix[3][1] + m.matrix[0][0]*m.matrix[2][3]*m.matrix[3][1] + m.matrix[0][1]*m.matrix[2][0]*m.matrix[3][3] - m.matrix[0][0]*m.matrix[2][1]*m.matrix[3][3];
-    m.matrix[2][2] = m.matrix[0][1]*m.matrix[1][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][1]*m.matrix[3][0] + m.matrix[0][3]*m.matrix[1][0]*m.matrix[3][1] - m.matrix[0][0]*m.matrix[1][3]*m.matrix[3][1] - m.matrix[0][1]*m.matrix[1][0]*m.matrix[3][3] + m.matrix[0][0]*m.matrix[1][1]*m.matrix[3][3];
-    m.matrix[2][3] = m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][0] - m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][0] - m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][1] + m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][1] + m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][3] - m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][3];
-    m.matrix[3][0] = m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][0] - m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][1] + m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][1] + m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][2];
-    m.matrix[3][1] = m.matrix[0][1]*m.matrix[2][2]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[2][1]*m.matrix[3][0] + m.matrix[0][2]*m.matrix[2][0]*m.matrix[3][1] - m.matrix[0][0]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][1]*m.matrix[2][0]*m.matrix[3][2] + m.matrix[0][0]*m.matrix[2][1]*m.matrix[3][2];
-    m.matrix[3][2] = m.matrix[0][2]*m.matrix[1][1]*m.matrix[3][0] - m.matrix[0][1]*m.matrix[1][2]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[1][0]*m.matrix[3][1] + m.matrix[0][0]*m.matrix[1][2]*m.matrix[3][1] + m.matrix[0][1]*m.matrix[1][0]*m.matrix[3][2] - m.matrix[0][0]*m.matrix[1][1]*m.matrix[3][2];
-    m.matrix[3][3] = m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][0] - m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][0] + m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][1] - m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][1] - m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][2] + m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][2];
+// Calculate the determinant recursively.
+double CalcDeterminant( float **mat, int order)
+{
+    // order must be >= 0
+    // stop the recursion when matrix is a single element
+    if( order == 1 )
+        return mat[0][0];
+ 
+    // the determinant value
+    float det = 0;
+ 
+    // allocate the cofactor matrix
+    float **minor;
+    minor = new float*[order-1];
+    for(int i=0;i<order-1;i++)
+        minor[i] = new float[order-1];
+ 
+    for(int i = 0; i < order; i++ )
+    {
+        // get minor of element (0,i)
+        GetMinor( mat, minor, 0, i , order);
+        // the recusion is here!
+ 
+        det += (i%2==1?-1.0:1.0) * mat[0][i] * CalcDeterminant(minor,order-1);
+        //det += pow( -1.0, i ) * mat[0][i] * CalcDeterminant( minor,order-1 );
+    }
+ 
+    // release memory
+    for(int i=0;i<order-1;i++)
+        delete [] minor[i];
+    delete [] minor;
+ 
+    return det;
+}
 
-    float det = m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][0] + m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][0]+
-   m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][1] + m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][1]+
-   m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][1] + m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][1]+
-   m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][2] + m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][2]+
-   m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][3] + m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][3]+
-   m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][3] - m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][3] - m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][3] + m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][3];
-    
-    m = m.multiply(det);
-    return m;
+// matrix inversioon
+// the result is put in Y
+void MatrixInversion(float **A, int order, float **Y)
+{
+    // get the determinant of a
+    double det = 1.0/CalcDeterminant(A,order);
+ 
+    // memory allocation
+    float *temp = new float[(order-1)*(order-1)];
+    float **minor = new float*[order-1];
+    for(int i=0;i<order-1;i++)
+        minor[i] = temp+(i*(order-1));
+ 
+    for(int j=0;j<order;j++)
+    {
+        for(int i=0;i<order;i++)
+        {
+            // get the co-factor (matrix) of A(j,i)
+            GetMinor(A,minor,j,i,order);
+            Y[i][j] = det*CalcDeterminant(minor,order-1);
+            if( (i+j)%2 == 1)
+                Y[i][j] = -Y[i][j];
+        }
+    }
+ 
+    // release memory
+    //delete [] minor[0];
+    delete [] temp;
+    delete [] minor;
 }
 
 Matrix Matrix::transpose() {
@@ -170,29 +211,29 @@ Matrix Matrix::operator + (Matrix m) {
 Vector Matrix::operator * (Vector v) {
     Vector product = Vector();
     int total = 0;
-    for (int j = 0; j < 4; ++j) {
+    for (int i = 0; i < 4; ++i) {
         total = 0;
-        for (int i = 0; i < 4; ++i) {
-            if (i == 0) {
+        for (int j = 0; j < 4; ++j) {
+            if (j == 0) {
                 total+= this->matrix[i][j]*v.x;
             }
-            if (i == 1) {
+            if (j == 1) {
                 total+= this->matrix[i][j]*v.y;
             }
-            if (i == 2) {
+            if (j == 2) {
                 total+= this->matrix[i][j]*v.z;
             }
-            if (i == 3) {
+            if (j == 3) {
                 total+= this->matrix[i][j];
             }
         }
-        if (j == 0) {
+        if (i == 0) {
             product.x = total;
         }
-        if (j == 1) {
+        if (i == 1) {
             product.y = total;
         }
-        if (j == 2) {
+        if (i == 2) {
             product.z = total;
         }
         total=0;

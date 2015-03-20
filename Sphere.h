@@ -11,6 +11,7 @@ class Sphere: public Shape {
     Sphere(Coord center, float r, Material material) :
         center(center),
         r(r)        {
+            // Sphere(center, r, material, transMatrix);
         }
     Sphere(Coord center, float r, Material material, Matrix transMatrix2) :
         center(center),
@@ -18,13 +19,18 @@ class Sphere: public Shape {
         matrixTransform(transMatrix2)
         {
             this->setMaterial(material);
-            this->matrixTransform = Matrix(transMatrix2);
+            this->preTransform = Matrix(transMatrix2);
+            this->matrixTransform = Matrix();
+            MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
+            mtTransposed = this->matrixTransform.transpose();
         }
     Sphere(Coord center, float r) :
         center(center),
         r(r)
         { }
+    Matrix preTransform;
     Matrix matrixTransform;
+    Matrix mtTransposed;
     Coord center;
     float r;
     void print(std::ostream &out) {
