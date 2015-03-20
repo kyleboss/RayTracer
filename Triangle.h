@@ -19,6 +19,7 @@ class Triangle: public Shape {
         {
             this->setMaterial(material);
             this->preTransform = Matrix(transMatrix2);
+            this->notInvertedTransform = preTransform.copy();
             this->matrixTransform = Matrix();
             MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
             mtTransposed = this->matrixTransform.transpose();
@@ -30,6 +31,7 @@ class Triangle: public Shape {
         hasNormal(0)                
         {
             this->preTransform = Matrix(transMatrix2);
+            this->notInvertedTransform = preTransform.copy();
             this->matrixTransform = Matrix();
             MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
             mtTransposed = this->matrixTransform.transpose();
@@ -44,6 +46,7 @@ class Triangle: public Shape {
         hasNormal(1)                
         {
             this->preTransform = Matrix(transMatrix2);
+            this->notInvertedTransform = preTransform.copy();
             this->matrixTransform = Matrix();
             MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
             mtTransposed = this->matrixTransform.transpose();
@@ -59,6 +62,7 @@ class Triangle: public Shape {
         {
             this->setMaterial(material);
             this->preTransform = Matrix(transMatrix2);
+            this->notInvertedTransform = preTransform.copy();
             this->matrixTransform = Matrix();
             MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
             mtTransposed = this->matrixTransform.transpose();
@@ -66,6 +70,7 @@ class Triangle: public Shape {
     Coord point1;
     Coord point2;
     Coord point3;
+    Matrix notInvertedTransform;
     Vector vn1;
     Vector vn2;
     Vector vn3;

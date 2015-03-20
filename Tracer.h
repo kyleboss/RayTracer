@@ -180,14 +180,15 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
     if (t > tMin && t < tMax) {
       //return obj with t1
       Vector p = r.eval(t);
-      Coord intersection = Coord(p.x, p.y, p.z);
+      Vector intersectionVec = Vector(p.x, p.y, p.z);
+      intersectionVec = s->notInvertedTransform*intersectionVec;
+      Coord intersection = Coord(intersectionVec.x, intersectionVec.y, intersectionVec.z);
       Vector normal = (p - c) * 2;
       //cout << "OLD NORM " << normal << endl;
       normal = s->mtTransposed.multiplyDir(normal);
          
       //normal = s->mtTransposed.multiplyDir(normal);
       // cout << "NORMAL\n";
-      cout << "NEW NORM " << normal << endl;
 
       Sphere sphere = *s;
       // cout << sphere.matrixTransform;
@@ -197,14 +198,15 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
     else if (t2 > tMin && t2 < tMax) {
       //return obj with t2
       Vector p = r.eval(t2);
-      Coord intersection = Coord(p.x, p.y, p.z);
+      Vector intersectionVec = Vector(p.x, p.y, p.z);
+      intersectionVec = s->notInvertedTransform*intersectionVec;
+      Coord intersection = Coord(intersectionVec.x, intersectionVec.y, intersectionVec.z);
       Vector normal = (p - c) * 2;
          //   cout << "OLD NORM " << normal << endl;
             normal = s->mtTransposed.multiplyDir(normal);
 
 
       //normal = s->mtTransposed.multiplyDir(normal);
-       cout << "NEW NORM " << normal << endl;
 
       Sphere sphere = *s;
     return HitRecord(t2, intersection, normal, sphere, bounces);
@@ -258,8 +260,10 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounc
 	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z);
 	Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
 	Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);
-  	Vector p = r.eval(t);
-  	Coord intersection = Coord(p.x, p.y, p.z);
+  Vector p = r.eval(t);
+  Vector intersectionVec = Vector(p.x, p.y, p.z);
+  intersectionVec = tri->notInvertedTransform*intersectionVec;
+  Coord intersection = Coord(intersectionVec.x, intersectionVec.y, intersectionVec.z);
 	Vector normal = (p2 - p1).cross(p3 - p1).normalize();
   normal = tri->mtTransposed.multiplyDir(normal);
 	if (tri->hasNormal) { //for obj parsing

@@ -5,7 +5,7 @@ CC = g++
 #  -g    adds debugging information to the executable file
 #  -Wall turns on most, but not all, compiler warnings
 # CFLAGS  = `Magick++-config --cxxflags --cppflags` -g -Wall
-CFLAGS  = -g -Wall 
+CFLAGS  = `pkg-config --cflags --libs opencv` -g -Wall 
 #remember to add -fopenmp if it ever happens
 
 # the build target executable:

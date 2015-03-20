@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cmath>
 #include <time.h>
+#include <opencv2/opencv.hpp>
 // #include <Magick++.h> 
 
 int canvasX = 500; //CHANGE THESE!
@@ -24,7 +25,7 @@ int canvasY = 500; //CHANGE THESE!
 #include <pthread.h>
 #endif
 #include <omp.h>*/
-
+using namespace cv;
 using namespace std;
 
 //************************
@@ -48,7 +49,8 @@ void render() {
 	Canvas canvas = Canvas(canvasX, canvasY);
 
 	// //SET UP IMAGE
-	cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
+	// cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
+  cv::Mat img(canvasX,canvasY,CV_8UC3,Scalar(0,0,0));
   // Magick::Blob blob(&Magick::rgbt[0],(rgbt.size()*sizeof(rgbt[0]));
   // std::string canvasXStr = std::to_string(canvasX);
   // std::string canvasYStr = std::to_string(canvasY);
@@ -103,7 +105,7 @@ void render() {
 		float scale = (float) 1/(n*n);
 		color = color.scale(scale); //c = c/n^2
 	    //clipping
-	    if (color.r > 1)
+	   if (color.r > 1)
 	    	color.r = 1;
 	    if (color.g > 1)
 	    	color.g = 1; 
@@ -112,11 +114,15 @@ void render() {
 	    editPixel(&img, canvas.currSample, color); //writes to the image
 	} */  
 
-  	Color color = Color(1,1,1);
-  	editPixel(&img, canvas.currSample, color);
+  	// Color color = Color(1,1,1);
+  	// editPixel(&img, canvas.currSample, color);
 	saveImg(img); // Saving image to file result.png
   	// cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
- 	img.display(); 
+ 	// img.display(); 
+
+  cv::namedWindow("RayTracer",cv::WINDOW_AUTOSIZE);
+  cv::imshow("RayTracer", img);
+  waitKey(-1);
   
 }; 
 

@@ -12,6 +12,7 @@ class Matrix {
     void setVal(int x, int y, int val);
     static void invert(Matrix* m);
     Matrix transpose();
+    Matrix copy();
     Matrix multiply(Matrix m2);
     Matrix multiply(float s);
     Vector multiplyDir(Vector v);
@@ -196,9 +197,19 @@ void MatrixInversion(float **A, int order, float **Y)
 
 Matrix Matrix::transpose() {
     Matrix m = Matrix();
-    for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 4; ++j) {
+    for (int j = 0; j < 4; ++j) {
+        for (int i = 0; i < 4; ++i) {
             m.matrix[i][j] = this->matrix[j][i];
+        }
+    }
+    return m;
+}
+
+Matrix Matrix::copy() {
+    Matrix m = Matrix();
+    for (int j = 0; j < 4; ++j) {
+        for (int i = 0; i < 4; ++i) {
+            m.matrix[i][j] = this->matrix[i][j];
         }
     }
     return m;

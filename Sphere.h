@@ -20,6 +20,7 @@ class Sphere: public Shape {
         {
             this->setMaterial(material);
             this->preTransform = Matrix(transMatrix2);
+            this->notInvertedTransform = preTransform.copy();
             this->matrixTransform = Matrix();
             MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
             mtTransposed = this->matrixTransform.transpose();
@@ -29,6 +30,7 @@ class Sphere: public Shape {
         r(r)
         { }
     Matrix preTransform;
+    Matrix notInvertedTransform;
     Matrix matrixTransform;
     Matrix mtTransposed;
     Coord center;
