@@ -148,7 +148,6 @@ void commandLine(int argc, char *argv[]) {
 	      // c = Transform::performTransform(c, transMatrix);
         Sphere * sph = new Sphere(c, strtof(argv[i+4], NULL), last_material, transMatrix);
 	      all_shapes.push_back(sph);
-        cout << *sph;
 	      i += 4;
 	    }
 	    else if (i < argc && strcmp(argv[i], "tri") == 0) {
@@ -240,116 +239,7 @@ void commandLine(int argc, char *argv[]) {
 }
 
 int main (int argc, char *argv[]) {
-  // Magick::InitializeMagick(*argv);
-  commandLine(argc, argv);
- 
-//*******************************************
-// THIS SETS UP THE SCENE AS ON THE WEBSITE
-// pls keep box to avoid merge conflict
-// implicit camera as    eye=[ 0.  0.  0.]
-	        // LL=[-1. -1. -3.]
-	        // LR=[ 1. -1. -3.]
-	        // UR=[ 1.  1. -3.]
-	        // UL=[-1.  1. -3.]
-	        // x, y = 500 x 500
-//*******************************************
-/*
-//Lights
-  Light l = Light(Coord(0.57735027,  -0.57735027, -0.57735027), Color(1, 1, 1), 1);
-  Light l1 = Light(Coord(0.57735027,  0.57735027, -0.57735027), Color(0, 0, 1), 1);
-  lights.push_back(l);
-  lights.push_back(l1);
-
-//Sphere 1
-  Color ka = Color(.1, .1, .1);
-  Color kd = Color(1, 0, 1);
-  Color ks = Color(1,1,1);
-  Color kr = Color(0,0,0);
-  Material mat1 = Material(ka, kd, ks, 50, kr);
-  Sphere * s1 = new Sphere(Coord(0,0,-20), 3, mat1);
-
-//Sphere 2
-  ka = Color(.1, .1, .1);
-  kd = Color(1, 1, 0);
-  ks = Color(1,1,1); 
-  kr = Color(0,0,0);
-  Material mat2 = Material(ka, kd, ks, 50, kr);
-  Sphere * s2 = new Sphere(Coord(-2,2,-15), 1, mat2);
-
-//Sphere 3
-  ka = Color(.1, .1, .1);
-  kd = Color(0, 1, 1);
-  ks = Color(1,1,1);
-  kr = Color(0,0,0);
-  Material mat3 = Material(ka, kd, ks, 50, kr);
-  //Transform(TRANSLATION, 1, 2, 1);
-  Coord c = Coord(-2,-2,-15);
-  //c = Transform::performTransform(c);
-  //cout << c;
-  Sphere * s3 = new Sphere(c, 1, mat3);
-
-
-  all_shapes.push_back(s1);
-  all_shapes.push_back(s2);
-  all_shapes.push_back(s3);
-
-//Triangle
-  Coord coord = Coord(5,5,-17);
-  Coord coord2 = Coord(1,4,-20);
-  Coord coord3 = Coord(6,-1,-20);
-  ka = Color(.1, .1, .1);
-  kd = Color(.1, .1, .1);
-  ks = Color(1,1,1);
-  kr = Color(1,1,1);
-  Material mattri =  Material(ka, kd, ks, 50, kr);
-  Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
-
-  all_shapes.push_back(tri);
-
-//*********************
-  /*
-  /*Light a = Light(Coord(1, 1, 1), Color(1, 1, 1), 2); //lol not much of a visible change?
-  lights.push_back(a); //change from non, lin, quad to your desires
-
-  Color ka = Color(1,1,1);
-  Color kd = Color(1, 1, 1);
-  Color ks = Color(0,0,0);
-  Color kr = Color(0,0,0);
-  Material mat1 = Material(ka, kd, ks, 64, kr);
-  Sphere * s1 = new Sphere(Coord(0,0,0), 0.65, mat1);
-  all_shapes.push_back(s1);*/
-
-
-
-          
-  //Attenuation check
-  /*Light none = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 0);
-  Light lin = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 1);
-  Light quad = Light(Coord(2, 2, 2), Color(1, 1, 1), 2, 2); //lol not much of a visible change?
-  lights.push_back(none); //change from non, lin, quad to your desires
-
-  Color ka = Color(.05, .05, .05);
-  Color kd = Color(1, 1, 1);
-  Color ks = Color(1,1,1);
-  Color kr = Color(0,0,0);
-  Material mat1 = Material(ka, kd, ks, 64, kr);
-  Sphere * s1 = new Sphere(Coord(0,0,-5), 3.5, mat1);
-  all_shapes.push_back(s1);*/      
-   Vector d = transMatrix * Vector(-0.557207, 0.58094, -0.59332);
-  cout << "D!!!! " << d << endl; 
-	cout << "all of the lights" << lights.size() << endl;
-	for (int i = 0; i < lights.size(); i++) {
-		cout << (lights[i]) << endl;
-	}
-
-	cout << "all shapes size is" << all_shapes.size() << endl;
-	for (int i = 0; i < all_shapes.size(); i++) {
-		cout << *(all_shapes[i]) << endl;
-	}
-
-  cout << "rendering..." << endl;
+  commandLine(argc, argv);     
   render();
-
-
   return 0;
 }

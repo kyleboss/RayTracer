@@ -89,17 +89,13 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     if (lightType == DIRECTIONAL) {
       lightDirectionVec = lightLocationVec*(-1);
     } else if (lightType == POINT) {
-    	    cout << "INTER! " << intersectionVec << endl;
 
       lightDirectionVec = lightLocationVec - intersectionVec;
-          cout << "LDV!1 " << lightDirectionVec << endl;
 
     }
     float r = lightDirectionVec.magnitude();
-              cout << "LDV!Before " << lightDirectionVec << endl;
 
     lightDirectionVec = lightDirectionVec.normalize();
-          cout << "LDV!After " << lightDirectionVec << endl;
     Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
     HitRecord shadowHR = this->hit(shadow);
 
