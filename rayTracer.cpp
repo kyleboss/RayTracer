@@ -155,7 +155,7 @@ void commandLine(int argc, char *argv[]) {
 	      Triangle * tri = new Triangle(a, b, c, last_material, transMatrix);
 	      all_shapes.push_back(tri);
 	      i += 9;
-	    } 
+	    }  
 	    else if (i < argc && strcmp(argv[i], "obj") == 0) {
 	    	objParse(argv[i+1], &objects, &transMatrix);
 	    	for (int i = 0; i < objects.size(); i++) {
@@ -329,7 +329,8 @@ int main (int argc, char *argv[]) {
   Material mat1 = Material(ka, kd, ks, 64, kr);
   Sphere * s1 = new Sphere(Coord(0,0,-5), 3.5, mat1);
   all_shapes.push_back(s1);*/
-
+  Vector d = transMatrix * Vector(3, 4, 1);
+  cout << "D!!!! " << d << endl;
 	cout << "all of the lights" << lights.size() << endl;
 	for (int i = 0; i < lights.size(); i++) {
 		cout << (lights[i]) << endl;
