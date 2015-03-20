@@ -55,6 +55,8 @@ HitRecord Tracer::hit(Ray ray) {
           rayStartVec = sphere->matrixTransform*rayStartVec;
           rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
           Vector rayDir = ray.direction;
+          //rayDir = sphere->matrixTransform * rayDir;
+  
           rayDir = sphere->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
           Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);          
@@ -181,12 +183,14 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
       Coord intersection = Coord(p.x, p.y, p.z);
       Vector normal = (p - c) * 2;
       //cout << "OLD NORM " << normal << endl;
-      normal = s->mtTransposed.multiplyDir(normal);
+            normal = s->mtTransposed * normal;
+
+      //normal = s->mtTransposed.multiplyDir(normal);
       // cout << "NORMAL\n";
-      //cout << "NEW NORM " << normal << endl;
+      cout << "NEW NORM " << normal << endl;
 
       Sphere sphere = *s;
-      // cout << sphere.matrixTransform;
+      cout << sphere.matrixTransform;
       // Matrix invertedMatrix = Matrix::invert(sphere.matrixTransform);
       return HitRecord(t, intersection, normal, sphere, bounces);
     }
@@ -196,9 +200,10 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
       Coord intersection = Coord(p.x, p.y, p.z);
       Vector normal = (p - c) * 2;
          //   cout << "OLD NORM " << normal << endl;
+      normal = s->mtTransposed * normal;
 
-      normal = s->mtTransposed.multiplyDir(normal);
-           // cout << "NEW NORM " << normal << endl;
+      //normal = s->mtTransposed.multiplyDir(normal);
+       cout << "NEW NORM " << normal << endl;
 
       Sphere sphere = *s;
     return HitRecord(t2, intersection, normal, sphere, bounces);
