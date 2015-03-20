@@ -61,9 +61,8 @@ class Matrix {
             A.matrix[2][1] = -1*r.x;
             A.matrix[3][3] = 0;
             this->matrix = (I+A.multiply(sin(angle))+A.multiply(A).multiply(1-cos(angle))).matrix;
-            std::cout << "Angle: " << angle << std::endl;
-            std::cout << "sin(angle): " << sin(angle) << std::endl;
         }
+
     }
 };
 

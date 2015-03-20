@@ -11,7 +11,6 @@
 
 int canvasX = 500; //CHANGE THESE!
 int canvasY = 500; //CHANGE THESE!
-#include "CImg.h"
 #include "Camera.h"
 #include "Tracer.h"
 #include "Canvas.h"
@@ -220,7 +219,6 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    else if (i < argc && strcmp(argv[i], "xfr") == 0) {
 	 			Transform newT = Transform(ROTATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
-	      std::cout << "matrix returned by Rodriguez's formula\n" << newT << std::endl;
         transMatrix = Transform::calcTransMatrix();
         i += 3;
 	    }
@@ -234,7 +232,7 @@ void commandLine(int argc, char *argv[]) {
 	      // i += 1;
 	    }
 	    else { //error handling per last pg in spec
-	    	cerr << "Bad command line input @ " << argv[i] << endl;
+	    	cerr << "Bad command line input " << argv[i] << " @ " << i << endl;
 
 	    }
 	}
