@@ -94,7 +94,7 @@ void read_line(istream& stream, vector<Triangle> * objects, vector<Coord> * temp
 
 
 //implies that obj filename was parsed and passed in, given WITH quotes, in same directory
-void objParse(char * filename, vector<Triangle> * objects, Matrix * transMatrix){
+void objParse(string filename, vector<Triangle> * objects, Matrix * transMatrix){
   vector<Coord> temp_vertices;
   vector<Vector> temp_normals;
   ifstream objFile(filename);
