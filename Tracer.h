@@ -288,16 +288,20 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounc
 
     return HitRecord(false);
 
-  }
-  Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z);
-  Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
-  Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);
-  Vector p = r.eval(t);
-  Coord intersection = Coord(p.x, p.y, p.z);
-  Vector normal = (p2 - p1).cross(p3 - p1);
-  Triangle triangle = *tri;
-      //cout << "the end good job " << endl;
-
+	}
+	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z);
+	Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
+	Vector p3 = Vector(tri->point3.x, tri->point3.y, tri->point3.z);
+  	Vector p = r.eval(t);
+  	Coord intersection = Coord(p.x, p.y, p.z);
+	Vector normal = (p2 - p1).cross(p3 - p1).normalize();
+	if (tri->hasNormal) { //for obj parsing
+		Vector na = tri->vn1;
+		Vector nb = tri->vn2;
+		Vector nc = tri->vn3;
+		normal = (na + (nb - na)*beta + (nc - na)*gamma).normalize();
+	}
+	Triangle triangle = *tri;
   return HitRecord(t, intersection, normal, triangle, bounces);
 }
 

@@ -41,7 +41,6 @@ using namespace std;
 	Coord camUR = Coord(1,1,1);
   Matrix transMatrix = Matrix();
 
- //THE DEFAULT VALUES are bc im too lazy to enter thru command line
 
 // Main render loop
 void render() {
@@ -116,10 +115,9 @@ void render() {
   	Color color = Color(1,1,1);
   	editPixel(&img, canvas.currSample, color);
 	saveImg(img); // Saving image to file result.png
-  // img.normalize(0,255);
-  // cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
-  img.display(); 
- 
+  	// cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
+ 	img.display(); 
+  
 }; 
 
 //To put command line parsings here
@@ -146,7 +144,6 @@ void commandLine(int argc, char *argv[]) {
 	      all_shapes.push_back(sph);
         cout << *sph;
 	      i += 4;
-	      cout << "entered sphere" << endl;
 	    }
 	    else if (i < argc && strcmp(argv[i], "tri") == 0) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
@@ -158,17 +155,21 @@ void commandLine(int argc, char *argv[]) {
 	      Triangle * tri = new Triangle(a, b, c, last_material, transMatrix);
 	      all_shapes.push_back(tri);
 	      i += 9;
-	      cout << "entered triangle" << endl;  
 	    } 
 	    else if (i < argc && strcmp(argv[i], "obj") == 0) {
 	    	objParse(argv[i+1], &objects, &transMatrix);
 	    	for (int i = 0; i < objects.size(); i++) {
-	    		Triangle * objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material, transMatrix);
+	    		Triangle * objtri;
+	    		if (objects[i].hasNormal) { //w defined normals
+		    		objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, objects[i].vn1, objects[i].vn2, objects[i].vn3, last_material);
+	    		} 
+	    		else {  
+		    		objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
+	    		}
 	    		all_shapes.push_back(objtri);
-	    		cout << "pushed tri from obj" << endl;	  
 	    	} 
 	    	//hacky fix to deal w/ shape class, if slow fix later ^
-	      i += 1;
+	      i += 1; 
 	    }
 	    else if (i < argc && strcmp(argv[i], "ltp") == 0) {
 	    	//ltp px py pz r g b falloff
@@ -235,7 +236,7 @@ void commandLine(int argc, char *argv[]) {
 int main (int argc, char *argv[]) {
   // Magick::InitializeMagick(*argv);
   commandLine(argc, argv);
-
+ 
 //*******************************************
 // THIS SETS UP THE SCENE AS ON THE WEBSITE
 // pls keep box to avoid merge conflict
@@ -298,7 +299,7 @@ int main (int argc, char *argv[]) {
   Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
 
   all_shapes.push_back(tri);
-*/
+
 //*********************
   /*
   /*Light a = Light(Coord(1, 1, 1), Color(1, 1, 1), 2); //lol not much of a visible change?
