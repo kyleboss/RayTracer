@@ -94,11 +94,6 @@ Vector Matrix::multiplyDir(Vector v) {
         if (j == 2) {
             product.z = total;
         }
-        if (j==3) {
-            product.x = product.x/total;
-            product.y = product.y/total;
-            product.z = product.z/total;
-        }
         total=0;
     }
     return product;
@@ -201,8 +196,8 @@ void MatrixInversion(float **A, int order, float **Y)
 
 Matrix Matrix::transpose() {
     Matrix m = Matrix();
-    for (int j = 0; j < 4; ++j) {
-        for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
             m.matrix[i][j] = this->matrix[j][i];
         }
     }
@@ -274,11 +269,6 @@ Vector Matrix::operator * (Vector v) {
         }
         if (j == 2) {
             product.z = total;
-        }
-        if (j==3) {
-            product.x = product.x/total;
-            product.y = product.y/total;
-            product.z = product.z/total;
         }
         total=0;
     }
