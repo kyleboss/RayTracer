@@ -130,11 +130,11 @@ void commandLine(int argc, char *argv[]) {
 	      camLR = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
 	      camUL = Coord(strtof(argv[i+10], NULL), strtof(argv[i+11], NULL), strtof(argv[i+12], NULL));
 	      camUR = Coord(strtof(argv[i+13], NULL), strtof(argv[i+14], NULL), strtof(argv[i+15], NULL));
-	      camEye = Transform::performTransform(camEye, transMatrix);
-	      camLL = Transform::performTransform(camLL, transMatrix);
-	      camLR = Transform::performTransform(camLR, transMatrix);
-	      camUL = Transform::performTransform(camUL, transMatrix);
-	      camUR = Transform::performTransform(camUR, transMatrix);
+	      // camEye = Transform::performTransform(camEye, transMatrix);
+	      // camLL = Transform::performTransform(camLL, transMatrix);
+	      // camLR = Transform::performTransform(camLR, transMatrix);
+	      // camUL = Transform::performTransform(camUL, transMatrix);
+	      // camUR = Transform::performTransform(camUR, transMatrix);
 	      i += 15;
 	    }
 	    else if (i < argc && strcmp(argv[i], "sph") == 0) {
