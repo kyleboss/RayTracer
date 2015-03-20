@@ -52,7 +52,7 @@ HitRecord Tracer::hit(Ray ray) {
           // cout << rayStartVec << endl;
           rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
           Vector rayDir = ray.direction;
-          rayDir = sphere->matrixTransform*rayDir;
+          rayDir = sphere->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
           Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
           temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
