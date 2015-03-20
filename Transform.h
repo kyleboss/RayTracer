@@ -24,13 +24,13 @@ Matrix Transform::calcTransMatrix() {
     if ((Transform::transforms).size() == 0) {
         return transformation;
     }
-    for(std::vector<Transform *>::iterator itor=std::prev((Transform::transforms).end()); true; --itor) {
-        if ((itor) == std::prev(Transform::transforms.end())) {
+    for(std::vector<Transform *>::iterator itor=(Transform::transforms).begin(); true; ++itor) {
+        if ((itor) == Transform::transforms.begin()) {
             transformation = (*itor)->matrix;
         } else {
             transformation = transformation.multiply((*itor)->matrix);
         }
-        if (itor == Transform::transforms.begin()) {
+        if (itor == std::prev(Transform::transforms.end())) {
             break;
         }
     }

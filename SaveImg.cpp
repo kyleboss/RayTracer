@@ -15,9 +15,9 @@ void editPixel(cv::Mat* img, Sample& sample, Color& color) {
   // Magick::ColorRGB magickColor = Magick::ColorRGB(color.r, color.g, color.b);
   // (*img).pixelColor(sample.x, sample.y, magickColor);
   cv::Vec3b oldColor = (*img).at<cv::Vec3b>(cv::Point(sample.x,sample.y));
-  oldColor[0] = std::fmax(0, std::fmin(255, color.r*255));
+  oldColor[2] = std::fmax(0, std::fmin(255, color.r*255));
   oldColor[1] = std::fmax(0, std::fmin(255, color.g*255));
-  oldColor[2] = std::fmax(0, std::fmin(255, color.b*255));
+  oldColor[0] = std::fmax(0, std::fmin(255, color.b*255));
   (*img).at<cv::Vec3b>(cv::Point(sample.x,sample.y)) = oldColor;
 }
 

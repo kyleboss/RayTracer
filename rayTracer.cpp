@@ -83,36 +83,36 @@ void render() {
 	    editPixel(&img, canvas.currSample, color); //writes to the image
 	}
 
-/*
+
 	//RENDER LOOP for aliasing   
-	while (canvas.getSample(&canvas.currSample)) {
-		Color color = Color(0,0,0);
-		Sample sample = canvas.currSample;
-		int n = 3; //do 3x3 anti-aliasing
-		//#pragma omp parallel for 
-		for (int p = 0; p < n; p++) {
-			for (int q = 0; q < n; q++) {
-				float zetta = ((float) rand() / (RAND_MAX));
-				float u = (sample.x + (p + zetta)/n) / canvasX ;
-  				float v = (sample.y + (q + zetta)/n) / canvasY;
-				Ray ray = camera.shootRay(u, v);
-				HitRecord hitRecord = tracer.hit(ray);
-				if (hitRecord.isHit) {
-				    color = color + tracer.trace(hitRecord, lights, ray.direction);
-				}  
-			}
-		}
-		float scale = (float) 1/(n*n);
-		color = color.scale(scale); //c = c/n^2
-	    //clipping
-	   if (color.r > 1)
-	    	color.r = 1;
-	    if (color.g > 1)
-	    	color.g = 1; 
-	    if (color.b > 1)
-	    	color.b = 1;
-	    editPixel(&img, canvas.currSample, color); //writes to the image
-	} */  
+	// while (canvas.getSample(&canvas.currSample)) {
+	// 	Color color = Color(0,0,0);
+	// 	Sample sample = canvas.currSample;
+	// 	int n = 3; //do 3x3 anti-aliasing
+	// 	//#pragma omp parallel for 
+	// 	for (int p = 0; p < n; p++) {
+	// 		for (int q = 0; q < n; q++) {
+	// 			float zetta = ((float) rand() / (RAND_MAX));
+	// 			float u = (sample.x + (p + zetta)/n) / canvasX ;
+ //  				float v = (sample.y + (q + zetta)/n) / canvasY;
+	// 			Ray ray = camera.shootRay(u, v);
+	// 			HitRecord hitRecord = tracer.hit(ray);
+	// 			if (hitRecord.isHit) {
+	// 			    color = color + tracer.trace(hitRecord, lights, ray.direction);
+	// 			}  
+	// 		}
+	// 	}
+	// 	float scale = (float) 1/(n*n);
+	// 	color = color.scale(scale); //c = c/n^2
+	//     //clipping
+	//    if (color.r > 1)
+	//     	color.r = 1;
+	//     if (color.g > 1)
+	//     	color.g = 1; 
+	//     if (color.b > 1)
+	//     	color.b = 1;
+	//     editPixel(&img, canvas.currSample, color); //writes to the image
+	// }   
 
   	// Color color = Color(1,1,1);
   	// editPixel(&img, canvas.currSample, color);
@@ -219,8 +219,9 @@ void commandLine(int argc, char *argv[]) {
         i += 3;
 	    }
 	    else if (i < argc && strcmp(argv[i], "xfr") == 0) {
-	 			Transform(ROTATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
-	      transMatrix = Transform::calcTransMatrix();
+	 			Transform newT = Transform(ROTATION, strtof(argv[i+1], NULL),strtof(argv[i+2], NULL),strtof(argv[i+3], NULL));
+	      std::cout << "matrix returned by Rodriguez's formula\n" << newT << std::endl;
+        transMatrix = Transform::calcTransMatrix();
         i += 3;
 	    }
 	    else if (i < argc && strcmp(argv[i], "xfs") == 0) {
@@ -230,10 +231,11 @@ void commandLine(int argc, char *argv[]) {
 	    }
 	    else if (i < argc && strcmp(argv[i], "xfz") == 0) {
 	 			transMatrix = Matrix();
-	      i += 1;
+	      // i += 1;
 	    }
 	    else { //error handling per last pg in spec
-	    	cerr << "Bad command line input" << endl;
+	    	cerr << "Bad command line input @ " << argv[i] << endl;
+
 	    }
 	}
 }

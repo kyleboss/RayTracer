@@ -33,7 +33,7 @@ class Matrix {
         }
     }
     Matrix(int transformation, float x, float y, float z) {
-        matrix = Matrix().matrix;
+        this->matrix = Matrix().matrix;
         if (transformation == TRANSLATION) {
             matrix[3][0] = x;
             matrix[3][1] = y;
@@ -46,19 +46,23 @@ class Matrix {
             Matrix A = Matrix();
             Matrix I = Matrix();
             Vector r = Vector(x,y,z);
+
             float angle = r.magnitude();
+            angle *= M_PI/180;
             r = r.normalize();
             A.matrix[0][0] = 0;
-            A.matrix[0][0] = r.z;
+            A.matrix[0][1] = r.z;
             A.matrix[0][2] = -1*r.y;
             A.matrix[1][0] = -1*r.z;
             A.matrix[1][1] = 0;
             A.matrix[1][2] = r.x;
             A.matrix[2][0] = r.y;
             A.matrix[2][2] = 0;
-            A.matrix[3][1] = -1*r.x;
+            A.matrix[2][1] = -1*r.x;
             A.matrix[3][3] = 0;
-            matrix = (I+A.multiply(sin(angle))+A.multiply(A).multiply(1-cos(angle))).matrix;
+            this->matrix = (I+A.multiply(sin(angle))+A.multiply(A).multiply(1-cos(angle))).matrix;
+            std::cout << "Angle: " << angle << std::endl;
+            std::cout << "sin(angle): " << sin(angle) << std::endl;
         }
     }
 };
