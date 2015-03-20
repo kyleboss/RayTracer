@@ -31,7 +31,14 @@ HitRecord Tracer::hit(Ray ray) {
     Triangle* triangle = dynamic_cast<Triangle*>(all_shapes[i]);
     Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
     if (triangle != 0) { //if it's a triangle?
-          //temp = rayTri(ray, triangle, t_min, t_max);
+          Coord rayStartCoord = ray.start;
+          Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
+          rayStartVec = triangle->matrixTransform*rayStartVec;
+          rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
+          Vector rayDir = ray.direction;
+          rayDir = triangle->matrixTransform.multiplyDir(rayDir);
+          rayDir = rayDir.normalize();
+          Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
           temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
       if (temp.isHit) {
         hitRecord = temp;
@@ -46,19 +53,11 @@ HitRecord Tracer::hit(Ray ray) {
           Coord rayStartCoord = ray.start;
           Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
           rayStartVec = sphere->matrixTransform*rayStartVec;
-          // cout << "sphere->matrixTransform" << endl;
-          // cout << sphere->matrixTransform << endl;
-          // cout << "rayStartVec" << endl;
-          // cout << rayStartVec << endl;
           rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
           Vector rayDir = ray.direction;
           rayDir = sphere->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
-          //cout << "RAY! " << ray << endl;
-          Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
-
-          //cout << "NEW RAY! " << newRay << endl;
-          
+          Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);          
           temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
       if (temp.isHit) {
       	//cout << "HIT!" << endl;
@@ -256,6 +255,7 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounc
   	Vector p = r.eval(t);
   	Coord intersection = Coord(p.x, p.y, p.z);
 	Vector normal = (p2 - p1).cross(p3 - p1).normalize();
+  normal = tri->mtTransposed.multiplyDir(normal);
 	if (tri->hasNormal) { //for obj parsing
 		Vector na = tri->vn1;
 		Vector nb = tri->vn2;

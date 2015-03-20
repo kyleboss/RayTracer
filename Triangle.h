@@ -8,6 +8,8 @@
 class Triangle: public Shape {
   public:
     Matrix matrixTransform;
+    Matrix preTransform;
+    Matrix mtTransposed;
     Triangle () {}
     Triangle(Coord point1, Coord point2, Coord point3, Material material, Matrix transMatrix2) :
         point1(point1),
@@ -16,7 +18,10 @@ class Triangle: public Shape {
         hasNormal(0)                               
         {
             this->setMaterial(material);
-            matrixTransform = transMatrix2;
+            this->preTransform = Matrix(transMatrix2);
+            this->matrixTransform = Matrix();
+            MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
+            mtTransposed = this->matrixTransform.transpose();
         }
     Triangle(Coord point1, Coord point2, Coord point3, Matrix transMatrix2) :
         point1(point1),
@@ -24,7 +29,10 @@ class Triangle: public Shape {
         point3(point3),
         hasNormal(0)                
         {
-            matrixTransform = transMatrix2;
+            this->preTransform = Matrix(transMatrix2);
+            this->matrixTransform = Matrix();
+            MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
+            mtTransposed = this->matrixTransform.transpose();
         }
     Triangle(Coord point1, Coord point2, Coord point3, Vector vn1, Vector vn2, Vector vn3, Matrix transMatrix2) :
         point1(point1),
@@ -35,7 +43,10 @@ class Triangle: public Shape {
         vn3(vn3),
         hasNormal(1)                
         {
-            matrixTransform = transMatrix2;
+            this->preTransform = Matrix(transMatrix2);
+            this->matrixTransform = Matrix();
+            MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
+            mtTransposed = this->matrixTransform.transpose();
         }  
     Triangle(Coord point1, Coord point2, Coord point3, Vector vn1, Vector vn2, Vector vn3, Material material, Matrix transMatrix2) :
         point1(point1),
@@ -47,7 +58,10 @@ class Triangle: public Shape {
         hasNormal(1)                
         {
             this->setMaterial(material);
-            matrixTransform = transMatrix2;
+            this->preTransform = Matrix(transMatrix2);
+            this->matrixTransform = Matrix();
+            MatrixInversion(this->preTransform.matrix, 4, this->matrixTransform.matrix);
+            mtTransposed = this->matrixTransform.transpose();
         }        
     Coord point1;
     Coord point2;
