@@ -24,12 +24,10 @@ class Camera {
     canvasY(canvasY),
     eyeLoc(eyeLoc)
     {}
-    Ray shootRay(Sample sample);
+    Ray shootRay(float u, float v);
 };
 
-Ray Camera::shootRay(Sample sample) {
-  float u = (sample.x + 0.5) / canvasX;
-  float v = (sample.y + 0.5) / canvasY;
+Ray Camera::shootRay(float u, float v) {
   Coord pointOnPlane = ((LL*v+UL*(1-v))*u+(LR*v + UR*(1-v))*(1-u)) - eyeLoc;
   Vector direction = Vector(-pointOnPlane.x, pointOnPlane.y, pointOnPlane.z).normalize();
   return Ray(eyeLoc, direction, 10, 1, INFINITY);

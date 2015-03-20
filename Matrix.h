@@ -14,6 +14,7 @@ class Matrix {
     Matrix transpose();
     Matrix multiply(Matrix m2);
     Matrix multiply(float s);
+    Vector multiplyDir(Vector v);
     Vector operator * (Vector v);
     Matrix operator + (Matrix m);
     Matrix() {
@@ -63,6 +64,39 @@ class Matrix {
 
 void Matrix::setVal(int x, int y, int val) {
     matrix[x][y] = val;
+}
+
+Vector Matrix::multiplyDir(Vector v) {
+    Vector product = Vector();
+    int total = 0;
+    for (int i = 0; i < 4; ++i) {
+        total = 0;
+        for (int j = 0; j < 4; ++j) {
+            if (j == 0) {
+                total+= this->matrix[i][j]*v.x;
+            }
+            if (j == 1) {
+                total+= this->matrix[i][j]*v.y;
+            }
+            if (j == 2) {
+                total+= this->matrix[i][j]*v.z;
+            }
+            if (j == 3) {
+                total+= 0;
+            }
+        }
+        if (i == 0) {
+            product.x = total;
+        }
+        if (i == 1) {
+            product.y = total;
+        }
+        if (i == 2) {
+            product.z = total;
+        }
+        total=0;
+    }
+    return product;
 }
 
 //INVERSE FUNCTIONS BROUGHT TO YOU BY:

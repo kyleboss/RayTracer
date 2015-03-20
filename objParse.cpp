@@ -13,7 +13,7 @@ using namespace std;
 
 //Takes in an obj file, fills the passed in obj vector of triangles in return.
 
-void read_line(istream& stream, vector<Triangle> * objects, vector<Coord> * temp_vertices) {
+void read_line(istream& stream, vector<Triangle> * objects, vector<Coord> * temp_vertices, Matrix * transMatrix) {
   string line;
   getline(stream, line); //line is relevant data
   //vertices  
@@ -73,7 +73,7 @@ void read_line(istream& stream, vector<Triangle> * objects, vector<Coord> * temp
       Coord a = (*temp_vertices)[v1i];
       Coord b = (*temp_vertices)[v2i];
       Coord c = (*temp_vertices)[v3i];
-      Triangle tri(a, b, c);
+      Triangle tri(a, b, c, *transMatrix);
       objects->push_back(tri);
       //cout << "pushed triangle " << tri << endl;
 
@@ -89,12 +89,12 @@ void read_line(istream& stream, vector<Triangle> * objects, vector<Coord> * temp
 
 
 //implies that obj filename was parsed and passed in, given WITH quotes, in same directory
-void objParse(char * filename, vector<Triangle> * objects){
+void objParse(char * filename, vector<Triangle> * objects, Matrix * transMatrix){
   vector<Coord> temp_vertices;
   ifstream objFile(filename);
   if (objFile.is_open()) {
     while (objFile.good()) {
-      read_line(objFile, objects, &temp_vertices);
+      read_line(objFile, objects, &temp_vertices, transMatrix);
     }
     objFile.close();
   }

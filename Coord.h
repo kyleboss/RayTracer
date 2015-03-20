@@ -1,6 +1,8 @@
 #ifndef COORD_H
 #define COORD_H
 
+// #include "Vector.h"
+
 class Coord {
   public:
     Coord (float x, float y, float z) :

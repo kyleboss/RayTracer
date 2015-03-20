@@ -9,20 +9,20 @@ class Triangle: public Shape {
   public:
     Matrix matrixTransform;
     Triangle () {}
-    Triangle(Coord point1, Coord point2, Coord point3, Material material) :
+    Triangle(Coord point1, Coord point2, Coord point3, Material material, Matrix transMatrix2) :
         point1(point1),
         point2(point2),
         point3(point3)        
         {
             this->setMaterial(material);
-            // matrixTransform = transMatrix;
+            matrixTransform = transMatrix2;
         }
-    Triangle(Coord point1, Coord point2, Coord point3) :
+    Triangle(Coord point1, Coord point2, Coord point3, Matrix transMatrix2) :
         point1(point1),
         point2(point2),
         point3(point3)
         {
-            // matrixTransform = transMatrix;
+            matrixTransform = transMatrix2;
         }
     Coord point1;
     Coord point2;

@@ -45,7 +45,19 @@ HitRecord Tracer::hit(Ray ray) {
     if (sphere != 0) {
       //cout << "YO IM SPHERE! " << endl;
          //temp = raySphere(ray, sphere, t_min, t_max);
-          temp = raySphere(ray, sphere, t_min, t_max, ray.bouncesLeft);
+          Coord rayStartCoord = ray.start;
+          Vector rayStartVec = Vector(rayStartVec.x, rayStartVec.y, rayStartVec.z);
+          rayStartVec = sphere->matrixTransform*rayStartVec;
+          // cout << "sphere->matrixTransform" << endl;
+          // cout << sphere->matrixTransform << endl;
+          // cout << "rayStartVec" << endl;
+          // cout << rayStartVec << endl;
+          rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
+          Vector rayDir = ray.direction;
+          rayDir = sphere->matrixTransform.multiplyDir(rayDir);
+          rayDir = rayDir.normalize();
+          Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
+          temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
       if (temp.isHit) {
         hitRecord = temp;
         t_max = temp.t;
@@ -120,9 +132,8 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     isreflective = true;    
   }
   if(hitRecord.bounces > 0 && isreflective == true) {
-    cout << "doing reflections ";
-    Vector l = (rayDirection * -1).normalize();
-    Vector n = hitRecord.normal.normalize();
+  	Vector l = (rayDirection * -1).normalize();
+  	Vector n = hitRecord.normal.normalize();
     Vector r = (l * -1) + n * 2 * (l).dot(n);
     r = r.normalize();
     Ray reflect = Ray(hitRecord.intersection, r, hitRecord.bounces - 1, epsilon, INFINITY);
@@ -137,6 +148,7 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounces) {
 //sph coord center float r
 //ray coord start v direction
+// <<<<<<< HEAD
   float t = -INFINITY;
   float t2 = -INFINITY;
   Vector d = r.direction;
@@ -167,7 +179,12 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
       Vector p = r.eval(t);
       Coord intersection = Coord(p.x, p.y, p.z);
       Vector normal = (p - c) * 2;
+      cout << "BEFORE\n";
+      cout << normal << endl;
       normal = s->mtTransposed*normal;
+      // cout << "NORMAL\n";
+      // cout << normal << endl;
+
       Sphere sphere = *s;
       // cout << sphere.matrixTransform;
       // Matrix invertedMatrix = Matrix::invert(sphere.matrixTransform);
@@ -184,6 +201,50 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
     }
   }
   return HitRecord(false);
+// =======
+// 	float t = -INFINITY;
+// 	float t2 = -INFINITY;
+// 	Vector d = r.direction;
+// 	Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
+// 	Vector e = Vector(r.start.x, r.start.y, r.start.z);
+// 	Vector e_minus_c = e - c;
+//   // e_minus_c = (s->matrixTransform)*e_minus_c;
+// 	float d_dot = d.dot(d);
+// 	float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s->r * s->r)));
+// 	if (discrimnant < 0)
+// 		return HitRecord(false);
+// 	if (discrimnant == 0)
+// 		t = -(d.dot(e_minus_c) / d_dot);
+// 	if (discrimnant > 0) {
+// 		t = -((d.dot(e_minus_c) + discrimnant) / d_dot);
+// 		t2 = -((d.dot(e_minus_c) - discrimnant) / d_dot);
+// 	}
+// 	if (t < tMin && t2 < tMin) { //equiv to t1, t2 < 0
+// 		return HitRecord(false);
+// 	}
+// 	if (t > tMax && t2 > tMax) {
+// 		return HitRecord(false);
+// 	}
+// 	else {
+// 		if (t > tMin && t < tMax) {
+// 			//return obj with t1
+// 			Vector p = r.eval(t);
+//      	 Coord intersection = Coord(p.x, p.y, p.z);
+// 			Vector normal = (p - c) * 2;
+// 	      	Sphere sphere = *s;
+// 			return HitRecord(t, intersection, normal, sphere, bounces);
+// 		}
+// 		else if (t2 > tMin && t2 < tMax) {
+// 			//return obj with t2
+// 		Vector p = r.eval(t2);
+//       	Coord intersection = Coord(p.x, p.y, p.z);
+// 		Vector normal = (p - c) * 2;
+//       	Sphere sphere = *s;
+// 		return HitRecord(t2, intersection, normal, sphere, bounces);
+// 		}
+// 	}
+// 	return HitRecord(false);
+// >>>>>>> 1d0f6bf627c00ce90537c8e87cd59c8e0a936cbb
 }
 
 HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounces) {
