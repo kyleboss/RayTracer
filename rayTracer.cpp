@@ -97,7 +97,7 @@ void render() {
 				HitRecord hitRecord = tracer.hit(ray);
 				if (hitRecord.isHit) {
 				    color = color + tracer.trace(hitRecord, lights, ray.direction);
-				} 
+				}  
 			}
 		}
 		float scale = (float) 1/(n*n);
