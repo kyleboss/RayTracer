@@ -7,7 +7,6 @@
 #include <cmath>
 #include <time.h>
 #include <opencv2/opencv.hpp>
-// #include <Magick++.h> 
 
 int canvasX = 500; //CHANGE THESE!
 int canvasY = 500; //CHANGE THESE!
@@ -20,10 +19,6 @@ int canvasY = 500; //CHANGE THESE!
 #include "Sphere.h"
 #include "Triangle.h"
 
-/*#if !defined(_MSC_VER)
-#include <pthread.h>
-#endif
-#include <omp.h>*/
 using namespace cv;
 using namespace std;
 

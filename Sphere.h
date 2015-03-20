@@ -11,7 +11,6 @@ class Sphere: public Shape {
     Sphere(Coord center, float r, Material material) :
         center(center),
         r(r)        {
-            // Sphere(center, r, material, transMatrix);
         }
     Sphere(Coord center, float r, Material material, Matrix transMatrix2) :
         center(center),

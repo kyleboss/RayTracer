@@ -30,7 +30,6 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
     } else {
       total = total + hitRecord.triangle.material.ambient*lightColor;
     }
-    //return total; NOT sure if should exit out
   }
 
   //DIFFUSE!
@@ -45,13 +44,11 @@ Color shadeCircle(HitRecord hitRecord, Vector lightDirectionVec, Vector rayDirec
 
   v = v.normalize();
   if (hitRecord.isSphere) {
-    specPos = pow(max(0.0f, r.dot(v)), sphere.material.exp); // CHECK v
-    //ambient = sphere.material.ambient*lightColor;
+    specPos = pow(max(0.0f, r.dot(v)), sphere.material.exp);
     diffuse = sphere.material.diffuse*lightColor;
     specular = sphere.material.specular*lightColor;
   } else {
-    specPos = pow(max(0.0f, r.dot(v)), triangle.material.exp); // CHECK v
-    //ambient = triangle.material.ambient*lightColor;
+    specPos = pow(max(0.0f, r.dot(v)), triangle.material.exp);
     diffuse = triangle.material.diffuse*lightColor;
     specular = triangle.material.specular*lightColor;              
   }
