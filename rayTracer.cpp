@@ -49,54 +49,54 @@ void render() {
 	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR, canvasX, canvasY);
 
 	//RENDER LOOP FAST
-	// 	while (canvas.getSample(&canvas.currSample)) {
-	// 	Color color = Color(0,0,0);
-	// 	Sample sample = canvas.currSample;
-	// 	float u = (sample.x + 0.5) / canvasX ;
-	// 	float v = (sample.y + 0.5) / canvasY;
-	// 	Ray ray = camera.shootRay(u, v);
-	// 	HitRecord hitRecord = tracer.hit(ray);
-	// 	if (hitRecord.isHit) {
-	// 		color = tracer.trace(hitRecord, lights, hitRecord.ray.direction);
-	// 	}
-	//     //clipping
-	//     if (color.r > 1)
-	//     	color.r = 1;
-	//     if (color.g > 1)
-	//     	color.g = 1; 
-	//     if (color.b > 1)
-	//     	color.b = 1;
-	//     editPixel(&img, canvas.currSample, color); //writes to the image
-	// }
-
-	//RENDER LOOP for aliasing   
-	while (canvas.getSample(&canvas.currSample)) {
+		while (canvas.getSample(&canvas.currSample)) {
 		Color color = Color(0,0,0);
 		Sample sample = canvas.currSample;
-		int n = 3; //do 3x3 anti-aliasing
-		for (int p = 0; p < n; p++) {
-			for (int q = 0; q < n; q++) {
-				float zetta = ((float) rand() / (RAND_MAX));
-				float u = (sample.x + (p + zetta)/n) / canvasX ;
-  				float v = (sample.y + (q + zetta)/n) / canvasY;
-				Ray ray = camera.shootRay(u, v);
-				HitRecord hitRecord = tracer.hit(ray);
-				if (hitRecord.isHit) {
-				    color = color + tracer.trace(hitRecord, lights, ray.direction);
-				}  
-			}
+		float u = (sample.x + 0.5) / canvasX ;
+		float v = (sample.y + 0.5) / canvasY;
+		Ray ray = camera.shootRay(u, v);
+		HitRecord hitRecord = tracer.hit(ray);
+		if (hitRecord.isHit) {
+			color = tracer.trace(hitRecord, lights, hitRecord.ray.direction);
 		}
-		float scale = (float) 1/(n*n);
-		color = color.scale(scale); //c = c/n^2
 	    //clipping
-	   if (color.r > 1)
+	    if (color.r > 1)
 	    	color.r = 1;
 	    if (color.g > 1)
 	    	color.g = 1; 
 	    if (color.b > 1)
 	    	color.b = 1;
 	    editPixel(&img, canvas.currSample, color); //writes to the image
-	}   
+	}
+
+	// //RENDER LOOP for aliasing   
+	// while (canvas.getSample(&canvas.currSample)) {
+	// 	Color color = Color(0,0,0);
+	// 	Sample sample = canvas.currSample;
+	// 	int n = 3; //do 3x3 anti-aliasing
+	// 	for (int p = 0; p < n; p++) {
+	// 		for (int q = 0; q < n; q++) {
+	// 			float zetta = ((float) rand() / (RAND_MAX));
+	// 			float u = (sample.x + (p + zetta)/n) / canvasX ;
+ //  				float v = (sample.y + (q + zetta)/n) / canvasY;
+	// 			Ray ray = camera.shootRay(u, v);
+	// 			HitRecord hitRecord = tracer.hit(ray);
+	// 			if (hitRecord.isHit) {
+	// 			    color = color + tracer.trace(hitRecord, lights, ray.direction);
+	// 			}  
+	// 		}
+	// 	}
+	// 	float scale = (float) 1/(n*n);
+	// 	color = color.scale(scale); //c = c/n^2
+	//     //clipping
+	//    if (color.r > 1)
+	//     	color.r = 1;
+	//     if (color.g > 1)
+	//     	color.g = 1; 
+	//     if (color.b > 1)
+	//     	color.b = 1;
+	//     editPixel(&img, canvas.currSample, color); //writes to the image
+	// }   
 
 
   saveImg(img); // Saving image to file result.png
@@ -108,7 +108,6 @@ void render() {
 
 //To put command line parsings here
 void commandLine(istream& stream) {
-	int argc = 0;
   string line;
   getline(stream, line); //line is the relevant data!
  	//split the line
@@ -150,7 +149,7 @@ void commandLine(istream& stream) {
 	    i += 9;
 	  }  
 	  else if (tokens[i].compare("obj") == 0) {
-	  	const char *obj = tokens[i+1].c_str();
+	  	const char * obj = tokens[i+1].c_str();
 	  	objParse(obj, &objects, &transMatrix);
 	  	for (int i = 0; i < objects.size(); i++) {
 	  		Triangle * objtri;
@@ -195,19 +194,19 @@ void commandLine(istream& stream) {
 	  }
 	  else if (tokens[i].compare("mat") == 0) {
 	    Color ka = Color(stof(tokens[i+1], NULL), stof(tokens[i+2], NULL), stof(tokens[i+3], NULL));
-	    Color kd = Color(stof(tokens[i+4], NULL), stof(tokens[i+6], NULL), stof(tokens[i+6], NULL));
+	    Color kd = Color(stof(tokens[i+4], NULL), stof(tokens[i+5], NULL), stof(tokens[i+6], NULL));
 	    Color ks = Color(stof(tokens[i+7], NULL), stof(tokens[i+8], NULL), stof(tokens[i+9], NULL));
 	    Color kr = Color(stof(tokens[i+11], NULL), stof(tokens[i+12], NULL), stof(tokens[i+13], NULL));
 	    last_material = Material(ka, kd, ks, stof(tokens[i+10], NULL), kr);
 	    i += 13;
 	  }
 	  else if (tokens[i].compare("xft") == 0) {
-				Transform(TRANSLATION, stof(tokens[i+1], NULL),stof(tokens[i+2], NULL),stof(tokens[i+3], NULL));
+			Transform(TRANSLATION, stof(tokens[i+1], NULL),stof(tokens[i+2], NULL),stof(tokens[i+3], NULL));
 	    transMatrix = Transform::calcTransMatrix();
 	    i += 3;
 	  }
 	  else if (tokens[i].compare("xfr") == 0) {
-				Transform newT = Transform(ROTATION, stof(tokens[i+1], NULL),stof(tokens[i+2], NULL),stof(tokens[i+3], NULL));
+		  Transform(ROTATION, stof(tokens[i+1], NULL),stof(tokens[i+2], NULL),stof(tokens[i+3], NULL));
 	    transMatrix = Transform::calcTransMatrix();
 	    i += 3;
 	  }
@@ -241,6 +240,15 @@ void readScene(char* scene) {
 
 int main (int argc, char *argv[]) {
   readScene(argv[1]);
+
+  for (int i = 0; i < lights.size(); i++) {
+  	cout << lights[i] << endl;
+  }
+
+  for (int i = 0; i < all_shapes.size(); i++) {
+  	cout << *all_shapes[i] << endl;
+  }
+
   render();
   return 0;
 }
