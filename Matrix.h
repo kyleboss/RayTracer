@@ -244,7 +244,7 @@ Matrix Matrix::operator + (Matrix m) {
 
 Vector Matrix::operator * (Vector v) {
     Vector product = Vector();
-    int total = 0;
+    float total = 0;
     for (int j = 0; j < 4; ++j) {
         total = 0;
         for (int i = 0; i < 4; ++i) {
