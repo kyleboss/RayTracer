@@ -155,9 +155,7 @@ double CalcDeterminant( float **mat, int order)
         // get minor of element (0,i)
         GetMinor( mat, minor, 0, i , order);
         // the recusion is here!
- 
         det += (i%2==1?-1.0:1.0) * mat[0][i] * CalcDeterminant(minor,order-1);
-        //det += pow( -1.0, i ) * mat[0][i] * CalcDeterminant( minor,order-1 );
     }
  
     // release memory

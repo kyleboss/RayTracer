@@ -10,8 +10,6 @@
 #include "Shader.cpp"
 using namespace std;
 
-//Ray.start <- coord, Ray.direction <-vec
-
 class Tracer {
  public:
    vector<Shape*> all_shapes;
@@ -44,30 +42,21 @@ HitRecord Tracer::hit(Ray ray) {
       if (temp.isHit) {
         hitRecord = temp;
         t_max = temp.t;
-        //hitobject = all_shapes[i].shape
-        //t_max = //t that was hit
       }
     }
     if (sphere != 0) {
-      //cout << "YO IM SPHERE! " << endl;
-         //temp = raySphere(ray, sphere, t_min, t_max);
           Coord rayStartCoord = ray.start;
           Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
           rayStartVec = sphere->matrixTransform*rayStartVec;
           rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
-          Vector rayDir = ray.direction;
-          //rayDir = sphere->matrixTransform * rayDir;
-  
+          Vector rayDir = ray.direction;  
           rayDir = sphere->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
           newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);          
           temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
       if (temp.isHit) {
-      	//cout << "HIT!" << endl;
         hitRecord = temp;
         t_max = temp.t;
-        //hitobject = all_shapes[i].shape
-        //t_max = //t that was hit
       }
     }
   }
@@ -153,16 +142,12 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 }
 
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounces) {
-//sph coord center float r
-//ray coord start v direction
   float t = -INFINITY;
   float t2 = -INFINITY;
   Vector d = r.direction;
   Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
   Vector e = Vector(r.start.x, r.start.y, r.start.z);
   Vector e_minus_c = e - c;
-  // cout << "MatrixTransform\n" << s->matrixTransform;
-  // e_minus_c = (s->matrixTransform)*e_minus_c;
   float d_dot = d.dot(d);
   float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s->r * s->r)));
   if (discrimnant < 0)
@@ -180,34 +165,23 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
     return HitRecord(false);
   }
   else {
-  	//cout << "T is " << t << " T2 is " << t2 << endl;
-  	  //	cout << "Tmin is " << tMin << " Tmax is " << tMax << endl;
     if (t > tMin && t < tMax) {
-      //return obj with t1
       Vector p = r.eval(t);
       Vector intersectionVec = Vector(p.x, p.y, p.z);
       intersectionVec = s->notInvertedTransform*intersectionVec;
       Coord intersection = Coord(intersectionVec.x, intersectionVec.y, intersectionVec.z);
       Vector normal = (p - c) * 2;
-      //cout << "OLD NORM " << normal << endl;
       normal = s->mtTransposed.multiplyDir(normal);
-
       Sphere sphere = *s;
-      // cout << sphere.matrixTransform;
-      // Matrix invertedMatrix = Matrix::invert(sphere.matrixTransform);
       return HitRecord(t, intersection, normal, sphere, bounces, r);
     }
     else if (t2 > tMin && t2 < tMax) {
-    	//cout << "inside if2 " << endl;
-      //return obj with t2
       Vector p = r.eval(t2);
       Vector intersectionVec = Vector(p.x, p.y, p.z);
       intersectionVec = s->notInvertedTransform*intersectionVec;
       Coord intersection = Coord(intersectionVec.x, intersectionVec.y, intersectionVec.z);
       Vector normal = (p - c) * 2;
-         //   cout << "OLD NORM " << normal << endl;
-            normal = s->mtTransposed.multiplyDir(normal);
-
+      normal = s->mtTransposed.multiplyDir(normal);
       Sphere sphere = *s;
     return HitRecord(t2, intersection, normal, sphere, bounces, r);
     }
@@ -218,14 +192,10 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
 HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounces) {
 //CALCULATIONS AS PER PG 79 OF TEXTBOOK
   Vector x = Vector(tri->point1.x, tri->point2.x, tri->point3.x);
-  // x = (xa, xb, xc) of triangles
   Vector y = Vector(tri->point1.y, tri->point2.y, tri->point3.y);
   Vector z = Vector(tri->point1.z, tri->point2.z, tri->point3.z);
   Vector d = r.direction;
   Vector e = Vector(r.start.x, r.start.y, r.start.z);
-
-  //cout << "X, Y, Z " << x << y << z <<endl;
-  //cout<< "D and E" << d << e << endl;
 
   float ei_m_hf = (y.x - y.z)*(d.z) - (d.y)*(z.x - z.z);
   float gf_m_di = (d.x)*(z.x - z.z) - (x.x - x.z)*(d.z);
@@ -238,24 +208,18 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounc
   float t = -((z.x - z.z)*ak_m_jb + (y.x - y.z)*jc_m_al + (x.x - x.z)*bl_m_kc)/m;
 
   if ((t < tMin) || (t > tMax)) {
-    //cout << "this happened 1 " << endl;
     return HitRecord(false);
 
   }
 
   float gamma = (d.z*ak_m_jb + d.y*jc_m_al + d.x*bl_m_kc)/m;
   if (gamma < 0 || gamma > 1) {
-    //cout << "this happened 2 " << endl;
-
     return HitRecord(false);
 
   }
   float beta = ((x.x - e.x)*ei_m_hf + (y.x - e.y)*gf_m_di + (z.x - e.z)*dh_m_eg) / m;
   if (beta < 0 || beta > 1 - gamma) {
-    //cout << "this happened 3 " << endl;
-
     return HitRecord(false);
-
 	}
 	Vector p1 = Vector(tri->point1.x, tri->point1.y, tri->point1.z);
 	Vector p2 = Vector(tri->point2.x, tri->point2.y, tri->point2.z);
