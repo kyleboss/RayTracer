@@ -17,7 +17,7 @@ void editPixel(cimg_library::CImg<float>* img, Sample& sample, Color& color) {
 
 void saveImg(cimg_library::CImg<float> img) {
   // void saveImg(Magick::Image img) {
-  // img.normalize(0, 255);
+  img.normalize(0, 255);
   img.save("result.png");
   // img.write( "result.png" ); 
 }

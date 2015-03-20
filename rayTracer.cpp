@@ -20,6 +20,11 @@ int canvasY = 500; //CHANGE THESE!
 #include "Sphere.h"
 #include "Triangle.h"
 
+/*#if !defined(_MSC_VER)
+#include <pthread.h>
+#endif
+#include <omp.h>*/
+
 using namespace std;
 
 //************************
@@ -55,32 +60,66 @@ void render() {
 	// //SET UP CAMERA through command line
 	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR, canvasX, canvasY);
 
-	//RENDER LOOP   
-	while(canvas.getSample(&canvas.currSample)) {
-		// cout << canvas.currSample << endl;
-		Ray ray = camera.shootRay(canvas.currSample);
-		// cout << "THE RAY AT " << canvas.currSample << " IS " << ray << "\n";
+/*
+	//RENDER LOOP FAST
+		while (canvas.getSample(&canvas.currSample)) {
+		Color color = Color(0,0,0);
+		Sample sample = canvas.currSample;
+		float u = (sample.x + 0.5) / canvasX ;
+		float v = (sample.y + 0.5) / canvasY;
+		Ray ray = camera.shootRay(u, v);
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-		    Color color = tracer.trace(hitRecord, lights, ray.direction);
-		    //cout << color << " at (" << canvas.currSample.x << " , " << canvas.currSample.y << ")" << endl;
-		    //clipping
-		    if (color.r > 1)
-		    	color.r = 1;
-		    if (color.g > 1)
-		    	color.g = 1; 
-		    if (color.b > 1)
-		    	color.b = 1;
-		    editPixel(&img, canvas.currSample, color); //writes to the image
+			color = tracer.trace(hitRecord, lights, ray.direction);
 		}
+	    //clipping
+	    if (color.r > 1)
+	    	color.r = 1;
+	    if (color.g > 1)
+	    	color.g = 1; 
+	    if (color.b > 1)
+	    	color.b = 1;
+	    editPixel(&img, canvas.currSample, color); //writes to the image
+	}*/
+
+
+	//RENDER LOOP for aliasing   
+	while (canvas.getSample(&canvas.currSample)) {
+		Color color = Color(0,0,0);
+		Sample sample = canvas.currSample;
+		int n = 3; //do 3x3 anti-aliasing
+		//#pragma omp parallel for 
+		for (int p = 0; p < n; p++) {
+			for (int q = 0; q < n; q++) {
+				float zetta = ((float) rand() / (RAND_MAX));
+				float u = (sample.x + (p + zetta)/n) / canvasX ;
+  				float v = (sample.y + (q + zetta)/n) / canvasY;
+				Ray ray = camera.shootRay(u, v);
+				HitRecord hitRecord = tracer.hit(ray);
+				if (hitRecord.isHit) {
+				    color = color + tracer.trace(hitRecord, lights, ray.direction);
+				}
+			}
+		}
+		float scale = (float) 1/(n*n);
+		color = color.scale(scale); //c = c/n^2
+	    //clipping
+	    if (color.r > 1)
+	    	color.r = 1;
+	    if (color.g > 1)
+	    	color.g = 1; 
+	    if (color.b > 1)
+	    	color.b = 1;
+	    editPixel(&img, canvas.currSample, color); //writes to the image
 	}
-  //Color color = Color(1,1,1);
-  //editPixel(&img, canvas.currSample, color);
+
+  	Color color = Color(1,1,1);
+  	editPixel(&img, canvas.currSample, color);
 	saveImg(img); // Saving image to file result.png
   // img.normalize(0,255);
   // cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
-  img.display();
-
+  img.display(); 
+ 
 }; 
 
 //To put command line parsings here
@@ -118,7 +157,7 @@ void commandLine(int argc, char *argv[]) {
 	      Triangle * tri = new Triangle(a, b, c, last_material);
 	      all_shapes.push_back(tri);
 	      i += 9;
-	      cout << "entered triangle" << endl; 
+	      cout << "entered triangle" << endl;  
 	    } 
 	    else if (i < argc && strcmp(argv[i], "obj") == 0) {
 	    	objParse(argv[i+1], &objects);
@@ -250,11 +289,12 @@ int main (int argc, char *argv[]) {
   ka = Color(.1, .1, .1);
   kd = Color(.1, .1, .1);
   ks = Color(1,1,1);
-  kr = Color(0,0,0);
+  kr = Color(1,1,1);
   Material mattri =  Material(ka, kd, ks, 50, kr);
   Triangle * tri = new Triangle(coord, coord2, coord3, mattri);
 
   all_shapes.push_back(tri);
+*/
 //*********************
   /*
   /*Light a = Light(Coord(1, 1, 1), Color(1, 1, 1), 2); //lol not much of a visible change?
@@ -297,5 +337,7 @@ int main (int argc, char *argv[]) {
 
   cout << "rendering..." << endl;
   render();
+
+
   return 0;
 }

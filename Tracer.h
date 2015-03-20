@@ -120,7 +120,6 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
   	isreflective = true;  	
   }
   if(hitRecord.bounces > 0 && isreflective == true) {
-  	cout << "doing reflections ";
   	Vector l = (rayDirection * -1).normalize();
   	Vector n = hitRecord.normal.normalize();
     Vector r = (l * -1) + n * 2 * (l).dot(n);
@@ -137,7 +136,6 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounces) {
 //sph coord center float r
 //ray coord start v direction
-	cout << "one call " << endl;
 	float t = -INFINITY;
 	float t2 = -INFINITY;
 	Vector d = r.direction;
@@ -168,9 +166,6 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
      	 Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c) * 2;
 	      	Sphere sphere = *s;
-      		if (normal.magnitude() < s->r)
-      			cout << "BAD t1 " << t << " Tmin: " << tMin << endl;
-      			//return HitRecord(false);
 			return HitRecord(t, intersection, normal, sphere, bounces);
 		}
 		else if (t2 > tMin && t2 < tMax) {
@@ -179,9 +174,6 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
       	Coord intersection = Coord(p.x, p.y, p.z);
 		Vector normal = (p - c) * 2;
       	Sphere sphere = *s;
-      		if (normal.magnitude() < s->r)
-      			cout << "BAD t2 " << t2 << " Tmin: " << tMin << endl;
-      			//return HitRecord(false);
 		return HitRecord(t2, intersection, normal, sphere, bounces);
 		}
 	}
