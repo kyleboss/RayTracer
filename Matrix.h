@@ -73,13 +73,13 @@ Vector Matrix::multiplyDir(Vector v) {
         total = 0;
         for (int i = 0; i < 4; ++i) {
             if (i == 0) {
-                total+= this->matrix[j][i]*v.x;
+                total+= this->matrix[i][j]*v.x;
             }
             if (i == 1) {
-                total+= this->matrix[j][i]*v.y;
+                total+= this->matrix[i][j]*v.y;
             }
             if (i == 2) {
-                total+= this->matrix[j][i]*v.z;
+                total+= this->matrix[i][j]*v.z;
             }
             if (i == 3) {
                 total+= 0;
@@ -249,16 +249,16 @@ Vector Matrix::operator * (Vector v) {
         total = 0;
         for (int i = 0; i < 4; ++i) {
             if (i == 0) {
-                total+= this->matrix[j][i]*v.x;
+                total+= this->matrix[i][j]*v.x;
             }
             if (i == 1) {
-                total+= this->matrix[j][i]*v.y;
+                total+= this->matrix[i][j]*v.y;
             }
             if (i == 2) {
-                total+= this->matrix[j][i]*v.z;
+                total+= this->matrix[i][j]*v.z;
             }
             if (i == 3) {
-                total+= this->matrix[j][i];
+                total+= this->matrix[i][j];
             }
         }
         if (j == 0) {
