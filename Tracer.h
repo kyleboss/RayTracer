@@ -30,6 +30,7 @@ HitRecord Tracer::hit(Ray ray) {
   for (int i = 0; i < all_shapes.size(); i++) {
     Triangle* triangle = dynamic_cast<Triangle*>(all_shapes[i]);
     Sphere* sphere = dynamic_cast<Sphere*>(all_shapes[i]);
+    Ray newRay;
     if (triangle != 0) { //if it's a triangle?
           Coord rayStartCoord = ray.start;
           Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
@@ -38,8 +39,8 @@ HitRecord Tracer::hit(Ray ray) {
           Vector rayDir = ray.direction;
           rayDir = triangle->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
-          Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
-          temp = rayTri(ray, triangle, t_min, t_max, ray.bouncesLeft);
+          newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
+          temp = rayTri(newRay, triangle, t_min, t_max, ray.bouncesLeft);
       if (temp.isHit) {
         hitRecord = temp;
         t_max = temp.t;
@@ -59,7 +60,7 @@ HitRecord Tracer::hit(Ray ray) {
   
           rayDir = sphere->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
-          Ray newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);          
+          newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);          
           temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
       if (temp.isHit) {
       	//cout << "HIT!" << endl;
@@ -88,14 +89,20 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
     if (lightType == DIRECTIONAL) {
       lightDirectionVec = lightLocationVec*(-1);
     } else if (lightType == POINT) {
+    	    cout << "INTER! " << intersectionVec << endl;
+
       lightDirectionVec = lightLocationVec - intersectionVec;
+          cout << "LDV!1 " << lightDirectionVec << endl;
+
     }
     float r = lightDirectionVec.magnitude();
+              cout << "LDV!Before " << lightDirectionVec << endl;
+
     lightDirectionVec = lightDirectionVec.normalize();
+          cout << "LDV!After " << lightDirectionVec << endl;
     Ray shadow = Ray(hitRecord.intersection, lightDirectionVec, 5, epsilon, INFINITY);
     HitRecord shadowHR = this->hit(shadow);
-    
-    
+
     if (shadowHR.isHit) {
       if (lightType == AMBIENT) {
         if (hitRecord.isSphere) {
@@ -177,6 +184,8 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
     return HitRecord(false);
   }
   else {
+  	//cout << "T is " << t << " T2 is " << t2 << endl;
+  	  //	cout << "Tmin is " << tMin << " Tmax is " << tMax << endl;
     if (t > tMin && t < tMax) {
       //return obj with t1
       Vector p = r.eval(t);
@@ -186,16 +195,14 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
       Vector normal = (p - c) * 2;
       //cout << "OLD NORM " << normal << endl;
       normal = s->mtTransposed.multiplyDir(normal);
-         
-      //normal = s->mtTransposed.multiplyDir(normal);
-      // cout << "NORMAL\n";
 
       Sphere sphere = *s;
       // cout << sphere.matrixTransform;
       // Matrix invertedMatrix = Matrix::invert(sphere.matrixTransform);
-      return HitRecord(t, intersection, normal, sphere, bounces);
+      return HitRecord(t, intersection, normal, sphere, bounces, r);
     }
     else if (t2 > tMin && t2 < tMax) {
+    	//cout << "inside if2 " << endl;
       //return obj with t2
       Vector p = r.eval(t2);
       Vector intersectionVec = Vector(p.x, p.y, p.z);
@@ -205,11 +212,8 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
          //   cout << "OLD NORM " << normal << endl;
             normal = s->mtTransposed.multiplyDir(normal);
 
-
-      //normal = s->mtTransposed.multiplyDir(normal);
-
       Sphere sphere = *s;
-    return HitRecord(t2, intersection, normal, sphere, bounces);
+    return HitRecord(t2, intersection, normal, sphere, bounces, r);
     }
   }
   return HitRecord(false);
@@ -273,7 +277,7 @@ HitRecord Tracer::rayTri(Ray r, Triangle* tri, float tMin, float tMax, int bounc
 		normal = (na + (nb - na)*beta + (nc - na)*gamma).normalize();
 	}
 	Triangle triangle = *tri;
-  return HitRecord(t, intersection, normal, triangle, bounces);
+  return HitRecord(t, intersection, normal, triangle, bounces, r);
 }
 
 #endif

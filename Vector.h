@@ -26,6 +26,8 @@ float Vector::magnitude() {
 };
 
 Vector Vector::normalize() {
+  if (this->magnitude() == 0)
+    return *this;
   return *this / this->magnitude();
 };
 

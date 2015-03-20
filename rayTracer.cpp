@@ -71,7 +71,7 @@ void render() {
 		Ray ray = camera.shootRay(u, v);
 		HitRecord hitRecord = tracer.hit(ray);
 		if (hitRecord.isHit) {
-			color = tracer.trace(hitRecord, lights, ray.direction);
+			color = tracer.trace(hitRecord, lights, hitRecord.ray.direction);
 		}
 	    //clipping
 	    if (color.r > 1)
@@ -99,7 +99,7 @@ void render() {
 				HitRecord hitRecord = tracer.hit(ray);
 				if (hitRecord.isHit) {
 				    color = color + tracer.trace(hitRecord, lights, ray.direction);
-				} 
+				}  
 			}
 		}
 		float scale = (float) 1/(n*n);
