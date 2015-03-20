@@ -69,29 +69,29 @@ void Matrix::setVal(int x, int y, int val) {
 Vector Matrix::multiplyDir(Vector v) {
     Vector product = Vector();
     int total = 0;
-    for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
         total = 0;
-        for (int j = 0; j < 4; ++j) {
-            if (j == 0) {
-                total+= this->matrix[i][j]*v.x;
+        for (int i = 0; i < 4; ++i) {
+            if (i == 0) {
+                total+= this->matrix[j][i]*v.x;
             }
-            if (j == 1) {
-                total+= this->matrix[i][j]*v.y;
+            if (i == 1) {
+                total+= this->matrix[j][i]*v.y;
             }
-            if (j == 2) {
-                total+= this->matrix[i][j]*v.z;
+            if (i == 2) {
+                total+= this->matrix[j][i]*v.z;
             }
-            if (j == 3) {
+            if (i == 3) {
                 total+= 0;
             }
         }
-        if (i == 0) {
+        if (j == 0) {
             product.x = total;
         }
-        if (i == 1) {
+        if (j == 1) {
             product.y = total;
         }
-        if (i == 2) {
+        if (j == 2) {
             product.z = total;
         }
         total=0;
