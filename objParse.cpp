@@ -78,7 +78,7 @@ void read_line(istream& stream, vector<Triangle> * objects, vector<Coord> * temp
       Coord b = (*temp_vertices)[v2i];
       Coord c = (*temp_vertices)[v3i];
       Triangle tri;
-      tri = Triangle(a, b, c);              
+      tri = Triangle(a, b, c, *transMatrix);              
       if (temp_normals->size() != 0) { //has normals
         Vector vna = (*temp_normals)[vn1i];
         Vector vnb = (*temp_normals)[vn2i];
