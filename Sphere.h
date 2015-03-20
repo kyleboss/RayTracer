@@ -7,27 +7,29 @@
 
 class Sphere: public Shape {
   public:
-    Matrix matrixTransform;
     Sphere () {}
     Sphere(Coord center, float r, Material material) :
         center(center),
+        r(r)        {
+        }
+    Sphere(Coord center, float r, Material material, Matrix transMatrix2) :
+        center(center),
         r(r),
-        matrixTransform(transMatrix)
+        matrixTransform(transMatrix2)
         {
-          this->setMaterial(material);
-          matrixTransform = transMatrix;
+            this->setMaterial(material);
+            this->matrixTransform = Matrix(transMatrix2);
         }
     Sphere(Coord center, float r) :
         center(center),
         r(r)
-        { 
-            matrixTransform = transMatrix;
-        }
+        { }
+    Matrix matrixTransform;
     Coord center;
     float r;
     void print(std::ostream &out) {
       out << "Sphere: (" << this->center << ") , r = " << this->r << "\n" <<
-        "Material: " << this->material << "\n";
+        "Material: " << this->material << "matrix\n" << this->matrixTransform << "\n";
     }
 };
 

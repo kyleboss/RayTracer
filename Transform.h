@@ -1,7 +1,6 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 #include "Matrix.h"
-Matrix transMatrix = Matrix();
 class Transform {
   public:
     static std::vector<Transform *> transforms;
@@ -11,21 +10,19 @@ class Transform {
     int transformation;
     int axis;
     Matrix matrix;
-    static Coord performTransform(Coord loc);
-    void calcTransMatrix();
-    static void emptyTransforms();
+    static Coord performTransform(Coord loc, Matrix transMatrix);
+    static Matrix calcTransMatrix();
+    static Matrix emptyTransforms();
     Transform(int transformation, float x, float y, float z) : transformation(transformation), x(x), y(y), z(z) {
         transforms.push_back(this);
         this->matrix = Matrix(this->transformation, this->x, this->y, this->z);
-        calcTransMatrix();
     }
 };
 
-void Transform::calcTransMatrix() {
+Matrix Transform::calcTransMatrix() {
     Matrix transformation;
     if ((Transform::transforms).size() == 0) {
-        transMatrix = transformation;
-        return;
+        return transformation;
     }
     for(std::vector<Transform *>::iterator itor=std::prev((Transform::transforms).end()); true; --itor) {
         if ((itor) == std::prev(Transform::transforms.end())) {
@@ -37,15 +34,14 @@ void Transform::calcTransMatrix() {
             break;
         }
     }
-    transMatrix = transformation;
+    return transformation;
 }
 
-void Transform::emptyTransforms() {
-    Transform::transforms.clear();
-    transMatrix = Matrix();
+Matrix Transform::emptyTransforms() {
+    return Matrix();
 }
 
-Coord Transform::performTransform(Coord loc) {
+Coord Transform::performTransform(Coord loc, Matrix transMatrix) {
     if ((Transform::transforms).size() == 0) {
         return loc;
     }

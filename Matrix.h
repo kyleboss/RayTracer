@@ -10,7 +10,7 @@ class Matrix {
   public:
     float** matrix = new float*[4];
     void setVal(int x, int y, int val);
-    Matrix inverse();
+    static Matrix invert(Matrix m);
     Matrix transpose();
     Matrix multiply(Matrix m2);
     Matrix multiply(float s);
@@ -65,24 +65,57 @@ void Matrix::setVal(int x, int y, int val) {
     matrix[x][y] = val;
 }
 
-Matrix Matrix::inverse() {
-    Matrix m = Matrix();
-    for (int i = 0; i < 4; ++i) {
-        float diviser = matrix[i][i];
-        for (int k = 0; k < 4; k++) {
-            matrix[i][k] /= diviser;
-            m.matrix[i][k] /= diviser;
-        }
-        for (int j = 0; j < 4; ++j) {
-            if (i!=j) {
-                float multiplier = matrix[j][i];
-                for (int l = 0; l < 4; l++) {
-                    matrix[j][l] -= multiplier*matrix[i][l];
-                    m.matrix[j][l] -= multiplier*matrix[i][l];
-                }
-            }
-        }
-    }
+// Matrix Matrix::inverse(Matrix m) {
+//     std::cout << "m before\n";
+//     std::cout << *m.matrix;
+//     Matrix m2 = Matrix();
+//     for (int i = 0; i < 4; ++i) {
+//         float diviser = m.matrix[i][i];
+//         for (int k = 0; k < 4; k++) {
+//             m.matrix[i][k] /= diviser;
+//             m2.matrix[i][k] /= diviser;
+//         }
+//         for (int j = 0; j < 4; ++j) {
+//             if (i!=j) {
+//                 float multiplier = m.matrix[j][i];
+//                 for (int l = 0; l < 4; l++) {
+//                     m.matrix[j][l] -= multiplier*m.matrix[i][l];
+//                     m2.matrix[j][l] -= multiplier*m.matrix[i][l];
+//                 }
+//             }
+//         }
+//     }
+//     std::cout << "m AFTER\n";
+//     std::cout << *(m.matrix);
+//     return m2;
+// }
+
+Matrix Matrix::invert(Matrix m) {
+    m.matrix[0][0] = m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][1] - m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][1] + m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][2] - m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][3] + m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][3];
+    m.matrix[0][1] = m.matrix[0][3]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][2]*m.matrix[2][3]*m.matrix[3][1] - m.matrix[0][3]*m.matrix[2][1]*m.matrix[3][2] + m.matrix[0][1]*m.matrix[2][3]*m.matrix[3][2] + m.matrix[0][2]*m.matrix[2][1]*m.matrix[3][3] - m.matrix[0][1]*m.matrix[2][2]*m.matrix[3][3];
+    m.matrix[0][2] = m.matrix[0][2]*m.matrix[1][3]*m.matrix[3][1] - m.matrix[0][3]*m.matrix[1][2]*m.matrix[3][1] + m.matrix[0][3]*m.matrix[1][1]*m.matrix[3][2] - m.matrix[0][1]*m.matrix[1][3]*m.matrix[3][2] - m.matrix[0][2]*m.matrix[1][1]*m.matrix[3][3] + m.matrix[0][1]*m.matrix[1][2]*m.matrix[3][3];
+    m.matrix[0][3] = m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][1] - m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][1] - m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][2] + m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][2] + m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][3] - m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][3];
+    m.matrix[1][0] = m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][0] - m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][2] + m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][2] + m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][3] - m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][3];
+    m.matrix[1][1] = m.matrix[0][2]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[2][2]*m.matrix[3][0] + m.matrix[0][3]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[0][0]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[0][2]*m.matrix[2][0]*m.matrix[3][3] + m.matrix[0][0]*m.matrix[2][2]*m.matrix[3][3];
+    m.matrix[1][2] = m.matrix[0][3]*m.matrix[1][2]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[1][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][0]*m.matrix[3][2] + m.matrix[0][0]*m.matrix[1][3]*m.matrix[3][2] + m.matrix[0][2]*m.matrix[1][0]*m.matrix[3][3] - m.matrix[0][0]*m.matrix[1][2]*m.matrix[3][3];
+    m.matrix[1][3] = m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][0] - m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][0] + m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][2] - m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][2] - m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][3] + m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][3];
+    m.matrix[2][0] = m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][0] + m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][1] - m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][1] - m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][3] + m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][3];
+    m.matrix[2][1] = m.matrix[0][3]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[0][1]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[2][0]*m.matrix[3][1] + m.matrix[0][0]*m.matrix[2][3]*m.matrix[3][1] + m.matrix[0][1]*m.matrix[2][0]*m.matrix[3][3] - m.matrix[0][0]*m.matrix[2][1]*m.matrix[3][3];
+    m.matrix[2][2] = m.matrix[0][1]*m.matrix[1][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][1]*m.matrix[3][0] + m.matrix[0][3]*m.matrix[1][0]*m.matrix[3][1] - m.matrix[0][0]*m.matrix[1][3]*m.matrix[3][1] - m.matrix[0][1]*m.matrix[1][0]*m.matrix[3][3] + m.matrix[0][0]*m.matrix[1][1]*m.matrix[3][3];
+    m.matrix[2][3] = m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][0] - m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][0] - m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][1] + m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][1] + m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][3] - m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][3];
+    m.matrix[3][0] = m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][0] - m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][1] + m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][1] + m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][2];
+    m.matrix[3][1] = m.matrix[0][1]*m.matrix[2][2]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[2][1]*m.matrix[3][0] + m.matrix[0][2]*m.matrix[2][0]*m.matrix[3][1] - m.matrix[0][0]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][1]*m.matrix[2][0]*m.matrix[3][2] + m.matrix[0][0]*m.matrix[2][1]*m.matrix[3][2];
+    m.matrix[3][2] = m.matrix[0][2]*m.matrix[1][1]*m.matrix[3][0] - m.matrix[0][1]*m.matrix[1][2]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[1][0]*m.matrix[3][1] + m.matrix[0][0]*m.matrix[1][2]*m.matrix[3][1] + m.matrix[0][1]*m.matrix[1][0]*m.matrix[3][2] - m.matrix[0][0]*m.matrix[1][1]*m.matrix[3][2];
+    m.matrix[3][3] = m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][0] - m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][0] + m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][1] - m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][1] - m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][2] + m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][2];
+
+    float det = m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][0] + m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][0]+
+   m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][0] - m.matrix[0][3]*m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][1] + m.matrix[0][2]*m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][1]+
+   m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][2]*m.matrix[3][1] - m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][1] + m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][3]*m.matrix[3][1]+
+   m.matrix[0][3]*m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[0][1]*m.matrix[1][3]*m.matrix[2][0]*m.matrix[3][2] - m.matrix[0][3]*m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][2] + m.matrix[0][0]*m.matrix[1][3]*m.matrix[2][1]*m.matrix[3][2]+
+   m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][3]*m.matrix[3][2] - m.matrix[0][2]*m.matrix[1][1]*m.matrix[2][0]*m.matrix[3][3] + m.matrix[0][1]*m.matrix[1][2]*m.matrix[2][0]*m.matrix[3][3]+
+   m.matrix[0][2]*m.matrix[1][0]*m.matrix[2][1]*m.matrix[3][3] - m.matrix[0][0]*m.matrix[1][2]*m.matrix[2][1]*m.matrix[3][3] - m.matrix[0][1]*m.matrix[1][0]*m.matrix[2][2]*m.matrix[3][3] + m.matrix[0][0]*m.matrix[1][1]*m.matrix[2][2]*m.matrix[3][3];
+    
+    m = m.multiply(det);
     return m;
 }
 
@@ -90,7 +123,7 @@ Matrix Matrix::transpose() {
     Matrix m = Matrix();
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            m.matrix[i][j] = m.matrix[j][i];
+            m.matrix[i][j] = this->matrix[j][i];
         }
     }
     return m;
@@ -137,18 +170,29 @@ Matrix Matrix::operator + (Matrix m) {
 Vector Matrix::operator * (Vector v) {
     Vector product = Vector();
     int total = 0;
-    for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
         total = 0;
-        for (int j = 0; j < 4; ++j) {
-            total+= this->matrix[i][j];
+        for (int i = 0; i < 4; ++i) {
+            if (i == 0) {
+                total+= this->matrix[i][j]*v.x;
+            }
+            if (i == 1) {
+                total+= this->matrix[i][j]*v.y;
+            }
+            if (i == 2) {
+                total+= this->matrix[i][j]*v.z;
+            }
+            if (i == 3) {
+                total+= this->matrix[i][j];
+            }
         }
-        if (i == 0) {
+        if (j == 0) {
             product.x = total;
         }
-        if (i == 1) {
+        if (j == 1) {
             product.y = total;
         }
-        if (i == 2) {
+        if (j == 2) {
             product.z = total;
         }
         total=0;

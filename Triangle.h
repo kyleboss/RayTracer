@@ -15,14 +15,14 @@ class Triangle: public Shape {
         point3(point3)        
         {
             this->setMaterial(material);
-            matrixTransform = transMatrix;;
+            // matrixTransform = transMatrix;
         }
     Triangle(Coord point1, Coord point2, Coord point3) :
         point1(point1),
         point2(point2),
         point3(point3)
         {
-            matrixTransform = transMatrix;;
+            // matrixTransform = transMatrix;
         }
     Coord point1;
     Coord point2;

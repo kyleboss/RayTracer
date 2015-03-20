@@ -104,22 +104,22 @@ Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirecti
 	  }
   }
   if(hitRecord.bounces > 0) {
-  	printf("Reflect\n");
+  	// printf("Reflect\n");
     Vector r = rayDirection + hitRecord.normal * 2 * (rayDirection * -1).dot(hitRecord.normal);
     r = r.normalize();
     Ray reflect = Ray(hitRecord.intersection, r, hitRecord.bounces - 1, epsilon, INFINITY);
     HitRecord rHit = hit(reflect);
     if(rHit.isHit) {
-      printf("Hit! Bounces: %d\n", rHit.bounces);
+      // printf("Hit! Bounces: %d\n", rHit.bounces);
       Color reflectance;
       if(hitRecord.isSphere) {
-      	printf("Sphere\n");
+      	// printf("Sphere\n");
         reflectance = hitRecord.sphere.material.reflective;
       } else {
-      	printf("Triangle\n");
+      	// printf("Triangle\n");
         reflectance = hitRecord.triangle.material.reflective;
       }
-      printf("Reflectance: %d %d %d\n", reflectance.r, reflectance.g, reflectance.b);
+      // printf("Reflectance: %d %d %d\n", reflectance.r, reflectance.g, reflectance.b);
       if (!(reflectance.r == 0 && reflectance.g == 0 && reflectance.b == 0)) {
         total = total + reflectance * trace(rHit, lights, r);
       }
@@ -137,7 +137,7 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
 	Vector c = Vector((s->center).x, (s->center).y, (s->center).z);
 	Vector e = Vector(r.start.x, r.start.y, r.start.z);
 	Vector e_minus_c = e - c;
-  // e_minus_c = (s->matrixTransform)*e_minus_c;
+  // e_minus_c = Matrix::inverse(s->matrixTransform)*e_minus_c;
 	float d_dot = d.dot(d);
 	float discrimnant = sqrt(pow((d.dot(e_minus_c)),2) - d_dot * (e_minus_c.dot(e_minus_c) - (s->r * s->r)));
 	if (discrimnant < 0)
@@ -160,15 +160,33 @@ HitRecord Tracer::raySphere(Ray r, Sphere* s, float tMin, float tMax, int bounce
 			Vector p = r.eval(t);
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c);
+      // cout << s->matrixTransform;
+      normal = Matrix::invert(s->matrixTransform)*normal;
       Sphere sphere = *s;
-			return HitRecord(t, intersection, normal, sphere, bounces);
+      // cout << "matrixTransform in sphere\n" << s->matrixTransform << endl;
+      // Matrix inverse = s->matrixTransform.inverse();
+      // cout << "matrixTransform inverse\n" << inverse << endl;	
+      // cout << sphere;		
+      return HitRecord(t, intersection, normal, sphere, bounces);
 		}
 		else if (t2 > tMin && t2 < tMax) {
 			//return obj with t2
 			Vector p = r.eval(t2);
       Coord intersection = Coord(p.x, p.y, p.z);
 			Vector normal = (p - c);
+      // cout << "BEFORE\n";
+      // cout << s->matrixTransform << endl;
+      // Matrix inverse = Matrix::invert(s->matrixTransform);
+      // cout <<"AFTER\n";
+      // cout << inverse << endl;
+
+      // normal = Matrix::invert(s->matrixTransform)*normal;
       Sphere sphere = *s;
+      // cout << "PRINTING SPHERE\n";
+      // cout << s->matrixTransform;
+      // cout << "matrixTransform in sphere\n" << s->matrixTransform << endl;
+      // Matrix inverse = s->matrixTransform.inverse();
+      // cout << "matrixTransform inverse\n" << inverse << endl; 
 			return HitRecord(t2, intersection, normal, sphere, bounces);
 		}
 	}
