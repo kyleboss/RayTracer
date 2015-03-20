@@ -46,7 +46,7 @@ HitRecord Tracer::hit(Ray ray) {
       //cout << "YO IM SPHERE! " << endl;
          //temp = raySphere(ray, sphere, t_min, t_max);
           Coord rayStartCoord = ray.start;
-          Vector rayStartVec = Vector(rayStartVec.x, rayStartVec.y, rayStartVec.z);
+          Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
           rayStartVec = sphere->matrixTransform*rayStartVec;
           // cout << "sphere->matrixTransform" << endl;
           // cout << sphere->matrixTransform << endl;

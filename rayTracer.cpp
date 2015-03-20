@@ -161,10 +161,10 @@ void commandLine(int argc, char *argv[]) {
 	    	for (int i = 0; i < objects.size(); i++) {
 	    		Triangle * objtri;
 	    		if (objects[i].hasNormal) { //w defined normals
-		    		objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, objects[i].vn1, objects[i].vn2, objects[i].vn3, last_material);
+		    		objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, objects[i].vn1, objects[i].vn2, objects[i].vn3, last_material, transMatrix);
 	    		} 
 	    		else {  
-		    		objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material);
+		    		objtri = new Triangle(objects[i].point1, objects[i].point2, objects[i].point3, last_material, transMatrix);
 	    		}
 	    		all_shapes.push_back(objtri);
 	    	} 
