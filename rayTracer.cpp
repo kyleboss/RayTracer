@@ -110,7 +110,7 @@ void render() {
 	    if (color.b > 1)
 	    	color.b = 1;
 	    editPixel(&img, canvas.currSample, color); //writes to the image
-	} */  
+	} */   
 
   	Color color = Color(1,1,1);
   	editPixel(&img, canvas.currSample, color);
@@ -119,7 +119,7 @@ void render() {
  	img.display(); 
   
 }; 
-
+ 
 //To put command line parsings here
 void commandLine(int argc, char *argv[]) {
 	for (int i = 1; i < argc; ++i) {
