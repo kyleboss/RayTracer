@@ -59,7 +59,7 @@ void render() {
 	// //SET UP CAMERA through command line
 	Camera camera = Camera(camEye, camLL, camUL, camLR, camUR, canvasX, canvasY);
 
-/*
+
 	//RENDER LOOP FAST
 		while (canvas.getSample(&canvas.currSample)) {
 		Color color = Color(0,0,0);
@@ -79,9 +79,9 @@ void render() {
 	    if (color.b > 1)
 	    	color.b = 1;
 	    editPixel(&img, canvas.currSample, color); //writes to the image
-	}*/
+	}
 
-
+/*
 	//RENDER LOOP for aliasing   
 	while (canvas.getSample(&canvas.currSample)) {
 		Color color = Color(0,0,0);
@@ -110,7 +110,7 @@ void render() {
 	    if (color.b > 1)
 	    	color.b = 1;
 	    editPixel(&img, canvas.currSample, color); //writes to the image
-	}
+	} */  
 
   	Color color = Color(1,1,1);
   	editPixel(&img, canvas.currSample, color);
@@ -328,9 +328,9 @@ int main (int argc, char *argv[]) {
   Color kr = Color(0,0,0);
   Material mat1 = Material(ka, kd, ks, 64, kr);
   Sphere * s1 = new Sphere(Coord(0,0,-5), 3.5, mat1);
-  all_shapes.push_back(s1);*/
-  Vector d = transMatrix * Vector(3, 4, 1);
-  cout << "D!!!! " << d << endl;
+  all_shapes.push_back(s1);*/      
+   Vector d = transMatrix * Vector(-0.557207, 0.58094, -0.59332);
+  cout << "D!!!! " << d << endl; 
 	cout << "all of the lights" << lights.size() << endl;
 	for (int i = 0; i < lights.size(); i++) {
 		cout << (lights[i]) << endl;
