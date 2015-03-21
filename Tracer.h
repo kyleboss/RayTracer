@@ -36,20 +36,25 @@ HitRecord Tracer::hit(Ray ray) {
     if (triangle != 0) { //if it's a triangle?
           Coord rayStartCoord = ray.start;
           Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
-          rayStartVec = triangle->matrixTransform*rayStartVec;
-          rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
           Vector rayDir = ray.direction;
-          rayDir = triangle->matrixTransform.multiplyDir(rayDir);
-          rayDir = rayDir.normalize();
-          newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
-          // AABBRay testRay = AABBRay(Vec3<T>(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z), Vec3<T>(rayDir.x, rayDir.y, rayDir.z));
-          // if intersect(*testRay) {
-            temp = rayTri(newRay, triangle, t_min, t_max, ray.bouncesLeft);
-            if (temp.isHit) {
-              hitRecord = temp;
-              t_max = temp.t;
-            }
-          // }
+          Vector3 rayStartVec3 = Vector3(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
+          Vector3 rayDir3 = Vector3(rayDir.x, rayDir.y, rayDir.z);
+          Vector3 UR3 = Vector3(triangle->UR.x, triangle->UR.y, triangle->UR.z);
+          Vector3 LL3 = Vector3(triangle->LL.x, triangle->LL.y, triangle->LL.z);
+          Box bb = Box(LL3, UR3);
+          AABBRay bbRay = AABBRay(rayStartVec3, rayDir3);
+          if (bb.intersect(bbRay, ray.tMin, ray.tMax)) {
+            rayStartVec = triangle->matrixTransform*rayStartVec;
+            rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
+            rayDir = triangle->matrixTransform.multiplyDir(rayDir);
+            rayDir = rayDir.normalize();
+            newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
+              temp = rayTri(newRay, triangle, t_min, t_max, ray.bouncesLeft);
+              if (temp.isHit) {
+                hitRecord = temp;
+                t_max = temp.t;
+              }
+          }
     }
     if (sphere != 0) {
 

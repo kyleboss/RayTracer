@@ -126,27 +126,6 @@ void render() {
   for (int i = 0; i < numThreads; ++i) {
     pthread_join(threads[i], NULL);
   }
-	saveImg(img); // Saving image to file result.png
-		while (canvas.getSample(&canvas.currSample)) {
-		Color color = Color(0,0,0);
-		Sample sample = canvas.currSample;
-		float u = (sample.x + 0.5) / canvasX ;
-		float v = (sample.y + 0.5) / canvasY;
-		Ray ray = camera.shootRay(u, v);
-		HitRecord hitRecord = tracer.hit(ray);
-		if (hitRecord.isHit) {
-			color = tracer.trace(hitRecord, lights, hitRecord.ray.direction);
-		}
-	    //clipping
-	    if (color.r > 1)
-	    	color.r = 1;
-	    if (color.g > 1)
-	    	color.g = 1; 
-	    if (color.b > 1)
-	    	color.b = 1;
-	    editPixel(&img, canvas.currSample, color); //writes to the image
-	}   
-
   saveImg(img); // Saving image to file result.png
   cv::namedWindow("RayTracer",cv::WINDOW_AUTOSIZE);
   cv::imshow("RayTracer", img);
