@@ -22,4 +22,4 @@ We have also implemented, for extra credit:
 - Acceleration with AABB Trees
 - Shearing
 
-Input to our ray tracer is a .scene file with each line containing information as specified in the README. For our extra features, "alias" (as a seperate line) turns on anti-aliasing, "thread [# of threads]" turns on multithreading, and _____ turns on intersection tests with axis-aligned bounding boxes. "xfh rx ry rz" denotes a shear transformation.
+Input to our ray tracer is a .scene file with each line containing information as specified in the README. For our extra features, "alias" (as a seperate line) turns on anti-aliasing, "thread [# of threads]" turns on multithreading, and "xfh rx ry rz" denotes a shear transformation. AABB Trees are always used so there's no line parsing.
