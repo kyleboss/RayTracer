@@ -15,6 +15,7 @@ In addition to the required features:
 - Shadows and reflections
 - Translations, scales and rotations (linear transformations)
 - Using openCV to save to a .PNG
+- Using AABB Boxing with assistance from Utah's Williams Lab: http://www.cs.utah.edu/~awilliam/box/
 
 We have also implemented, for extra credit:
 - Anti-aliasing (random/jittered model) 
