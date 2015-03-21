@@ -9,8 +9,8 @@
 #include <opencv2/opencv.hpp>
 #include <pthread.h>
 
-int canvasX = 600; //CHANGE THESE!
-int canvasY = 600; //CHANGE THESE!
+int canvasX = 1000; //CHANGE THESE!
+int canvasY = 1000; //CHANGE THESE!
 
 #include "Camera.h"
 #include "Tracer.h"

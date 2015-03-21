@@ -8,6 +8,9 @@
 #include "Shape.h"
 #include "HitRecord.h"
 #include "Shader.cpp"
+#include "vector3.h"
+#include "box.h"
+
 using namespace std;
 
 class Tracer {
@@ -39,31 +42,45 @@ HitRecord Tracer::hit(Ray ray) {
           rayDir = triangle->matrixTransform.multiplyDir(rayDir);
           rayDir = rayDir.normalize();
           newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);
-          temp = rayTri(newRay, triangle, t_min, t_max, ray.bouncesLeft);
-      if (temp.isHit) {
-        hitRecord = temp;
-        t_max = temp.t;
-      }
+          // AABBRay testRay = AABBRay(Vec3<T>(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z), Vec3<T>(rayDir.x, rayDir.y, rayDir.z));
+          // if intersect(*testRay) {
+            temp = rayTri(newRay, triangle, t_min, t_max, ray.bouncesLeft);
+            if (temp.isHit) {
+              hitRecord = temp;
+              t_max = temp.t;
+            }
+          // }
     }
     if (sphere != 0) {
+
+          // std::cout << "MIN: " << sphere->LL << std::endl;
+          // std::cout << "MAX: " << sphere->UR << std::endl;
           Coord rayStartCoord = ray.start;
           Vector rayStartVec = Vector(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
-          rayStartVec = sphere->matrixTransform*rayStartVec;
-          rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
           Vector rayDir = ray.direction;  
-          rayDir = sphere->matrixTransform.multiplyDir(rayDir);
-          rayDir = rayDir.normalize();
-          newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);          
-          temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
-      if (temp.isHit) {
-        hitRecord = temp;
-        t_max = temp.t;
-      }
+          Vector3 rayStartVec3 = Vector3(rayStartCoord.x, rayStartCoord.y, rayStartCoord.z);
+          Vector3 rayDir3 = Vector3(rayDir.x, rayDir.y, rayDir.z);
+          Vector3 UR3 = Vector3(sphere->UR.x, sphere->UR.y, sphere->UR.z);
+          Vector3 LL3 = Vector3(sphere->LL.x, sphere->LL.y, sphere->LL.z);
+          Box bb = Box(LL3, UR3);
+          AABBRay bbRay = AABBRay(rayStartVec3, rayDir3);
+          if (bb.intersect(bbRay, ray.tMin, ray.tMax)) { 
+            rayStartVec = sphere->matrixTransform*rayStartVec;
+            rayStartCoord = Coord(rayStartVec.x, rayStartVec.y, rayStartVec.z);
+            rayDir = sphere->matrixTransform.multiplyDir(rayDir);
+            rayDir = rayDir.normalize();
+            newRay = Ray(rayStartCoord, rayDir, ray.bouncesLeft, ray.tMin, ray.tMax);         
+            temp = raySphere(newRay, sphere, t_min, t_max, ray.bouncesLeft);
+            if (temp.isHit) {
+              hitRecord = temp;
+              t_max = temp.t;
+            }
     }
   }
+}
   return hitRecord;
 }
-
+ 
 Color Tracer::trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection) {
   float epsilon = .25;
   Color total = Color(0,0,0);
