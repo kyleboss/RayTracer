@@ -4,6 +4,7 @@
 
 class Camera {
   public:
+    Camera (){};
     Coord LL;
     Coord UL;
     Coord UR;
