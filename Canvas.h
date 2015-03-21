@@ -2,16 +2,24 @@
 
 class Canvas {
   public:
-    Sample currSample;
+    static Sample currSample;
     float width;
     float height;
+    Canvas() {
+    }
     Canvas(float width, float height) :
     width(width),
-    height(height),
-    currSample(Sample(0, 0))
-    {}
+    height(height)
+    {
+    }
+    static Sample getCurrSample();
     bool getSample(Sample* sample);
 };
+
+Sample Canvas::getCurrSample() {
+  return Sample(currSample.x, currSample.y);
+}
+
 bool Canvas::getSample(Sample* sample) {
   if (sample->x == (width - 1) && sample->y == (height - 1)) {
     return false;
@@ -24,3 +32,5 @@ bool Canvas::getSample(Sample* sample) {
   currSample.x++;
   return true;
 }
+
+Sample Canvas::currSample = Sample(0,0);

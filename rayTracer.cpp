@@ -7,9 +7,10 @@
 #include <cmath>
 #include <time.h>
 #include <opencv2/opencv.hpp>
+#include <pthread.h>
 
-int canvasX = 500; //CHANGE THESE!
-int canvasY = 500; //CHANGE THESE!
+int canvasX = 100; //CHANGE THESE!
+int canvasY = 100; //CHANGE THESE!
 #include "Camera.h"
 #include "Tracer.h"
 #include "Canvas.h"
@@ -21,6 +22,13 @@ int canvasY = 500; //CHANGE THESE!
 
 using namespace cv;
 using namespace std;
+
+struct thread_data{
+   Canvas  canvas;
+   cv::Mat img;
+   Tracer tracer;
+   Camera camera;
+};
 
 //************************
 // GLOBAL VARIABLES
@@ -35,20 +43,73 @@ using namespace std;
 	Coord camUL = Coord(-1,1,1);
 	Coord camUR = Coord(1,1,1);
   Matrix transMatrix = Matrix();
+  pthread_mutex_t lock_x;
+  bool toAlias = false;
+  int numThreads = 1;
 
+void * pixelProcessing (void *threadarg) {
+  struct thread_data *my_data;
+  my_data = (struct thread_data *) threadarg;
+  
+  while (1) {
+    if (!my_data->canvas.getSample(&my_data->canvas.currSample)) {
+      break;
+    }
+    Sample sample = my_data->canvas.getCurrSample();
+  
+  //RENDER LOOP for aliasing   
+   Color color = Color(0,0,0);
+   if (toAlias) {
+     int n = 3; //do 3x3 anti-aliasing
+     for (int p = 0; p < n; p++) {
+       for (int q = 0; q < n; q++) {
+         float zetta = ((float) rand() / (RAND_MAX));
+         float u = (sample.x + (p + zetta)/n) / canvasX ;
+           float v = (sample.y + (q + zetta)/n) / canvasY;
+         Ray ray = my_data->camera.shootRay(u, v);
+         HitRecord hitRecord = my_data->tracer.hit(ray);
+         if (hitRecord.isHit) {
+             color = color + my_data->tracer.trace(hitRecord, lights, ray.direction);
+         }  
+       }
+     }
+     float scale = (float) 1/(n*n);
+     color = color.scale(scale); //c = c/n^2
+  } else {
+      float u = (sample.x + 0.5) / canvasX ;
+      float v = (sample.y + 0.5) / canvasY;
+      Ray ray = my_data->camera.shootRay(u, v);
+      HitRecord hitRecord = my_data->tracer.hit(ray);
+      if (hitRecord.isHit) {
+        color = my_data->tracer.trace(hitRecord, lights, hitRecord.ray.direction);
+      }
+    }
+
+  //clipping
+  if (color.r > 1)
+    color.r = 1;
+  if (color.g > 1)
+    color.g = 1; 
+  if (color.b > 1)
+    color.b = 1;
+  pthread_mutex_lock(&lock_x);
+  editPixel(&my_data->img, sample, color); //writes to the image
+  pthread_mutex_unlock(&lock_x);
+  
+}
+pthread_exit(NULL);
+}
 
 // Main render loop
 void render() {
+  pthread_mutex_init(&lock_x, NULL);
+  // pthread_mutex_init(&lock_y, NULL);
+  // pthread_mutex_init(&lock_z, NULL);
 	//SET UP CAVAS
 	Canvas canvas = Canvas(canvasX, canvasY);
 
 	// //SET UP IMAGE
-	// cimg_library::CImg<float> img = createImg(canvasX, canvasY); // Creates Img
-  cv::Mat img(canvasX,canvasY,CV_8UC3,Scalar(0,0,0));
-  // Magick::Blob blob(&Magick::rgbt[0],(rgbt.size()*sizeof(rgbt[0]));
-  // std::string canvasXStr = std::to_string(canvasX);
-  // std::string canvasYStr = std::to_string(canvasY);
-  // Magick::Image img( canvasYStr + "x" + canvasXStr, "black"); 
+  cv::Mat img(canvasX,canvasY,CV_8UC3,Scalar(0,0,0)); 
 	// //SET UP TRACER
 	Tracer tracer = Tracer(all_shapes);       
 
@@ -57,63 +118,19 @@ void render() {
 
 
 	//RENDER LOOP FAST
-		while (canvas.getSample(&canvas.currSample)) {
-		Color color = Color(0,0,0);
-		Sample sample = canvas.currSample;
-		float u = (sample.x + 0.5) / canvasX ;
-		float v = (sample.y + 0.5) / canvasY;
-		Ray ray = camera.shootRay(u, v);
-		HitRecord hitRecord = tracer.hit(ray);
-		if (hitRecord.isHit) {
-			color = tracer.trace(hitRecord, lights, hitRecord.ray.direction);
-		}
-	    //clipping
-	    if (color.r > 1)
-	    	color.r = 1;
-	    if (color.g > 1)
-	    	color.g = 1; 
-	    if (color.b > 1)
-	    	color.b = 1;
-	    editPixel(&img, canvas.currSample, color); //writes to the image
-	}
-
-
-	//RENDER LOOP for aliasing   
-	// while (canvas.getSample(&canvas.currSample)) {
-	// 	Color color = Color(0,0,0);
-	// 	Sample sample = canvas.currSample;
-	// 	int n = 3; //do 3x3 anti-aliasing
-	// 	//#pragma omp parallel for 
-	// 	for (int p = 0; p < n; p++) {
-	// 		for (int q = 0; q < n; q++) {
-	// 			float zetta = ((float) rand() / (RAND_MAX));
-	// 			float u = (sample.x + (p + zetta)/n) / canvasX ;
- //  				float v = (sample.y + (q + zetta)/n) / canvasY;
-	// 			Ray ray = camera.shootRay(u, v);
-	// 			HitRecord hitRecord = tracer.hit(ray);
-	// 			if (hitRecord.isHit) {
-	// 			    color = color + tracer.trace(hitRecord, lights, ray.direction);
-	// 			}  
-	// 		}
-	// 	}
-	// 	float scale = (float) 1/(n*n);
-	// 	color = color.scale(scale); //c = c/n^2
-	//     //clipping
-	//    if (color.r > 1)
-	//     	color.r = 1;
-	//     if (color.g > 1)
-	//     	color.g = 1; 
-	//     if (color.b > 1)
-	//     	color.b = 1;
-	//     editPixel(&img, canvas.currSample, color); //writes to the image
-	// }   
-
-  	// Color color = Color(1,1,1);
-  	// editPixel(&img, canvas.currSample, color);
+  pthread_t threads[numThreads];
+  struct thread_data td;
+  td.canvas = canvas;
+  td.img    = img;
+  td.tracer = tracer;
+  td.camera = camera;
+  for(int i=0; i < numThreads; i++ ){
+    pthread_create(&threads[i], NULL, pixelProcessing, (void *)&td);
+  }
+  for (int i = 0; i < numThreads; ++i) {
+    pthread_join(threads[i], NULL);
+  }
 	saveImg(img); // Saving image to file result.png
-  	// cimg_library::CImgDisplay main_disp(img, "RayTracer", 3);
- 	// img.display(); 
-
   cv::namedWindow("RayTracer",cv::WINDOW_AUTOSIZE);
   cv::imshow("RayTracer", img);
   waitKey(-1);
@@ -148,9 +165,6 @@ void commandLine(int argc, char *argv[]) {
 	      Coord a = Coord(strtof(argv[i+1], NULL), strtof(argv[i+2], NULL), strtof(argv[i+3], NULL));
 	      Coord b = Coord(strtof(argv[i+4], NULL), strtof(argv[i+5], NULL), strtof(argv[i+6], NULL));
 	      Coord c = Coord(strtof(argv[i+7], NULL), strtof(argv[i+8], NULL), strtof(argv[i+9], NULL));
-	      // a = Transform::performTransform(a, transMatrix);
-	      // b = Transform::performTransform(b, transMatrix);
-	      // c = Transform::performTransform(c, transMatrix);
 	      Triangle * tri = new Triangle(a, b, c, last_material, transMatrix);
 	      all_shapes.push_back(tri);
 	      i += 9;
@@ -222,10 +236,18 @@ void commandLine(int argc, char *argv[]) {
 	      transMatrix = Transform::calcTransMatrix();
         i += 3;
 	    }
-	    else if (i < argc && strcmp(argv[i], "xfz") == 0) {
-	 			transMatrix = Matrix();
-	      // i += 1;
-	    }
+      else if (i < argc && strcmp(argv[i], "xfz") == 0) {
+        transMatrix = Matrix();
+        i += 0;
+      }
+      else if (i < argc && strcmp(argv[i], "alias") == 0) {
+        toAlias = true;
+        i += 0;
+      }
+      else if (i < argc && strcmp(argv[i], "thread") == 0) {
+        numThreads = strtof(argv[i+1], NULL);
+        i += 1;
+      }
 	    else { //error handling per last pg in spec
 	    	cerr << "Bad command line input " << argv[i] << " @ " << i << endl;
 

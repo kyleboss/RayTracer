@@ -13,6 +13,7 @@ using namespace std;
 class Tracer {
  public:
    vector<Shape*> all_shapes;
+   Tracer() {};
    Tracer(vector<Shape*> all_shapes) : all_shapes(all_shapes){}
    Color trace(HitRecord hitRecord, vector<Light> lights, Vector rayDirection);
    HitRecord hit(Ray ray);
