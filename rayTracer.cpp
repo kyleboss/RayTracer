@@ -266,6 +266,14 @@ void commandLine(istream& stream) {
 	  else if (tokens[i].compare("xfz") == 0) {
 				transMatrix = Matrix();
 	  }
+      else if (tokens[i].compare("alias") == 0) {
+        toAlias = true;
+        i += 0;
+      }
+      else if (tokens[i].compare("thread") == 0) {
+        numThreads = stof(tokens[i+1], NULL);
+        i += 1;
+      }
 	  else { //error handling per last pg in spec
 	  	cerr << "Bad command line input: " << tokens[i] << endl;
 
