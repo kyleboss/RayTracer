@@ -15,12 +15,12 @@ In addition to the required features:
 - Shadows and reflections
 - Translations, scales and rotations (linear transformations)
 - Using openCV to save to a .PNG
-- Using AABB Boxing with assistance from Utah's Williams Lab: http://www.cs.utah.edu/~awilliam/box/
 
 We have also implemented, for extra credit:
 - Anti-aliasing (random/jittered model) 
 - Multithreading
 - Acceleration with AABB Trees
 - Shearing
+- Using AABB Boxing with assistance from Utah's Williams Lab: http://www.cs.utah.edu/~awilliam/box/
 
 Input to our ray tracer is a .scene file with each line containing information as specified in the README. For our extra features, "alias" (as a seperate line) turns on anti-aliasing, "thread [# of threads]" turns on multithreading, and "xfh rx ry rz" denotes a shear transformation. AABB Trees are always used so there's no line parsing.
